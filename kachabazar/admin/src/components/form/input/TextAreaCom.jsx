@@ -1,0 +1,31 @@
+import { Textarea } from "@/components/ui/textarea";
+import React from "react";
+
+const TextAreaCom = ({
+  register,
+  name,
+  label,
+  placeholder,
+  required,
+  type,
+  value,
+}) => {
+  return (
+    <>
+      <Textarea
+        // className="border text-sm border-border focus:border-ring block w-full bg-muted"
+        {...register(`${name}`, {
+          required: required ? `${label} is required!` : false,
+        })}
+        type={type}
+        placeholder={placeholder}
+        name={name}
+        value={value}
+        rows="4"
+        spellCheck="false"
+      />
+    </>
+  );
+};
+
+export default TextAreaCom;
