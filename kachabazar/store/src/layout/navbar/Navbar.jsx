@@ -50,7 +50,7 @@ const Navbar = async ({
                   className="h-10 w-auto max-w-[160px] object-contain"
                   priority
                   src={
-                    storeCustomization?.navbar?.logo || "/logo/logo-light.svg"
+                    storeCustomization?.navbar?.logo || "/logo/logo-light.png"
                   }
                   alt="logo"
                 />

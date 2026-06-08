@@ -88,8 +88,8 @@ const Login = () => {
             <div className="mb-8">
               <Link href="/" className="inline-block relative h-10 w-40">
                 <Image
-                  src={globalSetting?.logo || "/logo/logo-color.svg"}
-                  alt={globalSetting?.shop_name || "Kacha Bazar"}
+                  src={globalSetting?.logo || "/logo/logo-color.png"}
+                  alt={globalSetting?.shop_name || "hautecouturejewellery"}
                   width={160}
                   height={40}
                   className="object-contain object-left"

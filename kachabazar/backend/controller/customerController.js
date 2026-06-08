@@ -257,7 +257,7 @@ const sendEmailOtp = async (req, res) => {
     const emailBody = {
       from: cfg.email_user,
       to: email,
-      subject: `Verify Your Email - ${cfg.app_name || "KachaBazar"}`,
+      subject: `Verify Your Email - ${cfg.app_name || "hautecouturejewellery"}`,
       html: emailOtpBody({
         name: name || "User",
         email,
@@ -427,7 +427,7 @@ const resendEmailOtp = async (req, res) => {
     const emailBody = {
       from: cfg2.email_user,
       to: email,
-      subject: `Verify Your Email - ${cfg2.app_name || "KachaBazar"}`,
+      subject: `Verify Your Email - ${cfg2.app_name || "hautecouturejewellery"}`,
       html: emailOtpBody({
         name: existingOtp?.userData?.name || "User",
         email,

@@ -170,7 +170,7 @@ const OrderInvoice = () => {
                         ? globalSetting?.logo_light || globalSetting?.logo
                         : globalSetting?.logo || globalSetting?.logo_light)
                     }
-                    alt="kachabazar"
+                    alt="hautecouturejewellery"
                     className="h-10 w-auto object-contain"
                   />
                 </h2>

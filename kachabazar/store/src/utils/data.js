@@ -183,7 +183,7 @@ const contactData = [
     title: "contact-page-box1-title",
     info: "contact-page-box1-info",
     icon: FiMail,
-    contact: "kachabazar@gmail.com",
+    contact: "hautecouturejewellery@gmail.com",
     className: "bg-accent",
   },
   {

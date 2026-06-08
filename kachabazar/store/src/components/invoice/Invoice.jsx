@@ -53,7 +53,7 @@ const Invoice = ({ data, printRef, globalSetting }) => {
                   src={
                     globalSetting?.invoice_logo ||
                     globalSetting?.logo ||
-                    "/logo/logo-color.svg"
+                    "/logo/logo-color.png"
                   }
                   alt="logo"
                 />

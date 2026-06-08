@@ -150,7 +150,7 @@ const useSettingSubmit = (id) => {
               import.meta.env.VITE_APP_STORE_URL ||
               settingData?.setting?.store_url;
             await fetch(
-              `${storeUrl}/api/revalidate?tag=settings&secret=kachabazar-revalidate-2024`,
+              `${storeUrl}/api/revalidate?tag=settings&secret=hautecouturejewellery-revalidate-2024`,
             );
           } catch (e) {
             console.log("Store revalidation skipped:", e.message);
@@ -172,7 +172,7 @@ const useSettingSubmit = (id) => {
             import.meta.env.VITE_APP_STORE_URL ||
             settingData?.setting?.store_url;
           await fetch(
-            `${storeUrl}/api/revalidate?tag=settings&secret=kachabazar-revalidate-2024`,
+            `${storeUrl}/api/revalidate?tag=settings&secret=hautecouturejewellery-revalidate-2024`,
           );
         } catch (e) {
           console.log("Store revalidation skipped:", e.message);

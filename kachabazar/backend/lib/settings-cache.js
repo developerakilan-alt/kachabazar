@@ -132,8 +132,8 @@ async function getSettings() {
       // ── SMS Config ──
       sms_provider: settings.sms_provider || process.env.SMS_PROVIDER || "mock",
       sms_sender_id:
-        settings.sms_sender_id || process.env.SMS_SENDER_ID || "KachaBazar",
-      app_name: settings.app_name || process.env.APP_NAME || "KachaBazar",
+        settings.sms_sender_id || process.env.SMS_SENDER_ID || "hautecouturejewellery",
+      app_name: settings.app_name || process.env.APP_NAME || "hautecouturejewellery",
 
       // Twilio
       twilio_account_sid:
@@ -206,8 +206,8 @@ async function getSettings() {
         email_user: process.env.EMAIL_USER || "",
         email_pass: process.env.EMAIL_PASS || "",
         sms_provider: process.env.SMS_PROVIDER || "mock",
-        sms_sender_id: process.env.SMS_SENDER_ID || "KachaBazar",
-        app_name: process.env.APP_NAME || "KachaBazar",
+        sms_sender_id: process.env.SMS_SENDER_ID || "hautecouturejewellery",
+        app_name: process.env.APP_NAME || "hautecouturejewellery",
         twilio_account_sid: process.env.TWILIO_ACCOUNT_SID || "",
         twilio_auth_token: process.env.TWILIO_AUTH_TOKEN || "",
         twilio_phone_number: process.env.TWILIO_PHONE_NUMBER || "",

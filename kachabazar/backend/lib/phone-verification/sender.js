@@ -145,7 +145,7 @@ const sendViaAwsSns = async (phoneNumber, message, cfg) => {
         MessageAttributes: {
           "AWS.SNS.SMS.SenderID": {
             DataType: "String",
-            StringValue: cfg.sms_sender_id || "KachaBazar",
+            StringValue: cfg.sms_sender_id || "hautecouturejewellery",
           },
           "AWS.SNS.SMS.SMSType": {
             DataType: "String",
@@ -176,7 +176,7 @@ const sendViaMessageBird = async (phoneNumber, message, cfg) => {
   const messagebird = require("messagebird")(apiKey);
 
   return new Promise((resolve) => {
-    const originator = cfg.sms_sender_id || "KachaBazar";
+    const originator = cfg.sms_sender_id || "hautecouturejewellery";
 
     console.log("MessageBird Config Check:", {
       hasApiKey: !!apiKey,
@@ -245,7 +245,7 @@ const sendViaVonage = async (phoneNumber, message, cfg) => {
   try {
     const result = await vonage.sms.send({
       to: phoneNumber.replace("+", ""),
-      from: cfg.sms_sender_id || "KachaBazar",
+      from: cfg.sms_sender_id || "hautecouturejewellery",
       text: message,
     });
     console.log("SMS sent via Vonage:", result.messageId);
@@ -275,7 +275,7 @@ const sendViaMock = async (phoneNumber, message) => {
 const sendVerificationCode = async (phoneNumber, verificationCode) => {
   const cfg = await getSettings();
   const provider = cfg.sms_provider || PROVIDERS.TWILIO;
-  const appName = cfg.app_name || "KachaBazar";
+  const appName = cfg.app_name || "hautecouturejewellery";
   const message = `Your ${appName} verification code is: ${verificationCode}. Valid for 10 minutes. Do not share this code with anyone.`;
 
   console.log(`Sending OTP via ${provider} to ${phoneNumber}`);

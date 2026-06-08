@@ -6,7 +6,7 @@ const themes = [
     name: "Emerald Default",
     slug: "emerald-default",
     description:
-      "The signature KachaBazar theme with a fresh emerald green accent",
+      "The signature hautecouturejewellery theme with a fresh emerald green accent",
     status: "show",
     isDefault: true,
     colors: {

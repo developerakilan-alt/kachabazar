@@ -16,7 +16,7 @@ const Uploader = ({
   setImageUrl,
   imageUrl,
   product,
-  folder = "kachabazar",
+  folder = "hautecouturejewellery",
   targetWidth = null,
   targetHeight = null,
 }) => {

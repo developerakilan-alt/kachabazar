@@ -247,7 +247,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                   width={140}
                   height={40}
                   className="h-8 w-auto max-w-[160px] object-contain brightness-0 invert"
-                  src={footer?.block4_logo || "/logo/logo-color.svg"}
+                  src={footer?.block4_logo || "/logo/logo-color.png"}
                   alt="logo"
                 />
               </Link>

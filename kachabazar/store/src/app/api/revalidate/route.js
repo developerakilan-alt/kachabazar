@@ -13,7 +13,7 @@ import { NextResponse } from "next/server";
  */
 
 const REVALIDATION_SECRET =
-  process.env.REVALIDATION_SECRET || "kachabazar-revalidate-2024";
+  process.env.REVALIDATION_SECRET || "hautecouturejewellery-revalidate-2024";
 
 function isAuthorized(request) {
   // Check header

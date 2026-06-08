@@ -1,7 +1,7 @@
 import { NavGroup } from "@/layout/nav-group";
 import { NavUser } from "@/layout/nav-user";
-import logoDark from "@/assets/img/logo/logo-color.svg";
-import logoLight from "@/assets/img/logo/logo-dark.svg";
+import logoDark from "@/assets/img/logo/logo-color.png";
+import logoLight from "@/assets/img/logo/logo-dark.png";
 import { useTheme } from "@/context/ThemeContext";
 import useGetCData from "@/hooks/useGetCData";
 import useUtilsFunction from "@/hooks/useUtilsFunction";
@@ -91,12 +91,12 @@ export function AppSidebar({ ...props }) {
                   ? globalSetting?.logo || logoLight
                   : globalSetting?.logo_light || logoDark
               }
-              alt="KachaBazar"
+              alt="hautecouturejewellery"
               className="h-8 w-auto object-contain"
             />
           </div>
           {/* <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">KachaBazar</span>
+            <span className="truncate font-semibold">hautecouturejewellery</span>
           </div> */}
         </SidebarMenuButton>
       </SidebarHeader>

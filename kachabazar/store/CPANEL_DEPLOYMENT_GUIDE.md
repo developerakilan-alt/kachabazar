@@ -1,4 +1,4 @@
-# KachaBazar — cPanel Deployment Guide for AmdaniExpress.com
+# hautecouturejewellery — cPanel Deployment Guide for AmdaniExpress.com
 
 > **Stack:** Backend (Node.js/Express) · Admin (Vite + React SPA) · Store (Next.js)  
 > **Domain:** `amdaniexpress.com`

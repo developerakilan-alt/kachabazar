@@ -790,7 +790,7 @@ const Setting = () => {
                         label="App Name"
                         name="app_name"
                         type="text"
-                        placeholder="KachaBazar"
+                        placeholder="hautecouturejewellery"
                       />
                     </div>
                   </div>
@@ -803,7 +803,7 @@ const Setting = () => {
                         label="SMS Sender ID"
                         name="sms_sender_id"
                         type="text"
-                        placeholder="KachaBazar"
+                        placeholder="hautecouturejewellery"
                       />
                     </div>
                   </div>

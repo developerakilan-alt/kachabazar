@@ -97,8 +97,8 @@ const SignUp = () => {
             <div className="mb-8">
               <Link href="/" className="inline-block relative h-10 w-40">
                 <Image
-                  src={globalSetting?.logo || "/logo/logo-color.svg"}
-                  alt={globalSetting?.shop_name || "Kacha Bazar"}
+                  src={globalSetting?.logo || "/logo/logo-color.png"}
+                  alt={globalSetting?.shop_name || "hautecouturejewellery"}
                   fill
                   className="object-contain object-left"
                 />

@@ -1,6 +1,6 @@
 import { ExternalLink } from "lucide-react";
 
-const DOC_BASE_URL = "https://kachabazar-documentation.netlify.app";
+const DOC_BASE_URL = "https://hautecouturejewellery-documentation.netlify.app";
 
 /**
  * A small link icon that opens the relevant documentation section.

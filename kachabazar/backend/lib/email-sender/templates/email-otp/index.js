@@ -38,7 +38,7 @@ const emailOtpBody = (option) => {
       <p class="greeting">Hello ${option.name},</p>
       
       <p class="message">
-        Thank you for registering with <span class="brand">KachaBazar</span>! 
+        Thank you for registering with <span class="brand">hautecouturejewellery</span>! 
         Please use the verification code below to complete your registration.
       </p>
       
@@ -59,8 +59,8 @@ const emailOtpBody = (option) => {
     </div>
     
     <div class="footer">
-      <p>Thank you for choosing <span class="brand">KachaBazar</span></p>
-      <p>© ${new Date().getFullYear()} KachaBazar. All rights reserved.</p>
+      <p>Thank you for choosing <span class="brand">hautecouturejewellery</span></p>
+      <p>© ${new Date().getFullYear()} hautecouturejewellery. All rights reserved.</p>
     </div>
   </div>
 </body>

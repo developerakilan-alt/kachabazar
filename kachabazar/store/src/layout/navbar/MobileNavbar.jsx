@@ -26,7 +26,7 @@ const MobileNavbar = ({ open, setOpen }) => {
   const navbarLogo =
     storeCustomization?.navbar?.logo ||
     globalSetting?.logo ||
-    "/logo/logo-light.svg";
+    "/logo/logo-light.png";
 
   return (
     <Transition show={open} as={Fragment}>
