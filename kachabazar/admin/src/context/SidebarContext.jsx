@@ -140,7 +140,7 @@ export const SidebarProvider = ({ children }) => {
 
   useEffect(() => {
     if (globalSetting?.site_description) {
-      document.title = `${globalSetting.site_description} | ${globalSetting.shop_name || "AmdaniExpress"}`;
+      document.title = `${globalSetting.site_description} | ${globalSetting.shop_name || "hautecouturejewellery"}`;
     }
 
     if (globalSetting?.favicon) {

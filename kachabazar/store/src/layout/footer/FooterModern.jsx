@@ -346,7 +346,7 @@ const FooterModern = async ({
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-sm">
           <p className="text-gray-500 mb-4 md:mb-0">
             {globalSetting?.copyright_text || (
-              <>© All rights reserved. Made by <span className="text-gray-400">ThemeTags</span></>
+              <>© All rights reserved. <span className="text-gray-400">hautecouturejewellery</span></>
             )}
           </p>
           <div className="flex space-x-6">
