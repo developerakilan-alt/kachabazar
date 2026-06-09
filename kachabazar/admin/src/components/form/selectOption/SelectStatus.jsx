@@ -39,6 +39,8 @@ const SelectStatus = ({ id, order }) => {
       <option value="processing">Processing</option>
       <option value="out-for-delivery">Out for Delivery</option>
       <option value="cancel">Cancel</option>
+      <option value="refund-processing">Refund Processing</option>
+      <option value="refunded">Refunded</option>
     </select>
   );
 };

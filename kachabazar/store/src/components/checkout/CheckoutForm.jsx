@@ -27,13 +27,16 @@ import SwitchToggle from "@components/form/SwitchToggle";
 import OrderSuccessNotification from "@components/notifications/OrderSuccessNotification";
 
 const CheckoutForm = ({
+  storeSetting: storeSettingProp,
   shippingAddress,
   hasShippingAddress,
+  storeCustomizationSetting,
   isGuest = false,
 }) => {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  const isEnabled = (value) => value === true || value === "true" || value === 1 || value === "1";
 
   const {
     error,
@@ -46,6 +49,7 @@ const CheckoutForm = ({
     cartTotal,
     currency,
     register,
+    watch,
     errors,
     showCard,
     setShowCard,
@@ -66,9 +70,15 @@ const CheckoutForm = ({
     showOrderSuccess,
     orderSuccessData,
     setShowOrderSuccess,
-  } = useCheckoutSubmit({ shippingAddress, isGuest });
+  } = useCheckoutSubmit({
+    shippingAddress,
+    isGuest,
+    storeSetting: storeSettingProp,
+    storeCustomizationSetting,
+  });
   const { formatPrice } = useUtilsFunction();
   const checkout = storeCustomization?.checkout;
+  const selectedPaymentMethod = watch("paymentMethod");
   if (!mounted) return null; // or a skeleton loader
 
   return (
@@ -252,7 +262,7 @@ const CheckoutForm = ({
                   </div>
                 )}
                 <div className="grid sm:grid-cols-3 grid-cols-1 gap-4">
-                  {storeSetting?.cod_status && (
+                  {isEnabled(storeSetting?.cod_status) && (
                     <div className="">
                       <InputPayment
                         setShowCard={setShowCard}
@@ -265,7 +275,7 @@ const CheckoutForm = ({
                     </div>
                   )}
 
-                  {!isGuest && storeSetting?.stripe_status && (
+                  {!isGuest && isEnabled(storeSetting?.stripe_status) && (
                     <div className="">
                       <InputPayment
                         setShowCard={setShowCard}
@@ -278,7 +288,7 @@ const CheckoutForm = ({
                     </div>
                   )}
 
-                  {!isGuest && (
+                  {!isGuest && isEnabled(storeSetting?.razorpay_status) && (
                     <div className="">
                       <InputPayment
                         setShowCard={setShowCard}
@@ -313,7 +323,9 @@ const CheckoutForm = ({
                     type="submit"
                     variant="create"
                     disabled={
-                      isEmpty || (!isGuest && !stripe) || isCheckoutSubmit
+                      isEmpty ||
+                      (selectedPaymentMethod === "Card" && !stripe) ||
+                      isCheckoutSubmit
                     }
                     isLoading={isCheckoutSubmit}
                     className="w-full h-10 rounded-sm"

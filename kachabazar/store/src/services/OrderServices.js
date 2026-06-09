@@ -79,21 +79,21 @@ const createPaymentIntent = async (orderInfo) => {
   }
 };
 
-const addRazorpayOrder = async ({ orderInfo }) => {
+const addRazorpayOrder = async (orderInfo) => {
   try {
     const response = await resilientFetch(`${baseURL}/order/add/razorpay`, {
       cache: "no-cache",
       method: "POST",
       headers: await getHeaders(),
-      body: JSON.stringify({ orderInfo }),
+      body: JSON.stringify(orderInfo),
     });
 
-    const order = await handleResponse(response);
+    const orderResponse = await handleResponse(response);
     revalidateTag("user-orders");
     revalidateTag("reviewed_products");
 
     return {
-      order,
+      orderResponse,
     };
   } catch (error) {
     return {
@@ -117,6 +117,7 @@ const createOrderByRazorPay = async ({ amount }) => {
       id: order.id,
       amount: order.amount,
       currency: order.currency,
+      keyId: order.keyId,
     };
   } catch (error) {
     // console.log("error", error);

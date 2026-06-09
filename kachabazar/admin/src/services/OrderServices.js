@@ -102,6 +102,10 @@ const OrderServices = {
   updateManyOrders: async (body) => {
     return requests.patch("/orders/update/many", body);
   },
+
+  processRefund: async (id, body) => {
+    return requests.post(`/orders/refund/${id}`, body);
+  },
 };
 
 export default OrderServices;

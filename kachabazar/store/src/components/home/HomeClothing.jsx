@@ -5,9 +5,11 @@ import ProductCard from "@components/product/ProductCard";
 import CMSkeletonTwo from "@components/preloader/CMSkeleton";
 import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
+import { getCategoryProductImage } from "@utils/categoryProductImages";
 
 const HomeClothing = ({
   popularProducts,
+  categoryProducts,
   discountedProducts,
   attributes,
   storeCustomizationSetting,
@@ -133,6 +135,10 @@ const HomeClothing = ({
             {/* Asymmetric category grid */}
             <div className="grid grid-cols-2 md:grid-cols-12 gap-3 lg:gap-4">
               {topCategories.map((cat, index) => {
+                const categoryImage = getCategoryProductImage(
+                  cat,
+                  categoryProducts || popularProducts,
+                );
                 const spans = [
                   "md:col-span-4",
                   "md:col-span-4",
@@ -155,15 +161,11 @@ const HomeClothing = ({
                     href={`/search?_id=${cat._id}`}
                     className={`group relative overflow-hidden ${spans[index] || "md:col-span-4"} ${heights[index] || "h-72 md:h-80"}`}
                   >
-                    {cat.icon ? (
-                      <img
-                        src={cat.icon}
-                        alt=""
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-800" />
-                    )}
+                    <img
+                      src={categoryImage}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    />
                     <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
                       <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">

@@ -21,12 +21,17 @@ const baseURL = getBaseURL();
 
 const handleResponse = async (response) => {
   if (!response.ok) {
-    let errorMessage = "Failed to fetch data";
+    let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
     try {
       const error = await response.json();
-      errorMessage = error.message || errorMessage;
+      errorMessage =
+        error.message ||
+        error.error?.description ||
+        error.error?.reason ||
+        error.error ||
+        errorMessage;
     } catch (e) {
-      errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+      // Keep the HTTP status message if the response body is not JSON.
     }
     throw new Error(errorMessage);
   }

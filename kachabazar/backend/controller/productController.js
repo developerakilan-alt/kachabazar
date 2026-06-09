@@ -382,7 +382,13 @@ const getShowingStoreProducts = async (req, res) => {
         .lean();
     } else {
       // Homepage — fetch popular and discounted products in parallel
-      const [popularRes, discountedRes] = await Promise.all([
+      const [productsRes, popularRes, discountedRes] = await Promise.all([
+        Product.find({ status: "show" })
+          .populate({ path: "category", select: "name _id" })
+          .select(selectFields)
+          .sort({ _id: -1 })
+          .limit(200)
+          .lean(),
         Product.find({ status: "show" })
           .populate({ path: "category", select: "name _id" })
           .select(selectFields)
@@ -422,6 +428,7 @@ const getShowingStoreProducts = async (req, res) => {
           .limit(20)
           .lean(),
       ]);
+      products = productsRes;
       popularProducts = popularRes;
       discountedProducts = discountedRes;
     }

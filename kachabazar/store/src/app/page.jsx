@@ -21,7 +21,7 @@ const Home = async ({ searchParams }) => {
   const [
     { attributes },
     { storeCustomizationSetting, error: storeCustomizationError },
-    { popularProducts, discountedProducts, error },
+    { products, popularProducts, discountedProducts, error },
     { globalSetting },
     { categories },
     featuredCampaignResult,
@@ -45,6 +45,7 @@ const Home = async ({ searchParams }) => {
 
   const layoutProps = {
     popularProducts,
+    categoryProducts: products,
     discountedProducts,
     attributes,
     storeCustomizationSetting,

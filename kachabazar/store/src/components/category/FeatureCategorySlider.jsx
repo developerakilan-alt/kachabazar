@@ -5,7 +5,7 @@ import "swiper/css";
 import { Autoplay } from "swiper/modules";
 import FeatureCategoryModernCard from "./FeatureCategoryModernCard";
 
-const FeatureCategorySlider = ({ categories, backgroundColors }) => {
+const FeatureCategorySlider = ({ categories, backgroundColors, products = [] }) => {
   if (!categories || categories.length === 0) return null;
 
   return (
@@ -30,7 +30,11 @@ const FeatureCategorySlider = ({ categories, backgroundColors }) => {
           const bgClass = backgroundColors[i % backgroundColors.length];
           return (
             <SwiperSlide key={category._id || i} className="h-auto">
-              <FeatureCategoryModernCard category={category} bgClass={bgClass} />
+              <FeatureCategoryModernCard
+                category={category}
+                bgClass={bgClass}
+                products={products}
+              />
             </SwiperSlide>
           );
         })}

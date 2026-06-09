@@ -28,7 +28,12 @@ import { useSetting } from "@context/SettingContext";
 import useUtilsFunction from "./useUtilsFunction";
 import { addShippingAddress } from "@services/ServerActionServices";
 
-const useCheckoutSubmit = ({ shippingAddress, isGuest = false }) => {
+const useCheckoutSubmit = ({
+  shippingAddress,
+  isGuest = false,
+  storeSetting: storeSettingOverride,
+  storeCustomizationSetting: storeCustomizationOverride,
+}) => {
   const { dispatch } = useContext(UserContext);
 
   const [error, setError] = useState("");
@@ -54,7 +59,14 @@ const useCheckoutSubmit = ({ shippingAddress, isGuest = false }) => {
   const { isEmpty, emptyCart, items, cartTotal } = useCart();
 
   const userInfo = getUserSession();
-  const { globalSetting, storeSetting, storeCustomization } = useSetting();
+  const {
+    globalSetting,
+    storeSetting: contextStoreSetting,
+    storeCustomization: contextStoreCustomization,
+  } = useSetting() || {};
+  const storeSetting = storeSettingOverride || contextStoreSetting || {};
+  const storeCustomization =
+    storeCustomizationOverride || contextStoreCustomization || {};
   const { showDateFormat, showingTranslateValue } = useUtilsFunction();
 
   const currency = globalSetting?.default_currency || "₹";
@@ -67,6 +79,7 @@ const useCheckoutSubmit = ({ shippingAddress, isGuest = false }) => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -368,12 +381,26 @@ const useCheckoutSubmit = ({ shippingAddress, isGuest = false }) => {
   //handle razorpay payment
   const handlePaymentWithRazorpay = async (orderInfo) => {
     try {
-      const { amount, id, currency } = await createOrderByRazorPay({
+      const {
+        amount,
+        id,
+        currency,
+        keyId,
+        error: razorpayOrderError,
+      } = await createOrderByRazorPay({
         amount: Math.round(total).toString(),
       });
+      if (razorpayOrderError) {
+        throw new Error(razorpayOrderError);
+      }
+
+      const razorpayKey = keyId || storeSetting?.razorpay_id;
+      if (!razorpayKey) {
+        throw new Error("Razorpay test key is not configured");
+      }
 
       const options = {
-        key: storeSetting?.razorpay_id,
+        key: razorpayKey,
         amount,
         currency,
         name: globalSetting?.shop_name || "Store",
@@ -387,7 +414,7 @@ const useCheckoutSubmit = ({ shippingAddress, isGuest = false }) => {
             razorpaySignature: response.razorpay_signature,
           };
 
-          const orderData = { ...orderInfo, razorpay: razorpayDetails, car };
+          const orderData = { ...orderInfo, razorpay: razorpayDetails };
           const { orderResponse, error } = await addRazorpayOrder(orderData);
           if (error) {
             setIsCheckoutSubmit(false);
@@ -401,6 +428,9 @@ const useCheckoutSubmit = ({ shippingAddress, isGuest = false }) => {
           contact: orderInfo?.user_info?.contact || "0000000000",
         },
         theme: { color: "#10b981" },
+        modal: {
+          ondismiss: () => setIsCheckoutSubmit(false),
+        },
       };
 
       const rzpay = new Razorpay(options);
@@ -494,6 +524,7 @@ const useCheckoutSubmit = ({ shippingAddress, isGuest = false }) => {
 
   return {
     register,
+    watch,
     errors,
     showCard,
     setShowCard,

@@ -2,8 +2,14 @@ import CMSkeletonTwo from "@components/preloader/CMSkeletonTwo";
 import { getShowingCategory } from "@services/CategoryService";
 import FeatureCategorySlider from "./FeatureCategorySlider";
 
-const FeatureCategoryModern = async () => {
-  const { categories, error } = await getShowingCategory();
+const FeatureCategoryModern = async ({
+  categories: initialCategories,
+  products = [],
+} = {}) => {
+  const result = initialCategories
+    ? { categories: initialCategories, error: null }
+    : await getShowingCategory();
+  const { categories, error } = result;
 
   const backgroundColors = [
     "from-[#eef2ff]", // blue
@@ -24,6 +30,7 @@ const FeatureCategoryModern = async () => {
         <FeatureCategorySlider 
           categories={categories?.filter(c => c?.name?.en && c.name.en !== "Uncategorized")} 
           backgroundColors={backgroundColors} 
+          products={products}
         />
       )}
     </>

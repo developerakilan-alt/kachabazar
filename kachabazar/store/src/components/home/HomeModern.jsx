@@ -12,11 +12,13 @@ import ModernBanner from "@components/banner/ModernBanner";
 
 const HomeModern = ({
   popularProducts,
+  categoryProducts,
   discountedProducts,
   attributes,
   storeCustomizationSetting,
   storeCustomizationError,
   globalSetting,
+  categories,
   featuredCampaign,
 }) => {
   return (
@@ -62,7 +64,10 @@ const HomeModern = ({
               </Link>
             </div>
             <Suspense fallback={<p>Loading categories...</p>}>
-              <FeatureCategoryModern />
+              <FeatureCategoryModern
+                categories={categories}
+                products={categoryProducts || popularProducts}
+              />
             </Suspense>
           </div>
            {/* Campaign / Flash Sale Section */}

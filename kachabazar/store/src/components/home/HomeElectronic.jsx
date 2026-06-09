@@ -7,9 +7,11 @@ import MainCarousel from "@components/carousel/MainCarousel";
 import CMSkeletonTwo from "@components/preloader/CMSkeleton";
 import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
+import { getCategoryProductImage } from "@utils/categoryProductImages";
 
 const HomeElectronic = ({
   popularProducts,
+  categoryProducts,
   discountedProducts,
   attributes,
   storeCustomizationSetting,
@@ -97,28 +99,31 @@ const HomeElectronic = ({
               </Link>
             </div>
             <div className="grid grid-cols-4 md:grid-cols-8 gap-3 lg:gap-4">
-              {topCategories.map((cat) => (
+              {topCategories.map((cat) => {
+                const categoryImage = getCategoryProductImage(
+                  cat,
+                  categoryProducts || popularProducts,
+                );
+                return (
                 <Link
                   key={cat._id}
                   href={`/search?_id=${cat._id}`}
-                  className="group flex flex-col items-center gap-2.5 p-4 rounded-2xl border border-transparent hover:border-border hover:bg-muted/50 transition-all duration-200"
+                  className="group relative min-h-[150px] overflow-hidden rounded-2xl border border-border/60 transition-all duration-200 hover:shadow-lg"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-200">
-                    {cat.icon ? (
-                      <img
-                        src={cat.icon}
-                        alt=""
-                        className="w-8 h-8 object-contain"
-                      />
-                    ) : (
-                      <span className="text-xl">📱</span>
-                    )}
+                  <img
+                    src={categoryImage}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/35 transition-colors group-hover:bg-black/45" />
+                  <div className="relative flex h-full min-h-[150px] items-end p-3">
+                    <span className="text-xs font-semibold text-white line-clamp-2 drop-shadow">
+                      {cat.name?.en || "Category"}
+                    </span>
                   </div>
-                  <span className="text-xs font-medium text-center text-muted-foreground group-hover:text-foreground line-clamp-2 transition-colors">
-                    {cat.name?.en || "Category"}
-                  </span>
                 </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>

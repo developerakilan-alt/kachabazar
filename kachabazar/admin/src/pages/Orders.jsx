@@ -395,6 +395,8 @@ const Orders = () => {
               </SelectItem>
               <SelectItem value="out-for-delivery">Out for Delivery</SelectItem>
               <SelectItem value="Cancel">{t("OrderCancel")}</SelectItem>
+              <SelectItem value="refund-processing">Refund Processing</SelectItem>
+              <SelectItem value="refunded">Refunded</SelectItem>
             </SelectContent>
           </Select>
 
