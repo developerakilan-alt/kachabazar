@@ -161,7 +161,9 @@ const useCategorySubmit = (id, data) => {
             setPublished(res.status === "show" ? true : false);
           }
         } catch (err) {
-          notifyError(err ? err.response.data.message : err.message);
+          notifyError(
+            err?.response?.data?.message || err?.message || "Failed to load category"
+          );
         }
       })();
     }

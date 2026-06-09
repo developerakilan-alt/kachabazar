@@ -16,6 +16,19 @@ import useTranslationValue from "./useTranslationValue";
 import { useAction } from "@/context/ActionContext";
 import { handleApiValidationErrors } from "@/utils/validation";
 
+const parseProductTags = (tagValue) => {
+  if (Array.isArray(tagValue)) return tagValue;
+  if (!tagValue || typeof tagValue !== "string") return [];
+
+  try {
+    const parsedTags = JSON.parse(tagValue);
+    return Array.isArray(parsedTags) ? parsedTags : [];
+  } catch (err) {
+    console.error("Failed to parse product tags", err);
+    return [];
+  }
+};
+
 const useProductSubmit = (id) => {
   const location = useLocation();
   const { setIsUpdate, lang } = useContext(SidebarContext);
@@ -248,7 +261,7 @@ const useProductSubmit = (id) => {
           setValue("show", res.show);
           setValue("barcode", res.barcode);
           setValue("stock", res.stock);
-          setTag(JSON.parse(res.tag));
+          setTag(parseProductTags(res.tag));
           setImageUrl(res.image);
           setVariants(res.variants);
           setValue("productId", res.productId);
@@ -406,7 +419,7 @@ const useProductSubmit = (id) => {
             // Keep original name objects — showingTranslateValue handles both strings and objects
             setSelectedCategory(res.categories);
             setDefaultCategory([res?.category]);
-            setTag(JSON.parse(res.tag));
+            setTag(parseProductTags(res.tag));
             setImageUrl(res.image);
             setVariants(res.variants);
             setIsCombination(res.isCombination);

@@ -61,17 +61,9 @@ export const handleApiValidationErrors = (err, setError, notifyError) => {
   const { fieldErrors, generalError, hasFieldErrors } =
     parseApiValidationErrors(err);
 
-  // Debug logging
-  console.log("API Validation Errors:", {
-    fieldErrors,
-    generalError,
-    hasFieldErrors,
-  });
-
   // Set field-level errors if available
   if (hasFieldErrors && setError) {
     Object.entries(fieldErrors).forEach(([field, message]) => {
-      console.log(`Setting error for field "${field}": ${message}`);
       setError(field, {
         type: "server",
         message: message,

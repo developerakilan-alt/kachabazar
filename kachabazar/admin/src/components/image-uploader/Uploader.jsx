@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { t } from "i18next";
-import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -11,6 +10,19 @@ import Pica from "pica";
 import useUtilsFunction from "@/hooks/useUtilsFunction";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import Container from "@/components/image-uploader/Container";
+import UploadServices from "@/services/UploadServices";
+
+const fileToDataUrl = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+
+const getUploadErrorMessage = (err) =>
+  err?.response?.data?.message || err?.message || "Failed to upload image";
 
 const Uploader = ({
   setImageUrl,
@@ -102,58 +114,59 @@ const Uploader = ({
       });
     }
 
-    if (files) {
-      files.forEach((file) => {
-        if (
-          product &&
-          imageUrl?.length + files?.length >
-            globalSetting?.number_of_image_per_product
-        ) {
-          return notifyError(
-            `Maximum ${globalSetting?.number_of_image_per_product} Image Can be Upload!`,
-          );
-        }
+    if (!files?.length) return;
 
+    const uploadFiles = async () => {
+      if (
+        product &&
+        imageUrl?.length + files?.length >
+          globalSetting?.number_of_image_per_product
+      ) {
+        notifyError(
+          `Maximum ${globalSetting?.number_of_image_per_product} Image Can be Upload!`,
+        );
+        return;
+      }
+
+      try {
         setLoading(true);
         setError("Uploading....");
 
-        const name = file.name.replaceAll(/\s/g, "");
-        const public_id = name?.substring(0, name.lastIndexOf("."));
+        const uploadedUrls = await Promise.all(
+          files.map(async (file) => {
+            const image = await fileToDataUrl(file);
+            const res = await UploadServices.uploadImage({
+              image,
+              folder,
+              fileName: file.name,
+            });
 
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append(
-          "upload_preset",
-          import.meta.env.VITE_APP_CLOUDINARY_UPLOAD_PRESET,
-        );
-        formData.append("cloud_name", import.meta.env.VITE_APP_CLOUD_NAME);
-        formData.append("folder", folder);
-        formData.append("public_id", public_id);
-
-        axios({
-          url: import.meta.env.VITE_APP_CLOUDINARY_URL,
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          data: formData,
-        })
-          .then((res) => {
-            notifySuccess("Image Uploaded successfully!");
-            setLoading(false);
-            if (product) {
-              setImageUrl((imgUrl) => [...imgUrl, res.data.secure_url]);
-            } else {
-              setImageUrl(res.data.secure_url);
+            if (!res?.secure_url) {
+              throw new Error("Upload did not return an image URL");
             }
-          })
-          .catch((err) => {
-            console.error("err", err);
-            notifyError(err.Message);
-            setLoading(false);
-          });
-      });
-    }
+
+            return res.secure_url;
+          }),
+        );
+
+        notifySuccess("Image Uploaded successfully!");
+
+        uploadedUrls.forEach((secureUrl) => {
+          if (product) {
+            setImageUrl((imgUrl) => [...imgUrl, secureUrl]);
+          } else {
+            setImageUrl(secureUrl);
+          }
+        });
+      } catch (err) {
+        console.error("err", err);
+        notifyError(getUploadErrorMessage(err));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    uploadFiles();
   }, [files]);
 
   const thumbs = files.map((file) => (
@@ -187,7 +200,7 @@ const Uploader = ({
       }
     } catch (err) {
       console.error("err", err);
-      notifyError(err.Message);
+      notifyError(err?.message || "Failed to remove image");
       setLoading(false);
     }
   };

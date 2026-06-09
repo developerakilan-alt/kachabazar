@@ -24,6 +24,16 @@ const nextConfig = {
         protocol: "https",
         hostname: "**",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "5056",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "5056",
+      },
     ],
     // Optimize image loading
     formats: ["image/avif", "image/webp"],

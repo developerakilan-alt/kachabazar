@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { getAdminInfoFromCookie } from "@/utils/adminCookie";
 
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_BASE_URL}`,
@@ -13,9 +14,7 @@ const instance = axios.create({
 // Request interceptor — attach auth token
 instance.interceptors.request.use(
   async (config) => {
-    let adminInfo = Cookies.get("adminInfo")
-      ? JSON.parse(Cookies.get("adminInfo"))
-      : null;
+    let adminInfo = getAdminInfoFromCookie();
     let company = Cookies.get("company") || null;
 
     if (adminInfo?.token) {
