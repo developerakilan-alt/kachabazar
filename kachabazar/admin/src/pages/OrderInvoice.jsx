@@ -386,6 +386,62 @@ const OrderInvoice = () => {
                 </div>
               )}
 
+            {/* Payment & Refund Section */}
+            {data.paymentMethod === "RazorPay" && (
+              <div className="bg-card rounded-lg p-4 border mt-4">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <Package className="h-4 w-4" /> Payment & Refund
+                </h4>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
+                  <div className="bg-muted rounded-lg p-3">
+                    <span className="text-xs text-muted-foreground font-medium block mb-1">Payment Method</span>
+                    <span className="text-sm font-semibold">{data.paymentMethod}</span>
+                  </div>
+                  <div className="bg-muted rounded-lg p-3">
+                    <span className="text-xs text-muted-foreground font-medium block mb-1">Payment Status</span>
+                    <span className={`text-sm font-semibold capitalize ${data.paymentStatus === "refunded" ? "text-red-500" : data.paymentStatus === "captured" ? "text-green-500" : ""}`}>
+                      {data.paymentStatus || "N/A"}
+                    </span>
+                  </div>
+                  <div className="bg-muted rounded-lg p-3">
+                    <span className="text-xs text-muted-foreground font-medium block mb-1">Razorpay Payment ID</span>
+                    <span className="text-xs font-mono break-all">{data.razorpay?.razorpayPaymentId || "N/A"}</span>
+                  </div>
+                  <div className="bg-muted rounded-lg p-3">
+                    <span className="text-xs text-muted-foreground font-medium block mb-1">Amount</span>
+                    <span className="text-sm font-semibold">{formatPrice(data.total)}</span>
+                  </div>
+                </div>
+                {data.paymentStatus === "captured" && adminInfo?.role !== "delivery-boy" && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={async () => {
+                      const reason = window.prompt("Enter refund reason (optional):");
+                      try {
+                        await OrderServices.processRefund(id, { reason: reason || "Admin initiated refund" });
+                        notifySuccess("Refund processed successfully!");
+                        window.location.reload();
+                      } catch (err) {
+                        notifyError(err?.response?.data?.message || err?.message);
+                      }
+                    }}
+                  >
+                    Refund Order
+                  </Button>
+                )}
+                {data.refundInfo?.razorpayRefundId && (
+                  <div className="mt-3 bg-muted rounded-lg p-3">
+                    <span className="text-xs text-muted-foreground font-medium block mb-1">Refund Details</span>
+                    <p className="text-xs">Refund ID: {data.refundInfo.razorpayRefundId}</p>
+                    <p className="text-xs">Amount: {formatPrice(data.refundInfo.amount)}</p>
+                    <p className="text-xs">Reason: {data.refundInfo.reason}</p>
+                    <p className="text-xs">Status: {data.refundInfo.status}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Delivery Rating */}
             {data.deliveryRating?.rating && (
               <div className="bg-card rounded-lg p-4 border mt-4">

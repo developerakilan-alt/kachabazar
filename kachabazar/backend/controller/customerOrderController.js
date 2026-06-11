@@ -17,6 +17,29 @@ const { handleProductQuantity } = require("../lib/stock-controller/others");
 const customerInvoiceEmailBody = require("../lib/email-sender/templates/order-to-customer");
 const { generateTrackingId } = require("../utils/tracking");
 
+const getRazorpayCredentials = async () => {
+  const storeSetting = await Setting.findOne({ name: "storeSetting" });
+  const envKeyId =
+    process.env.Razorpay_API_Key ||
+    process.env.RAZORPAY_API_KEY ||
+    process.env.RAZORPAY_KEY_ID;
+  const envKeySecret =
+    process.env.Razorpay_Secret_Key ||
+    process.env.RAZORPAY_SECRET_KEY ||
+    process.env.RAZORPAY_KEY_SECRET;
+  const dbKeyId = storeSetting?.setting?.razorpay_id;
+  const dbKeySecret = storeSetting?.setting?.razorpay_secret;
+  const isPlaceholder = (value = "") =>
+    value.includes("YourTestKeyHere") || value.includes("YourTestSecretHere");
+
+  const keyId =
+    envKeyId || (!isPlaceholder(dbKeyId) ? dbKeyId : undefined);
+  const keySecret =
+    envKeySecret || (!isPlaceholder(dbKeySecret) ? dbKeySecret : undefined);
+
+  return { keyId, keySecret };
+};
+
 const addOrder = async (req, res) => {
   try {
     // 1️⃣ Atomically increment invoice counter to prevent race conditions
@@ -139,12 +162,17 @@ const createPaymentIntent = async (req, res) => {
 
 const createOrderByRazorPay = async (req, res) => {
   try {
-    const storeSetting = await Setting.findOne({ name: "storeSetting" });
-    // console.log("createOrderByRazorPay", storeSetting?.setting);
+    const { keyId, keySecret } = await getRazorpayCredentials();
+
+    if (!keyId || !keySecret) {
+      return res.status(500).send({
+        message: "Razorpay test keys are not configured.",
+      });
+    }
 
     const instance = new Razorpay({
-      key_id: storeSetting?.setting?.razorpay_id,
-      key_secret: storeSetting?.setting?.razorpay_secret,
+      key_id: keyId,
+      key_secret: keySecret,
     });
 
     const options = {
@@ -157,7 +185,78 @@ const createOrderByRazorPay = async (req, res) => {
       return res.status(500).send({
         message: "Error occurred when creating order!",
       });
-    res.send(order);
+    res.send({ ...order, keyId });
+  } catch (err) {
+    const message =
+      err?.error?.description || err?.error?.reason || err?.message;
+    res.status(500).send({
+      message,
+    });
+  }
+};
+
+const addRazorpayOrder = async (req, res) => {
+  try {
+    // Verify Razorpay payment signature server-side
+    const { razorpay } = req.body;
+    if (razorpay?.razorpayPaymentId && razorpay?.razorpayOrderId && razorpay?.razorpaySignature) {
+      const { keySecret } = await getRazorpayCredentials();
+      const crypto = require("crypto");
+      const generatedSignature = crypto
+        .createHmac("sha256", keySecret || "")
+        .update(`${razorpay.razorpayOrderId}|${razorpay.razorpayPaymentId}`)
+        .digest("hex");
+
+      if (generatedSignature !== razorpay.razorpaySignature) {
+        return res.status(400).send({ message: "Invalid payment signature!" });
+      }
+    }
+
+    const counterDoc = await Setting.findOneAndUpdate(
+      { name: "invoiceCounter" },
+      { $inc: { "setting.counter": 1 } },
+      { new: true, upsert: true },
+    );
+    const nextInvoice = counterDoc?.setting?.counter || 10000;
+    const trackingId = generateTrackingId();
+
+    const newOrder = new Order({
+      ...req.body,
+      user: req.user._id,
+      invoice: nextInvoice,
+      trackingId,
+      paymentStatus: "captured",
+    });
+    const order = await newOrder.save();
+
+    await OrderTracking.create({
+      orderId: order._id,
+      trackingId,
+      status: "order-placed",
+      customerName: order.user_info?.name,
+      customerPhone: order.user_info?.contact,
+      deliveryAddress: order.user_info?.address,
+      history: [
+        {
+          status: "order-placed",
+          message: "Your order has been placed successfully",
+          updatedBy: "system",
+          timestamp: new Date(),
+        },
+      ],
+    });
+
+    await CustomerNotification.create({
+      customerId: req.user._id,
+      orderId: order._id,
+      trackingId,
+      type: "order-placed",
+      title: "Order Placed! 🎉",
+      message: `Your order #${nextInvoice} has been placed successfully. Track your order with ID: ${trackingId}`,
+    });
+
+    res.status(201).send(order);
+    handleProductQuantity(order.cart);
   } catch (err) {
     res.status(500).send({
       message: err.message,
@@ -165,19 +264,42 @@ const createOrderByRazorPay = async (req, res) => {
   }
 };
 
-const addRazorpayOrder = async (req, res) => {
+// ── Razorpay Webhook ──
+const razorpayWebhook = async (req, res) => {
   try {
-    const newOrder = new Order({
-      ...req.body,
-      user: req.user._id,
-    });
-    const order = await newOrder.save();
-    res.status(201).send(order);
-    handleProductQuantity(order.cart);
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET || "";
+    const crypto = require("crypto");
+    const expectedSignature = crypto
+      .createHmac("sha256", secret)
+      .update(JSON.stringify(req.body))
+      .digest("hex");
+
+    const actualSignature = req.headers["x-razorpay-signature"];
+
+    if (expectedSignature !== actualSignature) {
+      return res.status(400).send({ message: "Invalid webhook signature" });
+    }
+
+    const event = req.body.event;
+    const payment = req.body.payload?.payment?.entity;
+
+    if (event === "payment.captured" && payment) {
+      await Order.findOneAndUpdate(
+        { "razorpay.razorpayPaymentId": payment.id },
+        { paymentStatus: "captured" },
+      );
+    }
+
+    if (event === "payment.failed" && payment) {
+      await Order.findOneAndUpdate(
+        { "razorpay.razorpayPaymentId": payment.id },
+        { paymentStatus: "failed" },
+      );
+    }
+
+    res.status(200).send({ status: "ok" });
   } catch (err) {
-    res.status(500).send({
-      message: err.message,
-    });
+    res.status(500).send({ message: err.message });
   }
 };
 
@@ -484,4 +606,5 @@ module.exports = {
   createOrderByRazorPay,
   addRazorpayOrder,
   sendEmailInvoiceToCustomer,
+  razorpayWebhook,
 };

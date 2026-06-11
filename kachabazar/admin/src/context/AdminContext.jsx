@@ -1,12 +1,10 @@
-import Cookies from 'js-cookie';
 import React, { createContext, useReducer } from 'react';
+import { getAdminInfoFromCookie } from '@/utils/adminCookie';
 
 export const AdminContext = createContext();
 
 const initialState = {
-  adminInfo: Cookies.get('adminInfo')
-    ? JSON.parse(Cookies.get('adminInfo'))
-    : null,
+  adminInfo: getAdminInfoFromCookie(),
 };
 
 function reducer(state, action) {

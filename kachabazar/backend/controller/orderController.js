@@ -46,7 +46,7 @@ const getAllOrders = async (req, res) => {
 
   if (!status) {
     queryObject.status = {
-      $in: ["pending", "processing", "out-for-delivery", "delivered", "cancel"],
+      $in: ["pending", "processing", "out-for-delivery", "delivered", "cancel", "refund-processing", "refunded"],
     };
   }
 
@@ -266,6 +266,8 @@ const updateOrder = async (req, res) => {
     if (newStatus === "out-for-delivery") trackingStatus = "on-the-way";
     if (newStatus === "delivered") trackingStatus = "delivered";
     if (newStatus === "cancel") trackingStatus = "cancelled";
+    if (newStatus === "refund-processing") trackingStatus = "refund-processing";
+    if (newStatus === "refunded") trackingStatus = "refunded";
 
     const previousStatus = order.status;
     order.status = newStatus;
@@ -391,7 +393,7 @@ const getDashboardRecentOrder = async (req, res) => {
     const queryObject = {};
 
     queryObject.status = {
-      $in: ["pending", "processing", "delivered", "cancel"],
+      $in: ["pending", "processing", "delivered", "cancel", "refund-processing", "refunded"],
     };
 
     const totalDoc = await Order.countDocuments(queryObject);
@@ -882,6 +884,78 @@ const updateManyOrders = async (req, res) => {
   }
 };
 
+// ── Admin Refund Order via Razorpay ──
+const processRefund = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).send({ message: "Order not found!" });
+    }
+
+    if (order.paymentMethod !== "RazorPay" || !order.razorpay?.razorpayPaymentId) {
+      return res.status(400).send({ message: "This order is not eligible for Razorpay refund." });
+    }
+
+    if (order.paymentStatus === "refunded") {
+      return res.status(400).send({ message: "Order already refunded." });
+    }
+
+    const Setting = require("../models/Setting");
+    const storeSetting = await Setting.findOne({ name: "storeSetting" });
+    const Razorpay = require("razorpay");
+    const keyId =
+      storeSetting?.setting?.razorpay_id ||
+      process.env.Razorpay_API_Key ||
+      process.env.RAZORPAY_API_KEY ||
+      process.env.RAZORPAY_KEY_ID;
+    const keySecret =
+      storeSetting?.setting?.razorpay_secret ||
+      process.env.Razorpay_Secret_Key ||
+      process.env.RAZORPAY_SECRET_KEY ||
+      process.env.RAZORPAY_KEY_SECRET;
+
+    if (!keyId || !keySecret) {
+      return res.status(500).send({
+        message: "Razorpay keys are not configured.",
+      });
+    }
+
+    const instance = new Razorpay({
+      key_id: keyId,
+      key_secret: keySecret,
+    });
+
+    const refund = await instance.payments.refund(order.razorpay.razorpayPaymentId, {
+      amount: Math.round(order.total * 100),
+    });
+
+    order.paymentStatus = "refunded";
+    order.status = "refunded";
+    order.refundInfo = {
+      razorpayRefundId: refund.id,
+      amount: order.total,
+      reason: reason || "Customer requested refund",
+      initiatedBy: req.user?.name || "Admin",
+      initiatedAt: new Date(),
+      completedAt: new Date(),
+      status: "processed",
+    };
+    await order.save();
+
+    res.status(200).send({
+      message: "Refund processed successfully!",
+      refundId: refund.id,
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Error processing refund",
+    });
+  }
+};
+
 module.exports = {
   getAllOrders,
   getOrderById,
@@ -895,4 +969,5 @@ module.exports = {
   getDashboardRecentOrder,
   getDashboardCount,
   getDashboardAmount,
+  processRefund,
 };

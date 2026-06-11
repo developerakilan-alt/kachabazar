@@ -146,6 +146,14 @@ const getStoreSetting = async (req, res) => {
       facebook_login_status,
       github_login_status,
     } = storeSetting.setting;
+    const envRazorpayId =
+      process.env.Razorpay_API_Key ||
+      process.env.RAZORPAY_API_KEY ||
+      process.env.RAZORPAY_KEY_ID;
+    const isPlaceholder = (value = "") =>
+      value.includes("YourTestKeyHere") || value.includes("YourTestSecretHere");
+    const publicRazorpayId =
+      envRazorpayId || (!isPlaceholder(razorpay_id) ? razorpay_id : undefined);
 
     res.send({
       cod_status,
@@ -155,8 +163,8 @@ const getStoreSetting = async (req, res) => {
       google_analytic_status,
       google_login_status,
       meta_url,
-      razorpay_id,
-      razorpay_status,
+      razorpay_id: publicRazorpayId,
+      razorpay_status: razorpay_status || Boolean(publicRazorpayId),
       stripe_key,
       stripe_status,
       tawk_chat_property_id,
@@ -190,6 +198,21 @@ const getStoreSecretKeys = async (req, res) => {
       stripe_secret,
       nextauth_secret,
     } = storeSetting.setting;
+    const envRazorpayId =
+      process.env.Razorpay_API_Key ||
+      process.env.RAZORPAY_API_KEY ||
+      process.env.RAZORPAY_KEY_ID;
+    const envRazorpaySecret =
+      process.env.Razorpay_Secret_Key ||
+      process.env.RAZORPAY_SECRET_KEY ||
+      process.env.RAZORPAY_KEY_SECRET;
+    const isPlaceholder = (value = "") =>
+      value.includes("YourTestKeyHere") || value.includes("YourTestSecretHere");
+    const resolvedRazorpayId =
+      envRazorpayId || (!isPlaceholder(razorpay_id) ? razorpay_id : undefined);
+    const resolvedRazorpaySecret =
+      envRazorpaySecret ||
+      (!isPlaceholder(razorpay_secret) ? razorpay_secret : undefined);
 
     res.send({
       google_id,
@@ -198,8 +221,8 @@ const getStoreSecretKeys = async (req, res) => {
       facebook_secret,
       github_id,
       github_secret,
-      razorpay_id,
-      razorpay_secret,
+      razorpay_id: resolvedRazorpayId,
+      razorpay_secret: resolvedRazorpaySecret,
       stripe_secret,
       nextauth_secret,
     });

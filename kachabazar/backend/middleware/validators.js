@@ -710,12 +710,11 @@ const validateUpdateOrder = [
     .isIn([
       "pending",
       "processing",
+      "out-for-delivery",
       "delivered",
       "cancel",
-      "cancelled",
-      "deleted",
-      "shipped",
-      "out-for-delivery",
+      "refund-processing",
+      "refunded",
     ])
     .withMessage("Invalid order status"),
   validate,

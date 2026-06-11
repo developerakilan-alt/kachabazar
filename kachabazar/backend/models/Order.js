@@ -48,6 +48,24 @@ const orderSchema = new mongoose.Schema(
       type: Object,
       required: false,
     },
+    razorpay: {
+      type: Object,
+      required: false,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "captured", "failed", "refunded", "partial-refund"],
+      default: "pending",
+    },
+    refundInfo: {
+      razorpayRefundId: String,
+      amount: Number,
+      reason: String,
+      initiatedBy: String,
+      initiatedAt: Date,
+      completedAt: Date,
+      status: { type: String, enum: ["pending", "processed", "failed"] },
+    },
     status: {
       type: String,
       enum: [
@@ -56,6 +74,8 @@ const orderSchema = new mongoose.Schema(
         "out-for-delivery",
         "delivered",
         "cancel",
+        "refund-processing",
+        "refunded",
       ],
     },
 

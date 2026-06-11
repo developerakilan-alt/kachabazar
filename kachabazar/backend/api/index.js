@@ -24,6 +24,7 @@ const deliveryBoyRoutes = require("../routes/deliveryBoyRoutes");
 const deliveryRoutes = require("../routes/deliveryRoutes");
 const trackingRoutes = require("../routes/trackingRoutes");
 const campaignRoutes = require("../routes/campaignRoutes");
+const uploadRoutes = require("../routes/uploadRoutes");
 const { isAuth, isAdmin } = require("../config/auth");
 
 connectDB();
@@ -38,11 +39,12 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        imgSrc: ["'self'", "data:", "https:"],
+        imgSrc: ["'self'", "data:", "http:", "https:"],
         scriptSrc: ["'self'"],
       },
     },
     crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
   }),
 );
 
@@ -73,8 +75,8 @@ app.use(
 );
 
 // ── Body Parser ──
-app.use(express.json({ limit: "4mb" }));
-app.use(express.urlencoded({ extended: true, limit: "4mb" }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // ── Request Logging ──
 // Production: Apache combined format — structured for log aggregation (ELK, CloudWatch, etc.)
@@ -150,6 +152,7 @@ app.use("/v1/customer-tracking/", isAuth, trackingRoutes);
 // ── Admin Routes ──
 app.use("/v1/admin/", adminRoutes);
 app.use("/v1/orders/", isAuth, isAdmin, orderRoutes);
+app.use("/v1/uploads/", uploadRoutes);
 
 // ── Delivery Boy Routes ──
 const { loginDeliveryBoy } = require("../controller/deliveryBoyController");
@@ -158,7 +161,16 @@ app.use("/v1/delivery-boy/", isAuth, isAdmin, deliveryBoyRoutes);
 app.use("/v1/delivery/", deliveryRoutes);
 
 // ── Static Files ──
-app.use("/static", express.static("public", { maxAge: "1d" }));
+app.use(
+  "/static",
+  express.static("public", {
+    maxAge: "1d",
+    setHeaders: (res) => {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    },
+  }),
+);
 
 // ── 404 Handler ──
 app.use((req, res) => {

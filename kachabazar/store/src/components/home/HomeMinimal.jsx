@@ -9,11 +9,13 @@ import CampaignSection from "@components/campaign/CampaignSection";
 
 const HomeMinimal = ({
   popularProducts,
+  categoryProducts,
   discountedProducts,
   attributes,
   storeCustomizationSetting,
   storeCustomizationError,
   globalSetting,
+  categories,
   featuredCampaign,
 }) => {
   return (
@@ -59,7 +61,10 @@ const HomeMinimal = ({
               />
             </h2>
             <Suspense fallback={<p>Loading categories...</p>}>
-              <FeatureCategory />
+              <FeatureCategory
+                categories={categories}
+                products={categoryProducts || popularProducts}
+              />
             </Suspense>
           </div>
         </div>

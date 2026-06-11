@@ -10,6 +10,7 @@ import CMSkeletonTwo from "@components/preloader/CMSkeleton";
 import FeatureCategory from "@components/category/FeatureCategory";
 import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
+import { getCategoryProductImage } from "@utils/categoryProductImages";
 import {
   FiTruck,
   FiCreditCard,
@@ -19,6 +20,7 @@ import {
 
 const HomeDefault = ({
   popularProducts,
+  categoryProducts,
   discountedProducts,
   attributes,
   storeCustomizationSetting,
@@ -54,7 +56,7 @@ const HomeDefault = ({
     ? rootCategories.map((c) => ({
         title: c?.name?.en || "",
         id: c._id,
-        img: `/collections/${c?.slug || c?.name?.en?.toLowerCase().replace(/\s+/g, "-")}.jpg`,
+        img: getCategoryProductImage(c, categoryProducts || popularProducts),
         slug: c?.slug || "",
       }))
     : [

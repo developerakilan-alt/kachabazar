@@ -36,6 +36,8 @@ const getTrackingStatusMessage = (status) => {
     delivered: "Your order has been delivered successfully",
     cancelled: "Your order has been cancelled",
     returned: "Your order has been returned",
+    "refund-processing": "Your refund is being processed",
+    refunded: "Your order has been refunded",
   };
   return messages[status] || "Order status updated";
 };

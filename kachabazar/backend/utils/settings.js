@@ -993,9 +993,9 @@ const setting = [
       stripe_secret:
         "sk_test_51PusFzLS2pVM8hd8p1OUp7oAbMsHy5xtQ8hDJ426DOUbGWCO7kGC6NCfZYtDFQj87rrEali0Bd5YKK502c1aKffu004s0jelJI",
       stripe_status: true,
-      razorpay_status: false,
-      razorpay_id: "",
-      razorpay_secret: "",
+      razorpay_status: true,
+      razorpay_id: "rzp_test_YourTestKeyHere",
+      razorpay_secret: "YourTestSecretHere",
       meta_url: "https://hautecouturejewellery-store-nine.vercel.app/",
       tawk_chat_property_id: "",
       tawk_chat_status: false,
