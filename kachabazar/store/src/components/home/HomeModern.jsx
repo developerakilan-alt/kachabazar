@@ -129,7 +129,7 @@ const HomeModern = ({
      
 
       {/* Promotional banner */}
-      {storeCustomizationSetting?.home?.delivery_status && (
+      {/* {storeCustomizationSetting?.home?.delivery_status && (
         <div className="bg-background py-12">
           <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
             <div className="lg:p-16 p-6 bg-primary shadow-sm border border-primary/20 text-primary-foreground rounded-2xl">
@@ -137,7 +137,7 @@ const HomeModern = ({
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Discounted products — 2-column feature layout */}
       {storeCustomizationSetting?.home?.discount_product_status &&

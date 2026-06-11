@@ -3,16 +3,15 @@ const setting = [
     setting: {
       number_of_image_per_product: "5",
       shop_name: "hautecouturejewellery",
-      address: "59 Station Rd, Purls Bridge, United Kingdom",
-      company_name: "HtmlLover ltd",
+      address: "Pannangkombu, Manapparai",
+      company_name: "hautecouturejewellery ltd",
       vat_number: "47589",
       post_code: "2030",
-      contact: "019579034",
+      contact: "+91 6379156116",
       email: "hautecouturejewellery@gmail.com",
       website: "https://hautecouturejewellery-admin.vercel.app",
       default_language: "en",
-      default_currency: "€",
-      default_currency_name: "Euro",
+      default_currency: "₹",\n      default_currency_name: "INR",
       default_time_zone: "Europe/London",
       default_date_format: "MMM D, YYYY",
       receipt_size: "57-mm",
@@ -101,7 +100,20 @@ const setting = [
           en: "Privacy Policy",
           de: "Datenschutzrichtlinie",
         },
-        term_and_condition: {
+  
+      refund_policy: {
+        status: true,
+        header_bg:
+          "https://res.cloudinary.com/ahossain/image/upload/v1697439245/settings/yw3cd2xupqwqpqcbxv9l.jpg",
+        title: {
+          en: "Refund Policy",
+          de: "Refund Policy",
+        },
+        description: {
+          en: "<p><strong>1)</strong> Haute_Couture has a comprehensive cancellation and refund policy. Please must and should read our cancellation and return policy before placing your order on www.hautecouturejewellery.in/ or our official Instagram or official WhatsApp to ensure a smooth and hassle-free shopping experience.</p><p><strong>2)</strong> Haute_Couture: Each product is quality checked, verified, and then shipped to the customer. Haute_Couture has committed to delivering your order of genuine products accurately and in good condition.</p><p><strong>3)</strong> If the order has already been dispatched, no cancellations can be made.</p><p><strong>4)</strong> Any extra cost incurred due to incorrect/incomplete addresses provided by customers will be payable by the customer.</p><p><strong>5)</strong> While efforts are made to depict accurate color tones in product images, variations may occur due to digital representation and device settings.</p><p><strong>6)</strong> Exchanges are accepted only in cases of incorrect product shipment. Exchanges are available within 3 days with the same packing position, and the product/item will be replaced within 4 days.</p><p><strong>7)</strong> If you have received a damaged product or the wrong item. Kindly make a proper video while unboxing the package, then send it to us on our official WhatsApp with your order number and a couple of pictures of the material immediately within a day of delivery. It\u2019s mandatory for proof to exchange. We will try and replace the product as soon as possible.</p><p><strong>8)</strong> If there is no proper video proof otherwise, we will not exchange or refund. Kindly cooperate with us. Products eligible for return must be unused and in their original condition and packaging. Shipping charges will not be refunded.</p><p><strong>9)</strong> Sale of clearance sale items as defined are final and will not be exchanged or refunded or returned.</p><p><strong>10)</strong> Customized products are not eligible for returns/exchanges/refunds.</p><p><strong>11)</strong> Refunds would be processed and settled within 4-7 days after the product is cancelled/received by us. The settlement depends on the banking cycle and usually takes up to 4-7 working days. Instant refund is not an option.</p><p><strong>12)</strong> Refunds would go back to the original source/mode of payment that the client had opted for during checkout.</p><p><strong>We Do NOT Accept Returns for the Following Reasons:</strong></p><ul><li>The product doesn\u2019t suit you</li><li>Ordered for someone else and they didn\u2019t like it</li><li>Bangle size/motif width doesn\u2019t fit</li><li>Delays in delivery</li><li>Product not received before your occasion date</li><li>Order placed by mistake</li><li>Changed mind after ordering</li></ul>",
+        },
+      },
+      term_and_condition: {
           en: "Terms & Conditions",
           de: "Terms & Bedingungen",
         },
@@ -368,8 +380,8 @@ const setting = [
           de: "Schreiben Sie uns eine E-Mail",
         },
         email_box_email: {
-          en: "info@hautecouturejewellery.com ",
-          de: "info@hautecouturejewellery.com",
+          en: "hautecouturejewellery@gmail.com",
+          de: "hautecouturejewellery@gmail.com",
         },
         email_box_text: {
           en: "Interactively grow empowered for process-centric total linkage. ",
@@ -380,8 +392,8 @@ const setting = [
           de: "Rufen Sie uns an",
         },
         call_box_phone: {
-          en: "029-00124667",
-          de: "029-00124667",
+          en: "+91 6379156116",
+          de: "+91 6379156116",
         },
         call_box_text: {
           en: "Distinctively disseminate focused solutions clicks-and-mortar ministate. ",
@@ -392,16 +404,16 @@ const setting = [
           de: "Ort",
         },
         address_box_address_one: {
-          en: "Boho One, Bridge Street West, Middlesbrough, North Yorkshire, TS2 1AE.",
-          de: "Cecilia Chapman",
+          en: "Pannangkombu, Manapparai",
+          de: "Pannangkombu, Manapparai",
         },
         address_box_address_two: {
-          en: "561-4535 Nulla LA ",
-          de: "561-4535 Nulla LA",
+          en: "",
+          de: "",
         },
         address_box_address_three: {
-          en: "United States 96522. ",
-          de: "United States 96522",
+          en: "",
+          de: "",
         },
         form_title: {
           en: "For any suppoort just send your query ",
@@ -431,10 +443,23 @@ const setting = [
           de: "Datenschutz-Bestimmungen",
         },
         description: {
-          en: "<h1><strong>Last updated: February 15, 2022</strong></h1>\n<p>At hautecouturejewellery, accessible from hautecouturejewellery dot com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by hautecouturejewellery and how we use it. If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us, and any other information you may choose to provide. When you register for an Account, we may ask for your contact information, including items such as name, company name, address, email address, and telephone number.</p>\n<p>This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in hautecouturejewellery.we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us, we may ask for your contact information, including items such as name, company name, address, email address, and telephone number. This policy is not applicable to any information collected offline or via channels other than this website. Our Privacy Policy was created with the help of the Free Privacy Policy Generator.</p>\n<h1><strong>Consent</strong></h1>\n<p>By using our website, you hereby consent to our Privacy Policy and agree to its terms.</p>\n<h1><strong>Information we collect</strong></h1>\n<p>The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information. If you contact us directly, we may receive additional information about you such may choose to provide. When you register for an Account, we may ask for your contact information, including items such as name, company name, address, email address, and telephone number.</p>\n<p>Please note that the Company will not ask you to share any sensitive data or information via email or telephone. If you receive any such request by email or telephone, please do not respond/divulge any sensitive data or information and forward the information relating to the same to</p>\n<h1><strong>How we use your information</strong></h1>\n<p>We use the information we collect in various ways, including to:</p>\n<ol>\n<li>1. Provide, operate, and maintain our website, to provide you with updates and other information.</li>\n<li>2. Improve, personalize, and expand our website,and other information relating to the website.</li>\n<li>3. Understand and analyze how you use our website, to provide you with updates and other information relating to the website.</li>\n<li>4. Develop new products, services, features, and functionality,and other information relating to the website.</li>\n<li>5. Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates.</li>\n<li>6. Send you emails. To provide you with updates and other information relating to the website, and for marketing and promotional purposes</li>\n<li>7. Find and prevent fraud. To provide you with updates and other information relating to the website, and for marketing and promotional purposes</li>\n</ol>\n<h1><strong>Log Files</strong></h1>\n<p>hautecouturejewellery follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the website, and gathering demographic information.</p>\n<h1><strong>Advertising Partners Privacy Policies</strong></h1>\n<p>You may consult this list to find the Privacy Policy for each of the advertising partners of hautecouturejewellery. Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on hautecouturejewellery, which are sent directly to users' browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit. Note that hautecouturejewellery has no access to or control over these cookies that are used by third-party advertisers.</p>\n<h1><strong>Third Party Privacy Policies</strong></h1>\n<p>Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on hautecouturejewellery, which are sent directly to users' browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit. Note that hautecouturejewellery has no access to or control over these cookies that are used by third-party advertisers.</p>\n<p>hautecouturejewellery's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options. You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers' respective websites.</p>\n<h1><strong>CCPA Privacy Rights</strong></h1>\n<p>Under the CCPA, among other rights, California consumers have the right to: Request that a business that collects a consumer's personal data disclose the categories and specific pieces of personal data that a business has collected about consumers. Request that a business delete any personal data about the consumer that a business has collected. Request that a business that sells a consumer's personal data, not sell the consumer's personal data. If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us.</p>\n<h1><strong>Children's Information</strong></h1>\n<p>Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.Request that a business delete any personal data about the consumer that a business has collected. If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us.</p>\n<p>hautecouturejewellery does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.</p>\n",
+          en: "<p>www.hautecouturejewellery.in is an ecommerce store. We value the trust you place in us and recognize the importance of secure transactions and information privacy. This Privacy Policy describes how Haute_Couture (collectively “we, our, us”) collect, use, share, protect or otherwise process your personal information through Haute_Couture website www.hautecouturejewellery.in. While you may be able to browse certain sections of the Platform without registering with us. Your personal information will primarily be stored and processed in India and may have data protection laws that are different from those that apply in the country in which you are located.</p><p>By visiting this website, providing your information or availing any product/service offered on the web, you expressly agree to be bound by the terms and conditions of this Privacy Policy, the Terms of Use and the applicable service/product terms and conditions, and agree to be governed by the laws of India including but not limited to the laws applicable to data protection and privacy. If you do not agree please do not use or access our website. When you transact at our website, as part of the buying and selling process, we collect the personal information you provide us such as your name, date of birth, contact number, address, email address and other information relevant to customer surveys and/or offers. When you browse our website, we automatically receive your computer’s IP Address in order to provide us with information that helps us learn about your browser and operating system. We use this information for internal record keeping and may also use it to improve our products and services and to customize the website according to your interests.</p><p>We will not sell, distribute or disclose your personal information to third parties. To protect your personal information, we take safety and follow our IT professionals’ guidelines to make sure it is not inappropriately lost, misused, accessed, disclosed, altered or destroyed. We may disclose your personal information when required by law or to protect our users and rights. We do not retain full credit card information, and your privacy preferences are respected regarding email and SMS communication. We may use that data to process payment for the product and deliver the product to you. We also use that data to inform you when the product is about to be delivered. We may pass your name and address on to a third party in order to make delivery of the product to you.</p>",
+        },
+      }      },
+      shipping_policy: {
+        status: true,
+        header_bg:
+          "https://res.cloudinary.com/ahossain/image/upload/v1697439245/settings/yw3cd2xupqwqpqcbxv9l.jpg",
+        title: {
+          en: "Shipping Policy",
+          de: "Shipping Policy",
+        },
+        description: {
+          en: "<p><strong>1)</strong> Haute_Couture delivers across all the major locations within India and worldwide. We are committed to delivering your order with good quality packaging within the given time period.</p><p><strong>2)</strong> Orders are processed for shipment only after the payment is complete. Once payment is made, changes to the order or refunds are not possible. If you place orders through our official Instagram page or our official WhatsApp, we process them for shipment only upon receipt of complete payment.</p><p><strong>3)</strong> Orders are dispatched within 1-2 business days after payment receipt.</p><p><strong>4)</strong> Customized orders will need additional time for processing. The shipping will be based on the time required for customization. It depends on the number of items ordered. We inform all status updates through WhatsApp or email.</p><p><strong>5)</strong> We aim to dispatch all orders as soon as the product is ready and within the time shown on the product page. On weekends, government holidays, local holidays, or during seasonal calamities, there may be delays in delivery.</p><p><strong>6)</strong> Once a product has been dispatched, no modifications can be made.</p><p><strong>7)</strong> International orders are not included, like VAT/GST, or any other country\u2019s duties and taxes are not included as part of the products or shipping charges. These additional charges for customs clearance must be paid by the customer. Haute_Couture is not responsible for any custom duties.</p><p><strong>8)</strong> Our products are packed in secure, tamper-proof packaging. If you find the package to be tampered with, please do not accept delivery and return it back to the delivery person.</p><p><strong>9)</strong> If you find a tampered package, kindly make a video and send it to us on our official WhatsApp for proof while you return the product. A video clip is mandatory to return the product.</p><p><strong>10)</strong> Order cut-off times are provided as guidelines only and do not take into account possible delays caused by payment authorization.</p><p><strong>11)</strong> All orders are processed within 2 \u2013 3 business days (excluding Sundays and public holidays)</p><p><strong>12)</strong> During high demand seasons and unfortunate reasons (like weather or courier issues), delivery may take slightly longer.</p>",
         },
       },
-      term_and_condition: {
+      term_and_condition:
+ {
         status: true,
         header_bg:
           "https://res.cloudinary.com/ahossain/image/upload/v1697439245/settings/yw3cd2xupqwqpqcbxv9l.jpg",
@@ -443,7 +468,7 @@ const setting = [
           de: "Terms & Bedingungen",
         },
         description: {
-          en: '<h1><strong>Welcome to hautecouturejewellery!</strong></h1>\n<p>These terms and conditions outline the rules and regulations for the use of hautecouturejewellery\'s Website, located at https://hautecouturejewellery.com/. By accessing this website we assume you accept these terms and conditions. Do not continue to use hautecouturejewellery if you do not agree to take all of the terms and conditions stated on this page.</p>\n<p>The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: Client, You and Your refers to you, the person log on this website and compliant to the Company’s terms and conditions. The Company, refers to our CompanyPartParties or Us refers to both the Client and ourselves. All terms refer to the offer, acceptance and consideration of payment necessary to undertake the process of our assistance to the Client in the most appropriate manner for the express purpose of meeting the Client’s needs in respect of provision of the Company’s stated services, in accordance with and subject to, prevailing law of Netherlands. Any use of the above terminology or other words in the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and therefore as referring to same.</p>\n<h1><strong>Cookies</strong></h1>\n<p>We employ the use of cookies. By accessing hautecouturejewellery, you agreed to use cookies in agreement with the hautecouturejewellery\'s Privacy Policy. Most interactive websites use cookies to let us retrieve the user’s details for each visit. Cookies are used by our website to enable the functionality of certain areas to make it easier for people visiting our website. Some of our affiliate/advertising partners may also use cookies.</p>\n<h1><strong>License</strong></h1>\n<p>Unless otherwise stated, hautecouturejewellery and/or its licensors own the intellectual property rights for all material on hautecouturejewellery. All intellectual property rights are reserved. You may access this from hautecouturejewellery for your own personal use subjected to restrictions set in these terms and conditions.This Agreement shall begin on the date hereof. Our Terms and Conditions were created with the help of the Terms And Conditions Generator.<strong>You must not:</strong></p>\n<ul>\n<li>1. Identifiers (e.g. name, mailing address, email address, phone number, credit/debit card number)</li>\n<li>2. Characteristics of protected classifications (e.g. gender, age)</li>\n<li>3. Commercial information (e.g. products or services purchased, purchase history)</li>\n<li>4. Internet or other electronic network activity (e.g. browse or search history)</li>\n<li>5. Geo location data (e.g. latitude or longitude)</li>\n<li>6. Audio, electronic, visual, or similar information (e.g. recording of Guest service calls)</li>\n<li>7. Inferences drawn from any of the above (e.g. preferences or characteristics)</li>\n</ul>\n<p>Parts of this website offer an opportunity for users to post and exchange opinions and information in certain areas of the website. hautecouturejewellery does not filter, edit, publish or review Comments prior to their presence on the website. Comments do not reflect the views and opinions of hautecouturejewellery,its agents and/or affiliates. Comments reflect the views and opinions of the person who post their views and opinions. To the extent permitted by applicable laws, hautecouturejewellery shall not be liable for the Comments or for any liability, damages or expenses caused and/or suffered as a result of any use of and/or posting of and/or appearance of the Comments on this website.</p>\n<h1><strong>Content Liability</strong></h1>\n<p>We shall not be hold responsible for any content that appears on your Website. You agree to protect and defend us against all claims that is rising on your Website. No link(s) should appear on any Website that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or advocates the infringement or other violation of, any third party rights.Without prior approval and written permission, you may not create frames around our Webpages that alter in any way the visual presentation or appearance of our Website.</p>\n<h1><strong>Your Privacy</strong></h1>\n<p>Please read <a href="https://hautecouturejewellery-store.vercel.app/privacy-policy" target="_self">Privacy Policy</a></p>\n<h1><strong>Reservation of Rights</strong></h1>\n<p>We reserve the right to request that you remove all links or any particular link to our Website. You approve to immediately remove all links to our Website upon request. We also reserve the right to amen these terms and conditions and it’s linking policy at any time. By continuously linking to our Website, you agree to be bound to and follow these linking terms and conditions.</p>\n<h1><strong>Disclaimer</strong></h1>\n<p>To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website. Nothing in this disclaimer will:</p>\n<ul>\n<li>1. limit or exclude our or your liability for death or personal injury;</li>\n<li>2. limit or exclude our or your liability for fraud or fraudulent misrepresentation;</li>\n<li>3. limit any of our or your liabilities in any way that is not permitted under applicable law; or</li>\n<li>4. exclude any of our or your liabilities that may not be excluded under applicable law.</li>\n</ul>\n<p>The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a) are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer, including liabilities arising in contract, in tort and for breach of statutory duty. As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.</p>\n',
+          en: '<p>Welcome to www.hautecouturejewellery.in. It is an ecommerce website. If you continue to browse and use this website you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern by www.hautecouturejewellery.in The term \'you\' refers to the user or viewer of our website. The use of this website is subject to the following terms of use: The content of the pages of this website is for your general information and use only. It is subject to change without notice. Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials found or offered on this website for any particular purpose. You acknowledge that such information and materials may contain inaccuracies or errors and we expressly exclude liability for any such inaccuracies or errors to the fullest extent permitted by law.</p><p>Your use of any information or materials on this website is entirely at your own risk, for which we shall not be liable. It shall be your own responsibility to ensure that any products, services or information available through this website meet your specific requirements. This website contains material which is owned by or licensed to us. This material includes, but is not limited to, the design, layout, look, appearance and graphics.</p><p>Reproduction is prohibited other than in accordance with the copyright notice, which forms part of these terms and conditions. Unauthorized use of this website may give rise to a claim for damages and/or be a criminal offence. All prices, unless indicated otherwise are in Indian Rupees. The availability of products is subject to change without prior notice at the sole discretion of Haute_Couture and orders can be cancelled if the product goes out of stock.</p><p>In a credit/debit card transaction, you must use a credit/debit card that is issued in the name of the User. Haute_Couture will not be liable for any credit/debit card fraud because of the card being used fraudulently. The liability to use a credit/debit card or a net banking transaction fraudulently will be on the User and the onus to \'prove otherwise\' shall be exclusively on the User.</p>'s Website, located at https://hautecouturejewellery.com/. By accessing this website we assume you accept these terms and conditions. Do not continue to use hautecouturejewellery if you do not agree to take all of the terms and conditions stated on this page.</p>\n<p>The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: Client, You and Your refers to you, the person log on this website and compliant to the Company’s terms and conditions. The Company, refers to our CompanyPartParties or Us refers to both the Client and ourselves. All terms refer to the offer, acceptance and consideration of payment necessary to undertake the process of our assistance to the Client in the most appropriate manner for the express purpose of meeting the Client’s needs in respect of provision of the Company’s stated services, in accordance with and subject to, prevailing law of Netherlands. Any use of the above terminology or other words in the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and therefore as referring to same.</p>\n<h1><strong>Cookies</strong></h1>\n<p>We employ the use of cookies. By accessing hautecouturejewellery, you agreed to use cookies in agreement with the hautecouturejewellery\'s Privacy Policy. Most interactive websites use cookies to let us retrieve the user’s details for each visit. Cookies are used by our website to enable the functionality of certain areas to make it easier for people visiting our website. Some of our affiliate/advertising partners may also use cookies.</p>\n<h1><strong>License</strong></h1>\n<p>Unless otherwise stated, hautecouturejewellery and/or its licensors own the intellectual property rights for all material on hautecouturejewellery. All intellectual property rights are reserved. You may access this from hautecouturejewellery for your own personal use subjected to restrictions set in these terms and conditions.This Agreement shall begin on the date hereof. Our Terms and Conditions were created with the help of the Terms And Conditions Generator.<strong>You must not:</strong></p>\n<ul>\n<li>1. Identifiers (e.g. name, mailing address, email address, phone number, credit/debit card number)</li>\n<li>2. Characteristics of protected classifications (e.g. gender, age)</li>\n<li>3. Commercial information (e.g. products or services purchased, purchase history)</li>\n<li>4. Internet or other electronic network activity (e.g. browse or search history)</li>\n<li>5. Geo location data (e.g. latitude or longitude)</li>\n<li>6. Audio, electronic, visual, or similar information (e.g. recording of Guest service calls)</li>\n<li>7. Inferences drawn from any of the above (e.g. preferences or characteristics)</li>\n</ul>\n<p>Parts of this website offer an opportunity for users to post and exchange opinions and information in certain areas of the website. hautecouturejewellery does not filter, edit, publish or review Comments prior to their presence on the website. Comments do not reflect the views and opinions of hautecouturejewellery,its agents and/or affiliates. Comments reflect the views and opinions of the person who post their views and opinions. To the extent permitted by applicable laws, hautecouturejewellery shall not be liable for the Comments or for any liability, damages or expenses caused and/or suffered as a result of any use of and/or posting of and/or appearance of the Comments on this website.</p>\n<h1><strong>Content Liability</strong></h1>\n<p>We shall not be hold responsible for any content that appears on your Website. You agree to protect and defend us against all claims that is rising on your Website. No link(s) should appear on any Website that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or advocates the infringement or other violation of, any third party rights.Without prior approval and written permission, you may not create frames around our Webpages that alter in any way the visual presentation or appearance of our Website.</p>\n<h1><strong>Your Privacy</strong></h1>\n<p>Please read <a href="https://hautecouturejewellery-store.vercel.app/privacy-policy" target="_self">Privacy Policy</a></p>\n<h1><strong>Reservation of Rights</strong></h1>\n<p>We reserve the right to request that you remove all links or any particular link to our Website. You approve to immediately remove all links to our Website upon request. We also reserve the right to amen these terms and conditions and it’s linking policy at any time. By continuously linking to our Website, you agree to be bound to and follow these linking terms and conditions.</p>\n<h1><strong>Disclaimer</strong></h1>\n<p>To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website. Nothing in this disclaimer will:</p>\n<ul>\n<li>1. limit or exclude our or your liability for death or personal injury;</li>\n<li>2. limit or exclude our or your liability for fraud or fraudulent misrepresentation;</li>\n<li>3. limit any of our or your liabilities in any way that is not permitted under applicable law; or</li>\n<li>4. exclude any of our or your liabilities that may not be excluded under applicable law.</li>\n</ul>\n<p>The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a) are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer, including liabilities arising in contract, in tort and for breach of statutory duty. As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.</p>\n',
         },
       },
       faq: {
@@ -830,29 +855,29 @@ const setting = [
         },
         block1_sub_link4: "#",
         block2_title: {
-          en: "Latest News",
-          de: "Neueste Nachrichten",
+          en: "Our Policies",
+          de: "Our Policies",
         },
         block2_sub_title1: {
-          en: "Fish & Meat",
-          de: "Fisch Fleisch",
+          en: "Terms & Conditions",
+          de: "Terms & Conditions",
         },
-        block2_sub_link1: "/search?category=fish-meat",
+        block2_sub_link1: "/terms-and-conditions",
         block2_sub_title2: {
-          en: "Soft Drink",
-          de: "Erfrischungsgetränk",
+          en: "Privacy Policy",
+          de: "Privacy Policy",
         },
-        block2_sub_link2: "/search?category=drinks",
+        block2_sub_link2: "/privacy-policy",
         block2_sub_title3: {
-          en: "Milk & Dairy",
-          de: "Milch und Milchprodukte",
+          en: "Refunds & Return Policy",
+          de: "Refunds & Return Policy",
         },
-        block2_sub_link3: "/search?category=milk-dairy",
+        block2_sub_link3: "/refund-policy",
         block2_sub_title4: {
-          en: "Beauty & Health",
-          de: "Schönheit und Gesundheit",
+          en: "Shipping Policy",
+          de: "Shipping Policy",
         },
-        block2_sub_link4: "/search?category=beauty-health",
+        block2_sub_link4: "/shipping-policy",
         block3_title: {
           en: "My Account",
           de: "Mein Konto",
@@ -880,11 +905,11 @@ const setting = [
         block4_logo:
           "/logo/logo-color.png",
         block4_address: {
-          en: "987 Andre Plain Suite High Street 838, Lake Hestertown, USA",
-          de: "987 Andre Plain Suite High Street 838, Lake Hestertown, USA",
+          en: "Pannangkombu, Manapparai",
+          de: "Pannangkombu, Manapparai",
         },
-        block4_phone: "02.356.1666",
-        block4_email: "ccruidk@test.com",
+        block4_phone: "+91 6379156116",
+        block4_email: "hautecouturejewellery@gmail.com",
         social_facebook: "https://www.facebook.com/",
         social_twitter: "https://twitter.com/",
         social_pinterest: "https://www.pinterest.com/",
@@ -892,7 +917,7 @@ const setting = [
         social_whatsapp: "https://web.whatsapp.com/",
         payment_method_img:
           "https://res.cloudinary.com/ahossain/image/upload/v1697688607/settings/payment-logo_qhslgz.webp",
-        bottom_contact: "+6599887766",
+        bottom_contact: " +91 6379156116",
       },
       slug: {
         right_box_status: true,

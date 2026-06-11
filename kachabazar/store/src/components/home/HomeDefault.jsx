@@ -183,7 +183,7 @@ const HomeDefault = ({
       )}
 
       {/* promotional banner card */}
-      {storeCustomizationSetting?.home?.delivery_status && (
+      {/* {storeCustomizationSetting?.home?.delivery_status && (
         <div className="block mx-auto max-w-screen-2xl px-4 sm:px-10 mb-8">
           <div
             className="lg:p-16 p-6 shadow-sm rounded-2xl"
@@ -192,7 +192,7 @@ const HomeDefault = ({
             <CardTwo />
           </div>
         </div>
-      )}
+      )} */}
 
       {/* discounted products */}
       {storeCustomizationSetting?.home?.discount_product_status &&

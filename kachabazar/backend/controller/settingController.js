@@ -31,7 +31,7 @@ const getGlobalSetting = async (req, res) => {
     const globalSetting = await Setting.findOne({ name: "globalSetting" });
     if (!globalSetting || !globalSetting.setting) {
       return res.send({
-        default_currency: "$",
+        default_currency: "₹",
         default_language: "en",
       });
     }

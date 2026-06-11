@@ -89,7 +89,7 @@ const useUtilsFunction = () => {
     return data !== undefined ? data : "!#";
   };
 
-  const currency = globalSetting?.default_currency || "$";
+  const currency = globalSetting?.default_currency || "₹";
 
   /**
    * Format a price with Intl locale-aware currency formatting.
