@@ -147,6 +147,7 @@ const getStoreSetting = async (req, res) => {
       github_login_status,
     } = storeSetting.setting;
     const envRazorpayId =
+      process.env.Razor_API_KEY ||
       process.env.Razorpay_API_Key ||
       process.env.RAZORPAY_API_KEY ||
       process.env.RAZORPAY_KEY_ID;
@@ -199,10 +200,12 @@ const getStoreSecretKeys = async (req, res) => {
       nextauth_secret,
     } = storeSetting.setting;
     const envRazorpayId =
+      process.env.Razor_API_KEY ||
       process.env.Razorpay_API_Key ||
       process.env.RAZORPAY_API_KEY ||
       process.env.RAZORPAY_KEY_ID;
     const envRazorpaySecret =
+      process.env.Razor_API_SECRET ||
       process.env.Razorpay_Secret_Key ||
       process.env.RAZORPAY_SECRET_KEY ||
       process.env.RAZORPAY_KEY_SECRET;

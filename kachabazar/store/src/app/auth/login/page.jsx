@@ -8,17 +8,13 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Image from "next/image";
+import LoginSlideshow from "@components/login/LoginSlideshow";
 
 //internal imports
 import { notifyError } from "@utils/toast";
 import Error from "@components/form/Error";
 import InputArea from "@components/form/InputArea";
-import BottomNavigation from "@components/login/BottomNavigation";
-import AuthButton from "@components/form/AuthButton";
 import ShowToast from "@components/common/ShowToast";
-import OtpLogin from "@components/login/OtpLogin";
-import { useSetting } from "@context/SettingContext";
 
 // Zod validation schema for login
 const loginSchema = z.object({
@@ -30,9 +26,7 @@ const loginSchema = z.object({
 
 const Login = () => {
   const router = useRouter();
-  const { globalSetting } = useSetting() || {};
   const [loading, setLoading] = useState(false);
-  const [loginMethod, setLoginMethod] = useState("password"); // "password" | "otp"
   const redirectUrl = useSearchParams().get("redirectUrl") || "/user/dashboard";
   const {
     register,
@@ -69,34 +63,14 @@ const Login = () => {
     <>
       <ShowToast />
       <div className="min-h-screen flex flex-col lg:flex-row bg-background">
-        {/* Left Side: Background Image Area (hidden on mobile) */}
-        <div className="hidden lg:flex lg:w-1/2 bg-muted">
-          <Image
-            src="https://images.unsplash.com/photo-1632406897798-e5472b4a989e?q=80"
-            alt="Workspace Background"
-            width={960}
-            height={1080}
-            className="object-cover w-full h-auto"
-            priority
-          />
+        {/* Left Side: Category Slideshow (hidden on mobile) */}
+        <div className="hidden lg:block lg:w-1/2">
+          <LoginSlideshow />
         </div>
 
         {/* Right Side: Form Area */}
         <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-24 relative">
           <div className="max-w-md w-full">
-            {/* Logo */}
-            <div className="mb-8">
-              <Link href="/" className="inline-block relative h-10 w-40">
-                <Image
-                  src={globalSetting?.logo || "/logo/logo-color.png"}
-                  alt={globalSetting?.shop_name || "hautecouturejewellery"}
-                  width={160}
-                  height={40}
-                  className="object-contain object-left"
-                />
-              </Link>
-            </div>
-
             {/* Headers */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -113,34 +87,7 @@ const Login = () => {
               </p>
             </div>
 
-            {/* Login Method Toggle - Subtler styling for this design */}
-            <div className="flex mb-6 border-b border-border">
-              <button
-                type="button"
-                onClick={() => setLoginMethod("password")}
-                className={`flex-1 pb-2 text-sm font-semibold transition-all duration-200 border-b-2 ${
-                  loginMethod === "password"
-                    ? "border-primary text-primary"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Password Login
-              </button>
-              <button
-                type="button"
-                onClick={() => setLoginMethod("otp")}
-                className={`flex-1 pb-2 text-sm font-semibold transition-all duration-200 border-b-2 ${
-                  loginMethod === "otp"
-                    ? "border-primary text-primary"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                OTP Login
-              </button>
-            </div>
-
-            {loginMethod === "password" ? (
-              <form
+            <form
                 onSubmit={handleSubmit(submitHandler)}
                 className="space-y-6"
               >
@@ -185,20 +132,6 @@ const Login = () => {
                   {loading ? "Signing in..." : "Login"}
                 </button>
               </form>
-            ) : (
-              <OtpLogin redirectUrl={redirectUrl} />
-            )}
-
-            {/* Standard "Or continue with" component */}
-            <div className="mt-8">
-              <BottomNavigation
-                or={loginMethod === "password"}
-                route="/auth/signup"
-                pageName="Sign Up"
-                loginTitle="Login"
-                hideSignupText={true} // Adding a prop here to hide duplicate signup text if the component supports it. If not, we'll fix it in the next step.
-              />
-            </div>
           </div>
         </div>
       </div>

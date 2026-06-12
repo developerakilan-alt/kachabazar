@@ -151,7 +151,6 @@ const Register = () => {
                   </div>
                 </form>
                 <BottomNavigation
-                  desc
                   route={"/auth/login"}
                   pageName={"Login"}
                 />

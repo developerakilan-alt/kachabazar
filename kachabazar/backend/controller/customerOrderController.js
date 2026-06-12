@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const OrderTracking = require("../models/OrderTracking");
 const CustomerNotification = require("../models/CustomerNotification");
+const PaymentLog = require("../models/PaymentLog");
 const Setting = require("../models/Setting");
 const { sendEmail } = require("../lib/email-sender/sender");
 const { formatAmountForStripe } = require("../lib/stripe/stripe");
@@ -20,10 +21,12 @@ const { generateTrackingId } = require("../utils/tracking");
 const getRazorpayCredentials = async () => {
   const storeSetting = await Setting.findOne({ name: "storeSetting" });
   const envKeyId =
+    process.env.Razor_API_KEY ||
     process.env.Razorpay_API_Key ||
     process.env.RAZORPAY_API_KEY ||
     process.env.RAZORPAY_KEY_ID;
   const envKeySecret =
+    process.env.Razor_API_SECRET ||
     process.env.Razorpay_Secret_Key ||
     process.env.RAZORPAY_SECRET_KEY ||
     process.env.RAZORPAY_KEY_SECRET;
@@ -185,6 +188,20 @@ const createOrderByRazorPay = async (req, res) => {
       return res.status(500).send({
         message: "Error occurred when creating order!",
       });
+
+    await PaymentLog.create({
+      gateway: "razorpay",
+      event: "order.created",
+      razorpayOrderId: order.id,
+      amount: order.amount,
+      currency: order.currency || "INR",
+      status: "created",
+      payload: { amount: req.body.amount, currency: "INR" },
+      rawResponse: order,
+    }).catch((logErr) =>
+      console.error("PaymentLog creation error:", logErr.message),
+    );
+
     res.send({ ...order, keyId });
   } catch (err) {
     const message =
@@ -257,7 +274,37 @@ const addRazorpayOrder = async (req, res) => {
 
     res.status(201).send(order);
     handleProductQuantity(order.cart);
+
+    PaymentLog.create({
+      gateway: "razorpay",
+      event: "payment.captured",
+      razorpayPaymentId: razorpay?.razorpayPaymentId,
+      razorpayOrderId: razorpay?.razorpayOrderId,
+      razorpaySignature: razorpay?.razorpaySignature,
+      orderId: order._id,
+      invoice: nextInvoice,
+      customerId: req.user._id,
+      customerEmail: req.user?.email,
+      amount: req.body.total,
+      status: "captured",
+      payload: req.body,
+      rawResponse: { razorpay, orderId: order._id },
+    }).catch((logErr) =>
+      console.error("PaymentLog creation error:", logErr.message),
+    );
   } catch (err) {
+    PaymentLog.create({
+      gateway: "razorpay",
+      event: "payment.failed",
+      razorpayPaymentId: req.body?.razorpay?.razorpayPaymentId,
+      razorpayOrderId: req.body?.razorpay?.razorpayOrderId,
+      customerId: req.user?._id,
+      customerEmail: req.user?.email,
+      amount: req.body?.total,
+      status: "failed",
+      errorMessage: err.message,
+      payload: req.body,
+    }).catch(() => {});
     res.status(500).send({
       message: err.message,
     });
@@ -277,24 +324,71 @@ const razorpayWebhook = async (req, res) => {
     const actualSignature = req.headers["x-razorpay-signature"];
 
     if (expectedSignature !== actualSignature) {
+      PaymentLog.create({
+        gateway: "razorpay",
+        event: "webhook.ignored",
+        status: "invalid_signature",
+        rawResponse: {
+          headers: { "x-razorpay-signature": actualSignature },
+          event: req.body?.event,
+        },
+      }).catch(() => {});
       return res.status(400).send({ message: "Invalid webhook signature" });
     }
 
     const event = req.body.event;
     const payment = req.body.payload?.payment?.entity;
 
+    PaymentLog.create({
+      gateway: "razorpay",
+      event: "webhook.received",
+      razorpayPaymentId: payment?.id,
+      razorpayOrderId: payment?.order_id,
+      amount: payment?.amount,
+      currency: payment?.currency,
+      status: event,
+      rawResponse: req.body,
+    }).catch(() => {});
+
     if (event === "payment.captured" && payment) {
-      await Order.findOneAndUpdate(
+      const updatedOrder = await Order.findOneAndUpdate(
         { "razorpay.razorpayPaymentId": payment.id },
         { paymentStatus: "captured" },
+        { new: true },
       );
+
+      PaymentLog.create({
+        gateway: "razorpay",
+        event: "payment.captured",
+        razorpayPaymentId: payment.id,
+        razorpayOrderId: payment.order_id,
+        orderId: updatedOrder?._id,
+        amount: payment.amount,
+        currency: payment.currency,
+        status: "captured",
+        rawResponse: req.body,
+      }).catch(() => {});
     }
 
     if (event === "payment.failed" && payment) {
-      await Order.findOneAndUpdate(
+      const failedOrder = await Order.findOneAndUpdate(
         { "razorpay.razorpayPaymentId": payment.id },
         { paymentStatus: "failed" },
+        { new: true },
       );
+
+      PaymentLog.create({
+        gateway: "razorpay",
+        event: "payment.failed",
+        razorpayPaymentId: payment.id,
+        razorpayOrderId: payment.order_id,
+        orderId: failedOrder?._id,
+        amount: payment.amount,
+        currency: payment.currency,
+        status: "failed",
+        errorMessage: payment.error_description || "Payment failed",
+        rawResponse: req.body,
+      }).catch(() => {});
     }
 
     res.status(200).send({ status: "ok" });

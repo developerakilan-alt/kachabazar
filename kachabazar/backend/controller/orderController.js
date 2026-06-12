@@ -908,11 +908,13 @@ const processRefund = async (req, res) => {
     const Razorpay = require("razorpay");
     const keyId =
       storeSetting?.setting?.razorpay_id ||
+      process.env.Razor_API_KEY ||
       process.env.Razorpay_API_Key ||
       process.env.RAZORPAY_API_KEY ||
       process.env.RAZORPAY_KEY_ID;
     const keySecret =
       storeSetting?.setting?.razorpay_secret ||
+      process.env.Razor_API_SECRET ||
       process.env.Razorpay_Secret_Key ||
       process.env.RAZORPAY_SECRET_KEY ||
       process.env.RAZORPAY_KEY_SECRET;
