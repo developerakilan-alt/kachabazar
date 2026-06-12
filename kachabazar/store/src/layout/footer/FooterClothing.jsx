@@ -1,13 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  XIcon,
-  FacebookIcon,
-  LinkedinIcon,
-  PinterestIcon,
-  WhatsappIcon,
-} from "react-share";
+// import {
+//   XIcon,
+//   FacebookIcon,
+//   LinkedinIcon,
+//   PinterestIcon,
+//   WhatsappIcon,
+// } from "react-share";
 
 import { cookies } from "next/headers";
 import { getUserServerSession } from "@lib/auth-server";
@@ -193,60 +193,7 @@ const FooterClothing = async ({
               "© " + new Date().getFullYear() + " All rights reserved."}
           </p>
 
-          {footer?.social_links_status && (
-            <div className="flex items-center gap-3">
-              {footer?.social_facebook && (
-                <Link
-                  href={footer.social_facebook}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Facebook"
-                >
-                  <FacebookIcon size={28} round />
-                </Link>
-              )}
-              {footer?.social_twitter && (
-                <Link
-                  href={footer.social_twitter}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Twitter"
-                >
-                  <XIcon size={28} round />
-                </Link>
-              )}
-              {footer?.social_pinterest && (
-                <Link
-                  href={footer.social_pinterest}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Pinterest"
-                >
-                  <PinterestIcon size={28} round />
-                </Link>
-              )}
-              {footer?.social_linkedin && (
-                <Link
-                  href={footer.social_linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="LinkedIn"
-                >
-                  <LinkedinIcon size={28} round />
-                </Link>
-              )}
-              {footer?.social_whatsapp && (
-                <Link
-                  href={footer.social_whatsapp}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="WhatsApp"
-                >
-                  <WhatsappIcon size={28} round />
-                </Link>
-              )}
-            </div>
-          )}
+
 
           {footer?.payment_method_status && (
             <div>

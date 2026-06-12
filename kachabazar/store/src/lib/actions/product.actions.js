@@ -20,7 +20,7 @@ export async function getStoreProducts({
       `${baseURL}/products/store?category=${category}&title=${title}&slug=${slug}`,
       {
         next: {
-          revalidate: 60,
+          revalidate: 0,
           tags: ["store_products"],
         },
       },
@@ -59,8 +59,8 @@ export async function getProductBySlug(slug) {
     const response = await resilientFetch(
       `${baseURL}/products/product/${slug}`,
       {
+        cache: "no-store",
         next: {
-          revalidate: 120,
           tags: ["product", `product-${slug}`],
         },
       },
@@ -84,16 +84,16 @@ export async function getProductBySlug(slug) {
       resilientFetch(
         `${baseURL}/products/store?category=${product.category?._id || product.category || ""}`,
         {
+          cache: "no-store",
           next: {
-            revalidate: 120,
             tags: ["related_products", `product-${slug}-related`],
           },
         },
       ).then((r) => (r.ok ? r.json() : { products: [] })),
       // Reviews can be fetched from the store endpoint with slug
       resilientFetch(`${baseURL}/products/store?slug=${slug}`, {
+        cache: "no-store",
         next: {
-          revalidate: 120,
           tags: [`product-${slug}-reviews`],
         },
       }).then((r) => (r.ok ? r.json() : { reviews: [] })),
@@ -138,8 +138,8 @@ export async function searchProducts({
         query,
       )}`,
       {
+        cache: "no-store",
         next: {
-          revalidate: 30,
           tags: ["search_products"],
         },
       },
@@ -169,8 +169,8 @@ export async function searchProducts({
 export async function getDiscountedProducts() {
   try {
     const response = await resilientFetch(`${baseURL}/products/store`, {
+      cache: "no-store",
       next: {
-        revalidate: 120,
         tags: ["discounted_products"],
       },
     });
@@ -197,8 +197,8 @@ export async function getDiscountedProducts() {
 export async function getPopularProducts() {
   try {
     const response = await resilientFetch(`${baseURL}/products/store`, {
+      cache: "no-store",
       next: {
-        revalidate: 120,
         tags: ["popular_products"],
       },
     });
@@ -227,8 +227,8 @@ export async function getRelatedProducts(category) {
     const response = await resilientFetch(
       `${baseURL}/products/store?category=${category}`,
       {
+        cache: "no-store",
         next: {
-          revalidate: 120,
           tags: ["related_products", `category-${category}`],
         },
       },

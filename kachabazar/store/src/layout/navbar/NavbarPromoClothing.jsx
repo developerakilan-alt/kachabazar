@@ -1,30 +1,19 @@
 "use client";
 
-import { useContext, useState, useEffect } from "react";
-import Link from "next/link";
+import { useState, useEffect } from "react";
 
 import MegaMenuCategory from "@components/mega-menu/MegaMenuCategory";
-import { SidebarContext } from "@context/SidebarContext";
-import useUtilsFunction from "@hooks/useUtilsFunction";
-import SelectLanguage from "@components/form/SelectLanguage";
-import SelectTheme from "@components/form/SelectTheme";
-import SelectLayout from "@components/form/SelectLayout";
 import StoreTheme from "@components/common/StoreTheme";
-
-const isDev = process.env.NODE_ENV === "development";
 import { useSetting } from "@context/SettingContext";
 
 const NavbarPromoClothing = ({
-  languages,
   categories,
   categoryError,
   themes,
   defaultTheme,
   storeLayout = "clothing",
 }) => {
-  const { isLoading, setIsLoading } = useContext(SidebarContext);
-  const { storeCustomization, globalSetting } = useSetting();
-  const { showingTranslateValue } = useUtilsFunction();
+  const { storeCustomization } = useSetting();
   const navbar = storeCustomization?.navbar;
 
   const [activeTheme, setActiveTheme] = useState(defaultTheme || null);
@@ -57,52 +46,6 @@ const NavbarPromoClothing = ({
                 storeLayout="clothing"
               />
             )}
-
-            {navbar?.about_menu_status && (
-              <Link
-                href="/about-us"
-                onClick={() => setIsLoading(!isLoading)}
-                className="text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors"
-              >
-                {showingTranslateValue(navbar?.about_us) || "About Us"}
-              </Link>
-            )}
-
-            {navbar?.contact_menu_status && (
-              <Link
-                href="/contact-us"
-                onClick={() => setIsLoading(!isLoading)}
-                className="text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors"
-              >
-                {showingTranslateValue(navbar?.contact_us) || "Contact Us"}
-              </Link>
-            )}
-
-            {navbar?.offers_menu_status && (
-              <Link
-                href="/offers"
-                onClick={() => setIsLoading(!isLoading)}
-                className="relative text-sm font-medium text-red-500 hover:text-red-600 transition-colors"
-              >
-                {showingTranslateValue(navbar?.offers) || "Offers"}
-                <span className="absolute -top-1.5 -right-2.5 flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 border border-white"></span>
-                </span>
-              </Link>
-            )}
-          </div>
-
-          <div className="flex items-center text-neutral-600 dark:text-neutral-300">
-            <SelectLanguage data={languages} />
-            {isDev && (
-              <SelectTheme
-                themes={themes}
-                defaultTheme={defaultTheme}
-                onThemeChange={(theme) => setActiveTheme(theme)}
-              />
-            )}
-            {isDev && <SelectLayout currentLayout={storeLayout} />}
           </div>
         </div>
       </div>

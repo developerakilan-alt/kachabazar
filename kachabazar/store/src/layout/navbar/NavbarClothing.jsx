@@ -35,9 +35,12 @@ const NavbarClothing = async ({
       <div className="hidden lg:block bg-neutral-950 text-white">
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
           <div className="py-1.5 text-xs flex justify-between items-center">
-            <span className="tracking-[0.25em] uppercase text-[10px] font-light text-neutral-400">
-              Free shipping on orders over $100
-            </span>
+            <a
+              href="mailto:hautecouturejewellery@gmail.com"
+              className="tracking-[0.25em] uppercase text-[10px] font-light text-neutral-400 hover:text-white transition-colors"
+            >
+              SUPPORT: hautecouturejewellery@gmail.com
+            </a>
             <div className="flex items-center gap-5 text-neutral-500">
               <Link
                 href="/about-us"
