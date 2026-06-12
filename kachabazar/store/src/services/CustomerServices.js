@@ -5,7 +5,7 @@ import {
   handleResponse,
   resilientFetch,
 } from "@services/CommonService";
-import { getHeaders, getUserServerSession } from "@lib/auth-server";
+
 
 const loginCustomer = async ({ email, password }) => {
   // console.log("registerEmail", email, "password", password);
@@ -102,13 +102,11 @@ const resetPassword = async () => {
 
 const getShippingAddress = async ({ id = "" }) => {
   try {
-    // return;
+    const { getUserServerSession, getHeaders } = await import("@lib/auth-server");
     const userInfo = await getUserServerSession();
-    // console.log("userInfo", userInfo);
     const response = await resilientFetch(
       `${baseURL}/customer/shipping/address/${userInfo?.id}?id=${id}`,
       {
-        // cache: "no-cache",
         headers: await getHeaders(),
       },
     );
