@@ -8,7 +8,6 @@ import React, {
   useRef,
 } from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Home, ChevronRight } from "lucide-react";
@@ -36,7 +35,6 @@ const SearchScreenClothing = ({
 }) => {
   const router = useRouter();
   const [visibleProduct, setVisibleProduct] = useState(24);
-  const [mounted, setMounted] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState("default");
@@ -49,8 +47,6 @@ const SearchScreenClothing = ({
 
   const { showingTranslateValue } = useUtilsFunction();
   const { productData } = useFilter(products);
-
-  useEffect(() => setMounted(true), []);
 
   // Check if category bar can scroll
   const checkScroll = useCallback(() => {
@@ -75,7 +71,7 @@ const SearchScreenClothing = ({
       };
     }
     return () => clearTimeout(timer);
-  }, [checkScroll, mounted]);
+  }, [checkScroll]);
 
   const scrollCategoriesLeft = () => {
     categoryScrollRef.current?.scrollBy({ left: -200, behavior: "smooth" });
@@ -110,8 +106,6 @@ const SearchScreenClothing = ({
   }, [productData, sortBy]);
 
   const handleCategoryClick = (id) => router.push(`/search?_id=${id}`);
-
-  if (!mounted) return null;
 
   const topCategories = categories?.[0]?.children || [];
 
@@ -392,6 +386,4 @@ const SearchScreenClothing = ({
   );
 };
 
-export default dynamic(() => Promise.resolve(SearchScreenClothing), {
-  ssr: false,
-});
+export default SearchScreenClothing;

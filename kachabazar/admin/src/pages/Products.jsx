@@ -436,7 +436,7 @@ const Products = () => {
       <DeleteModal
         open={open}
         title={title}
-        ids={selectedIds}
+        ids={selectedIds?.length > 0 ? selectedIds : null}
         onOpenChange={() => setOpen(false)}
       />
       <BulkActionDrawer ids={selectedIds} title="Products" />

@@ -13,11 +13,8 @@ import { Button } from "@components/ui/button";
 
 const SearchScreen = ({ products, attributes, categories }) => {
   const [visibleProduct, setVisibleProduct] = useState(18);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   const { setSortedField, productData } = useFilter(products);
-  if (!mounted) return null; // or a skeleton loader
 
   return (
     <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
@@ -94,4 +91,4 @@ const SearchScreen = ({ products, attributes, categories }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(SearchScreen), { ssr: false });
+export default SearchScreen;

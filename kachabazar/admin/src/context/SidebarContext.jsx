@@ -74,14 +74,12 @@ export const SidebarProvider = ({ children }) => {
     // console.log("handleChangeLang", value);
 
     Cookies.set("i18next", value?.code, {
-      sameSite: "None",
-      secure: true, // Include the "secure" attribute
+      sameSite: "Lax",
     });
     i18n.changeLanguage(value?.code);
     setLang(value?.code);
     Cookies.set("_currLang", JSON.stringify(value), {
-      sameSite: "None",
-      secure: true, // Include the "secure" attribute
+      sameSite: "Lax",
     });
     setCurrLang(value);
   };
@@ -119,8 +117,7 @@ export const SidebarProvider = ({ children }) => {
     // Set i18next language & update cookies **only when needed**
     if (!cookieLang || cookieLang !== selectedLang) {
       Cookies.set("i18next", selectedLang, {
-        sameSite: "None",
-        secure: true,
+        sameSite: "Lax",
       });
     }
 

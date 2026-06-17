@@ -92,8 +92,7 @@ const useStaffSubmit = (id) => {
           const cookieTimeOut = 0.5;
           Cookies.set("adminInfo", JSON.stringify(res), {
             expires: cookieTimeOut,
-            sameSite: "None",
-            secure: true,
+            sameSite: "Lax",
           });
         }
         setIsUpdate(true);

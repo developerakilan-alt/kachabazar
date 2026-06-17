@@ -40,7 +40,6 @@ const SearchScreenNew = ({
   const searchParams = useSearchParams();
 
   const [visibleProduct, setVisibleProduct] = useState(24);
-  const [mounted, setMounted] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
@@ -61,8 +60,6 @@ const SearchScreenNew = ({
 
   const { showingTranslateValue } = useUtilsFunction();
   const { setSortedField, productData } = useFilter(products);
-
-  useEffect(() => setMounted(true), []);
 
   // Check if category bar can scroll
   const checkScroll = useCallback(() => {
@@ -88,7 +85,7 @@ const SearchScreenNew = ({
       };
     }
     return () => clearTimeout(timer);
-  }, [checkScroll, mounted]);
+  }, [checkScroll]);
 
   const scrollCategoriesLeft = () => {
     categoryScrollRef.current?.scrollBy({ left: -200, behavior: "smooth" });
@@ -133,8 +130,6 @@ const SearchScreenNew = ({
       .replace(/[^A-Z0-9]+/gi, "-");
     router.push(`/search?category=${name}&_id=${categoryId}`);
   };
-
-  if (!mounted) return null;
 
   const flattenCategories = (cats) => {
     const result = [];
@@ -588,4 +583,4 @@ const SearchScreenNew = ({
   );
 };
 
-export default dynamic(() => Promise.resolve(SearchScreenNew), { ssr: false });
+export default SearchScreenNew;

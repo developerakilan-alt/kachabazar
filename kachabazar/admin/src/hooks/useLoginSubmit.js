@@ -50,8 +50,7 @@ const useLoginSubmit = () => {
           dispatch({ type: "USER_LOGIN", payload: res });
           Cookies.set("adminInfo", JSON.stringify(res), {
             expires: cookieTimeOut,
-            sameSite: "None",
-            secure: true,
+            sameSite: "Lax",
           });
 
           if (loginMode === "delivery-boy") {
@@ -75,8 +74,7 @@ const useLoginSubmit = () => {
           dispatch({ type: "USER_LOGIN", payload: res });
           Cookies.set("adminInfo", JSON.stringify(res), {
             expires: cookieTimeOut,
-            sameSite: "None",
-            secure: true,
+            sameSite: "Lax",
           });
           navigate("/", { replace: true });
         }

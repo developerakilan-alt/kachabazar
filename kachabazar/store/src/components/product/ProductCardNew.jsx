@@ -236,4 +236,4 @@ const ProductCardNew = ({ product, attributes }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(ProductCardNew), { ssr: false });
+export default ProductCardNew;

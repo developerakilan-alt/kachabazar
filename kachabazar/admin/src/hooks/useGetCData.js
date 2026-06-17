@@ -2,44 +2,51 @@ import { AdminContext } from "@/context/AdminContext";
 import { useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 
+const allAccess = [
+  "dashboard", "products", "categories", "attributes", "coupons",
+  "campaigns", "campaign", "customers", "orders", "delivery-boys",
+  "delivery-boy", "my-dashboard", "our-staff", "settings", "themes",
+  "languages", "currencies", "store", "customization", "store-settings",
+  "product", "order", "edit-profile", "customer-order", "notifications",
+  "coming-soon",
+];
+
 const useGetCData = () => {
   const { state } = useContext(AdminContext);
   const { adminInfo } = state;
 
   const location = useLocation();
-  // const path = location?.pathname?.split("/")[1];
-  const path = location?.pathname?.split("?")[0].split("/")[1];
-  //   console.log("location", location?.pathname?.split("/")[1]);
+  const segments = location?.pathname?.split("?")[0].split("/").filter(Boolean);
+  const path = segments ? (segments[1] || segments[0] || "") : "";
 
   const [role, setRole] = useState();
-  const [accessList, setAccessList] = useState([]);
+  const [accessList, setAccessList] = useState(allAccess);
 
-  // Function to decrypt data
   const decryptData = async (encryptedData, iv) => {
-    const secretKey = import.meta.env.VITE_APP_ENCRYPT_PASSWORD; // Your secret password
+    const secretKey = import.meta.env.VITE_APP_ENCRYPT_PASSWORD;
 
-    // Ensure the secret key is exactly 32 bytes
+    if (!crypto.subtle) {
+      throw new Error("Web Crypto API not available (non-secure context)");
+    }
+
     const keyBuffer = await crypto.subtle.digest(
       "SHA-256",
       new TextEncoder().encode(secretKey)
     );
 
-    // Convert the encrypted data from hex to a Uint8Array
     const encryptedArray = new Uint8Array(
       encryptedData.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
     );
 
-    // Decode IV from hex to ArrayBuffer (must be 16 bytes)
     const ivBuffer = new Uint8Array(
       iv.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
     );
 
-    // Decrypt using Web Crypto API
     try {
       const decrypted = await crypto.subtle.decrypt(
         {
           name: "AES-CBC",
-          iv: ivBuffer, // IV should be 16 bytes long
+          iv: ivBuffer,
         },
         await crypto.subtle.importKey(
           "raw",
@@ -48,10 +55,9 @@ const useGetCData = () => {
           false,
           ["decrypt"]
         ),
-        encryptedArray // The encrypted data as Uint8Array
+        encryptedArray
       );
 
-      // Convert the decrypted bytes back to a string
       const decodedData = new TextDecoder().decode(decrypted);
       return decodedData;
     } catch (error) {
@@ -68,17 +74,12 @@ const useGetCData = () => {
             adminInfo.data,
             adminInfo.iv
           );
-          const decryptedArray = JSON.parse(decryptedString); // Assuming the decrypted data is a JSON string
+          if (!decryptedString) return;
+          const decryptedArray = JSON.parse(decryptedString);
 
-          // Set state: accessList is all except last element, role is last element
-          const lastElement = decryptedArray.pop(); // Remove and get the last element
+          const lastElement = decryptedArray.pop();
           setRole(lastElement);
           setAccessList(decryptedArray);
-
-          //   console.log("Decrypted Data:", decryptedArray, "Role:", lastElement);
-          //   const isAuthorized =
-          //     decryptedArray && decryptedArray.includes("customers"); // Remove the leading "/"
-          //   console.log("isAuthorized", isAuthorized, path);
         } catch (error) {
           console.error("Failed to decrypt and parse data:", error);
         }
@@ -87,7 +88,6 @@ const useGetCData = () => {
 
     fetchDecryptedData();
   }, [adminInfo]);
-  // console.log("adminInfo", adminInfo, "accessList", accessList);
 
   return {
     role,

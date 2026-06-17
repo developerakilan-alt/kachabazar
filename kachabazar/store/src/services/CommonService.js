@@ -3,15 +3,20 @@
 // Use internal API URL for server-side requests (SSR/ISR) to avoid DNS/loopback issues on cPanel
 // Falls back to the public URL if NEXT_SERVER_API_BASE_URL is not set
 const getBaseURL = () => {
+  const publicApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
+  const serverApiUrl =
+    process.env.NEXT_SERVER_API_BASE_URL ||
+    process.env.NEXT_INTERNAL_API_BASE_URL ||
+    (publicApiUrl.startsWith("/")
+      ? "http://kachabazar_backend:5056/v1"
+      : publicApiUrl);
+
   if (typeof window === "undefined") {
     // Server-side: use internal URL if available, then public URL
-    return (
-      process.env.NEXT_SERVER_API_BASE_URL ||
-      process.env.NEXT_PUBLIC_API_BASE_URL
-    );
+    return serverApiUrl || publicApiUrl;
   }
   // Client-side: always use the public URL
-  return process.env.NEXT_PUBLIC_API_BASE_URL;
+  return publicApiUrl;
 };
 
 // NEXT_PUBLIC_* vars are inlined at build time by Next.js, so this is safe

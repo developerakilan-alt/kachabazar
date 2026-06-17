@@ -5,7 +5,7 @@ import { IoAdd, IoRemove, IoExpand, IoBagAdd } from "react-icons/io5";
 import { useCart } from "react-use-cart";
 import { Expand } from "lucide-react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
+
 
 //internal import
 import Price from "@components/common/Price";
@@ -206,4 +206,4 @@ const ProductCard = ({ product, attributes }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(ProductCard), { ssr: false });
+export default ProductCard;

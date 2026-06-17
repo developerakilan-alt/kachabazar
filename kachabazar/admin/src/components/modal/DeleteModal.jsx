@@ -61,7 +61,7 @@ const DeleteModal = ({
     try {
       setIsSubmitting(true);
       if (location.pathname === "/products") {
-        if (ids) {
+        if (ids?.length > 0) {
           const res = await ProductServices.deleteManyProducts({
             ids: ids,
           });

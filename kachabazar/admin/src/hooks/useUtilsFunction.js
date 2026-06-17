@@ -81,8 +81,16 @@ const useUtilsFunction = () => {
     };
   }, [lang, globalSetting?.default_language]);
 
+  const fixUrl = (url) => {
+    if (!url || typeof url !== "string") return url;
+    return url
+      .replace(/http:\/\/localhost:5056/g, window.location.origin)
+      .replace(/http:\/\/192\.168\.29\.108/g, window.location.origin);
+  };
+
   const showingImage = (data) => {
-    return data !== undefined && data;
+    if (data === undefined) return data;
+    return typeof data === "string" ? fixUrl(data) : data;
   };
 
   const showingUrl = (data) => {
@@ -123,6 +131,7 @@ const useUtilsFunction = () => {
     showDateFormat,
     showingImage,
     showingUrl,
+    fixUrl,
     languages,
     globalSetting,
     showDateTimeFormat,

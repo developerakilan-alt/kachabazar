@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -125,8 +125,37 @@ const MegaMenuCategory = ({
   const [activeCategory, setActiveCategory] = useState(null);
   const { showingTranslateValue } = useUtilsFunction();
 
-  const topCategories = categories?.filter(c => c?.name?.en && c.name.en !== "Uncategorized") || [];
+  const topCategories = useMemo(() => {
+    const categoryTree = Array.isArray(categories) ? categories : [];
+    const visibleCategories = categoryTree.filter(
+      (category) =>
+        category?.name?.en &&
+        category.name.en !== "Uncategorized" &&
+        category.status !== "hide",
+    );
+    const rootCategory =
+      visibleCategories.length === 1 &&
+      visibleCategories[0]?.children?.length > 0 &&
+      ["home", "root"].includes(
+        showingTranslateValue(visibleCategories[0].name)?.toLowerCase(),
+      )
+        ? visibleCategories[0]
+        : null;
+
+    return (rootCategory?.children || visibleCategories).filter(
+      (category) =>
+        category?.name?.en &&
+        category.name.en !== "Uncategorized" &&
+        category.status !== "hide",
+    );
+  }, [categories, showingTranslateValue]);
   const config = layoutConfig[storeLayout] || layoutConfig["default"];
+
+  useEffect(() => {
+    if (!activeCategory && topCategories.length > 0) {
+      setActiveCategory(topCategories[0]);
+    }
+  }, [activeCategory, topCategories]);
 
   const FallbackIcon = config.fallbackIcon;
   const SubFallbackIcon = config.subFallbackIcon;

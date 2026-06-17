@@ -78,6 +78,4 @@ const DownloadPrintButton = ({ data }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(DownloadPrintButton), {
-  ssr: false,
-});
+export default DownloadPrintButton;

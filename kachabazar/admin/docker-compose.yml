@@ -1,0 +1,14 @@
+services:
+  kachabazar_admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kachabazar_admin
+    restart: unless-stopped
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: bf

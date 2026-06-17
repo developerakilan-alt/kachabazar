@@ -190,6 +190,4 @@ const CheckoutCartScreen = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(CheckoutCartScreen), {
-  ssr: false,
-});
+export default CheckoutCartScreen;

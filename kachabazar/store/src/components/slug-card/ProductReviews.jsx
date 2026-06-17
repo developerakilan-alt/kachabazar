@@ -171,4 +171,4 @@ const ProductReviews = ({ reviews }) => {
     </>
   );
 };
-export default dynamic(() => Promise.resolve(ProductReviews), { ssr: false });
+export default ProductReviews;

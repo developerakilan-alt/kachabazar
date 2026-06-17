@@ -45,18 +45,15 @@ const Layout = () => {
                 <Routes>
                   {routes.map((route, i) => {
                     if (!route.component) return null;
-                    const path = route.path.startsWith("/")
-                      ? route.path.slice(1)
-                      : route.path;
                     return (
                       <Route
                         key={i}
-                        path={path}
+                        path={route.path}
                         element={<route.component />}
                       />
                     );
                   })}
-                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route index element={<Navigate to="/dashboard" replace />} />
                   <Route path="*" element={<Page404 />} />
                 </Routes>
               </Suspense>

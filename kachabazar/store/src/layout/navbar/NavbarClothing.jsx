@@ -28,6 +28,7 @@ const NavbarClothing = async ({
   ]);
 
   const storeLayout = layoutProp || globalSetting?.store_layout || "clothing";
+  const categoriesMenuStatus = storeCustomization?.navbar?.categories_menu_status !== false;
 
   return (
     <div className="sticky z-40 top-0 w-full">
@@ -100,6 +101,7 @@ const NavbarClothing = async ({
         themes={themes}
         defaultTheme={defaultTheme}
         storeLayout={storeLayout}
+        categoriesMenuStatus={categoriesMenuStatus}
       />
 
       <MobileFooter

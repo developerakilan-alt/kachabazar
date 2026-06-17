@@ -3,7 +3,7 @@
 import { FiLock, FiMail } from "react-icons/fi";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +27,16 @@ const loginSchema = z.object({
 const Login = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const redirectUrl = useSearchParams().get("redirectUrl") || "/user/dashboard";
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirectUrl") || "/user/dashboard";
+
+  useEffect(() => {
+    const error = searchParams.get("error");
+    if (error) {
+      notifyError(decodeURIComponent(error));
+    }
+  }, [searchParams]);
+
   const {
     register,
     handleSubmit,
