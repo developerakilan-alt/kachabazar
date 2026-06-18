@@ -9,7 +9,6 @@ import {
   signUpWithOauthProvider,
   verifyOtpAndLogin,
 } from "@services/CustomerServices";
-import { getStoreSecretKeys } from "@services/SettingServices";
 import { getBaseURL, resilientFetch } from "@services/CommonService";
 
 async function refreshAccessToken(token) {
@@ -41,22 +40,18 @@ async function refreshAccessToken(token) {
 }
 
 export const getDynamicAuthOptions = async () => {
-  const { storeSetting } = await getStoreSecretKeys();
-
-  // console.log("storeSetting::::", storeSetting);
-
   const providers = [
     Google({
-      clientId: storeSetting?.google_id || "",
-      clientSecret: storeSetting?.google_secret || "",
+      clientId: process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET || "",
     }),
     GitHub({
-      clientId: storeSetting?.github_id || "",
-      clientSecret: storeSetting?.github_secret || "",
+      clientId: process.env.GITHUB_CLIENT_ID || process.env.NEXT_PUBLIC_GITHUB_ID || "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || process.env.NEXT_PUBLIC_GITHUB_SECRET || "",
     }),
     Facebook({
-      clientId: storeSetting?.facebook_id || "",
-      clientSecret: storeSetting?.facebook_secret || "",
+      clientId: process.env.FACEBOOK_CLIENT_ID || process.env.NEXT_PUBLIC_FACEBOOK_ID || "",
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || process.env.NEXT_PUBLIC_FACEBOOK_SECRET || "",
     }),
     Credentials({
       name: "Credentials",
