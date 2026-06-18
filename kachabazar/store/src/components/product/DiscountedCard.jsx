@@ -1,6 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
+
 import { useState } from "react";
 import { IoAdd, IoExpand, IoBagAdd, IoRemove } from "react-icons/io5";
 import { useCart } from "react-use-cart";
@@ -181,6 +181,4 @@ const DiscountedCard = ({ product, attributes }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(DiscountedCard), {
-  ssr: false,
-});
+export default DiscountedCard;

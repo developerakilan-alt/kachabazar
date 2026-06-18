@@ -475,6 +475,58 @@ export async function handleLoginAction(prevState, formData) {
 // ==========================================
 
 /**
+ * Verify email token from link (clicked from email)
+ */
+export async function verifyEmailTokenAction(token) {
+  if (!token) {
+    return { success: false, error: "Invalid verification link" };
+  }
+
+  try {
+    const response = await resilientFetch(
+      `${baseURL}/customer/register/${token}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+    const data = await handleResponse(response);
+
+    // Set auth cookies
+    const cookieStore = await cookies();
+    cookieStore.set("_token", data.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    cookieStore.set(
+      "_userInfo",
+      JSON.stringify({
+        _id: data._id,
+        name: data.name,
+        email: data.email,
+      }),
+      {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+      },
+    );
+
+    return { success: true, message: data.message || "Email verified!" };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message || "Verification failed. Link may have expired.",
+    };
+  }
+}
+
+/**
  * Send OTP to phone number
  */
 export async function sendPhoneOtpAction(prevState, formData) {

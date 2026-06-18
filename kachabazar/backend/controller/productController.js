@@ -452,7 +452,7 @@ const deleteManyProducts = async (req, res) => {
     const cname = req.cname;
     // console.log("deleteMany", cname, req.body.ids);
 
-    await Product.deleteMany({ _id: req.body.ids });
+    await Product.deleteMany({ _id: { $in: req.body.ids } });
 
     res.send({
       message: `Products Delete Successfully!`,

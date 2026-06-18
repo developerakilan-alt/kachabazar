@@ -4,7 +4,7 @@ import { useState } from "react";
 import { IoAdd, IoExpand, IoBagAdd, IoRemove } from "react-icons/io5";
 import { useCart } from "react-use-cart";
 import Link from "next/link";
-import dynamic from "next/dynamic";
+
 
 //internal import
 import { notifyError } from "@utils/toast";
@@ -228,6 +228,4 @@ const CampaignProductCard = ({ campaignProduct, attributes }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(CampaignProductCard), {
-  ssr: false,
-});
+export default CampaignProductCard;

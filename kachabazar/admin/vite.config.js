@@ -9,9 +9,11 @@ import path from "path";
 
 dns.setDefaultResultOrder("verbatim");
 
+const apiTarget = process.env.VITE_API_TARGET || "http://localhost:5056";
+
 export default defineConfig({
   // root: "./", // Set the root directory of your project
-  // base: "/", // Set the base URL path for your application
+  base: "/admin/",
 
   build: {
     outDir: "build", // comment this if you select vite as project when deploy
@@ -106,9 +108,24 @@ export default defineConfig({
   ],
 
   server: {
+    allowedHosts: ["kachabazar_admin", "192.168.29.108", ".local"],
     proxy: {
       "/api/": {
-        target: "http://localhost:5065",
+        target: apiTarget,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, "/v1"),
+      },
+      "/socket.io/": {
+        target: apiTarget,
+        changeOrigin: true,
+        ws: true,
+      },
+      "/static/": {
+        target: apiTarget,
+        changeOrigin: true,
+      },
+      "/uploads/": {
+        target: apiTarget,
         changeOrigin: true,
       },
     },

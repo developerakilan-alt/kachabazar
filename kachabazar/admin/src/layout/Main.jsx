@@ -6,7 +6,7 @@ import NotFoundPage from "@/components/common/NotFoundPage";
 const Main = ({ children, className }) => {
   const { path, accessList } = useGetCData();
 
-  if (!accessList?.includes(path)) {
+  if (accessList && accessList.length > 0 && !accessList.includes(path)) {
     return <NotFoundPage />;
   }
   return (

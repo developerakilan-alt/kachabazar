@@ -54,4 +54,4 @@ const LogoutButton = ({ storeCustomization }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(LogoutButton), { ssr: false });
+export default LogoutButton;

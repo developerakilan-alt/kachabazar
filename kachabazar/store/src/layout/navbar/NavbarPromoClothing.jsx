@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 
 import MegaMenuCategory from "@components/mega-menu/MegaMenuCategory";
 import StoreTheme from "@components/common/StoreTheme";
-import { useSetting } from "@context/SettingContext";
 
 const NavbarPromoClothing = ({
   categories,
@@ -12,9 +11,8 @@ const NavbarPromoClothing = ({
   themes,
   defaultTheme,
   storeLayout = "clothing",
+  categoriesMenuStatus = true,
 }) => {
-  const { storeCustomization } = useSetting();
-  const navbar = storeCustomization?.navbar;
 
   const [activeTheme, setActiveTheme] = useState(defaultTheme || null);
 
@@ -39,7 +37,7 @@ const NavbarPromoClothing = ({
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10 h-11 flex justify-between items-center">
           <div className="flex items-center gap-6">
             {/* Mega Menu */}
-            {navbar?.categories_menu_status && (
+            {categoriesMenuStatus && (
               <MegaMenuCategory
                 categories={categories}
                 categoryError={categoryError}

@@ -1,0 +1,23 @@
+services:
+  kachabazar_store:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kachabazar_store
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: /api
+      NEXT_SERVER_API_BASE_URL: http://kachabazar_backend:5056/v1
+      NEXT_REWRITE_BACKEND: http://kachabazar_backend:5056
+    restart: unless-stopped
+    volumes:
+      - next_cache:/app/.next/cache
+    networks:
+      - default
+
+volumes:
+  next_cache:
+
+networks:
+  default:
+    external:
+      name: bf

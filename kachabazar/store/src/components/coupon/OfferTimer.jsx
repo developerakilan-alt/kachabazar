@@ -52,6 +52,4 @@ const OfferTimer = ({ expiryTimestamp, darkGreen }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(OfferTimer), {
-  ssr: false,
-});
+export default OfferTimer;

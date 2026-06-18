@@ -108,8 +108,7 @@ const EditProfile = () => {
       dispatch({ type: "USER_LOGIN", payload: res });
       Cookies.set("adminInfo", JSON.stringify(res), {
         expires: cookieTimeOut,
-        sameSite: "None",
-        secure: true,
+        sameSite: "Lax",
       });
 
       notifySuccess(res.message || "Profile updated successfully!");

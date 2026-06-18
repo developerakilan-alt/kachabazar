@@ -14,7 +14,7 @@ import BottomNavigation from "@components/login/BottomNavigation";
 import AuthButton from "@components/form/AuthButton";
 import { verifyEmailAction } from "@lib/actions/auth.actions";
 import { useSetting } from "@context/SettingContext";
-import OtpLogin from "@components/login/OtpLogin";
+import LoginSlideshow from "@components/login/LoginSlideshow";
 
 // Password strength calculation
 const calculatePasswordStrength = (password) => {
@@ -64,7 +64,6 @@ const SignUp = () => {
     undefined,
   );
   const [password, setPassword] = useState("");
-  const [signupMethod, setSignupMethod] = useState("email"); // "email" | "otp"
   const passwordStrength = calculatePasswordStrength(password);
 
   useEffect(() => {
@@ -79,15 +78,9 @@ const SignUp = () => {
   return (
     <>
       <div className="min-h-screen flex flex-col lg:flex-row bg-background">
-        {/* Left Side: Background Image Area (hidden on mobile) */}
-        <div className="hidden lg:flex lg:w-1/2 relative bg-muted">
-          <Image
-            src="https://images.unsplash.com/photo-1632406897798-e5472b4a989e?q=80" // Large image placeholder
-            alt="Signup Background"
-            fill
-            className="object-cover"
-            priority
-          />
+        {/* Left Side: Category Product Slideshow (hidden on mobile) */}
+        <div className="hidden lg:flex lg:w-1/2">
+          <LoginSlideshow />
         </div>
 
         {/* Right Side: Form Area */}
@@ -121,149 +114,112 @@ const SignUp = () => {
               </p>
             </div>
 
-            {/* Signup Method Toggle */}
-            <div className="flex mb-6 border-b border-border">
-              <button
-                type="button"
-                onClick={() => setSignupMethod("email")}
-                className={`flex-1 pb-2 text-sm font-semibold transition-all duration-200 border-b-2 ${
-                  signupMethod === "email"
-                    ? "border-primary text-primary"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Email
-              </button>
-              <button
-                type="button"
-                onClick={() => setSignupMethod("otp")}
-                className={`flex-1 pb-2 text-sm font-semibold transition-all duration-200 border-b-2 ${
-                  signupMethod === "otp"
-                    ? "border-primary text-primary"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                OTP Sign Up
-              </button>
-            </div>
-
-            {signupMethod === "email" ? (
-              <>
-                {state?.user ? (
-                  <div className="text-center py-8">
-                    <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <FiMail className="w-10 h-10 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-foreground mb-3">
-                      Check Your Email
-                    </h3>
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
-                      We've sent a verification link to your email address.
-                      Please check your inbox and click the link to activate
-                      your account.
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Didn't receive it? Check your spam folder.
-                    </p>
-                  </div>
-                ) : (
-                  <form action={formAction} className="space-y-6">
-                    <div>
-                      <InputAreaTwo
-                        label="Full Name"
-                        name="name"
-                        type="text"
-                        placeholder="John Doe"
-                        Icon={FiUser}
-                        defaultValue="Justin"
-                        hasError={state?.errors?.name}
-                      />
-                      <Error errorName={state?.errors?.name?.join(" ")} />
-                    </div>
-
-                    <div>
-                      <InputAreaTwo
-                        label="Email Address"
-                        name="email"
-                        type="email"
-                        placeholder="you@example.com"
-                        Icon={FiMail}
-                        defaultValue="justin@gmail.com"
-                        hasError={state?.errors?.email}
-                      />
-                      <Error errorName={state?.errors?.email?.join(" ")} />
-                    </div>
-
-                    <div>
-                      <InputAreaTwo
-                        label="Password"
-                        name="password"
-                        type="password"
-                        placeholder="••••••••"
-                        Icon={FiLock}
-                        defaultValue="12345678"
-                        onChange={(e) => setPassword(e.target.value)}
-                        hasError={state?.errors?.password}
-                      />
-
-                      {/* Password Strength Indicator */}
-                      {password && (
-                        <div className="mt-3">
-                          <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-xs text-muted-foreground font-medium">
-                              Strength
-                            </span>
-                            <span
-                              className={`text-xs font-semibold ${passwordStrength.textColor}`}
-                            >
-                              {passwordStrength.label}
-                            </span>
-                          </div>
-                          <div className="flex gap-1">
-                            {[1, 2, 3, 4].map((level) => (
-                              <div
-                                key={level}
-                                className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                                  level <= passwordStrength.level
-                                    ? passwordStrength.color
-                                    : "bg-muted"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {state?.errors?.password && (
-                        <div className="mt-1">
-                          <ErrorTwo errors={state?.errors?.password} />
-                        </div>
-                      )}
-                    </div>
-
-                    <AuthButton
-                      type="submit"
-                      loading={isPending}
-                      loadingText="Signing Up..."
-                      className="h-12 w-full text-white bg-primary rounded-lg hover:bg-primary/90 focus:outline-none transition-colors disabled:opacity-70 mt-4 block"
-                    >
-                      Sign Up
-                    </AuthButton>
-                  </form>
-                )}
-              </>
-            ) : (
-              <div>
-                <p className="text-sm text-muted-foreground mb-6 font-medium">
-                  Sign up instantly using your phone or email OTP.
+            {state?.user ? (
+              <div className="text-center py-8">
+                <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <FiMail className="w-10 h-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold text-foreground mb-3">
+                  Check Your Email
+                </h3>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  We've sent a verification link to your email address.
+                  Please check your inbox and click the link to activate
+                  your account.
                 </p>
-                <OtpLogin redirectUrl="/user/dashboard" />
+                <p className="text-sm text-muted-foreground">
+                  Didn't receive it? Check your spam folder.
+                </p>
               </div>
+            ) : (
+              <form action={formAction} className="space-y-6">
+                <div>
+                  <InputAreaTwo
+                    label="Full Name"
+                    name="name"
+                    type="text"
+                    placeholder="John Doe"
+                    Icon={FiUser}
+                    defaultValue="Justin"
+                    hasError={state?.errors?.name}
+                  />
+                  <Error errorName={state?.errors?.name?.join(" ")} />
+                </div>
+
+                <div>
+                  <InputAreaTwo
+                    label="Email Address"
+                    name="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    Icon={FiMail}
+                    defaultValue="justin@gmail.com"
+                    hasError={state?.errors?.email}
+                  />
+                  <Error errorName={state?.errors?.email?.join(" ")} />
+                </div>
+
+                <div>
+                  <InputAreaTwo
+                    label="Password"
+                    name="password"
+                    type="password"
+                    placeholder="••••••••"
+                    Icon={FiLock}
+                    defaultValue="12345678"
+                    onChange={(e) => setPassword(e.target.value)}
+                    hasError={state?.errors?.password}
+                  />
+
+                  {/* Password Strength Indicator */}
+                  {password && (
+                    <div className="mt-3">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs text-muted-foreground font-medium">
+                          Strength
+                        </span>
+                        <span
+                          className={`text-xs font-semibold ${passwordStrength.textColor}`}
+                        >
+                          {passwordStrength.label}
+                        </span>
+                      </div>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4].map((level) => (
+                          <div
+                            key={level}
+                            className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
+                              level <= passwordStrength.level
+                                ? passwordStrength.color
+                                : "bg-muted"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {state?.errors?.password && (
+                    <div className="mt-1">
+                      <ErrorTwo errors={state?.errors?.password} />
+                    </div>
+                  )}
+                </div>
+
+                <AuthButton
+                  type="submit"
+                  loading={isPending}
+                  loadingText="Signing Up..."
+                  className="h-12 w-full text-white bg-primary rounded-lg hover:bg-primary/90 focus:outline-none transition-colors disabled:opacity-70 mt-4 block"
+                >
+                  Sign Up
+                </AuthButton>
+              </form>
             )}
 
             <div className="mt-8">
               <BottomNavigation
-                or={signupMethod === "email" && !state?.user}
+                or={!state?.user}
                 route="/auth/login"
                 pageName="Login"
                 loginTitle="Sign Up"

@@ -20,7 +20,7 @@ import { sidebarData } from "@/data/sidebar-data";
 export function AppSidebar({ ...props }) {
   const { theme } = useTheme();
   const { accessList } = useGetCData();
-  const { globalSetting } = useUtilsFunction();
+  const { globalSetting, fixUrl } = useUtilsFunction();
   const { state } = useContext(AdminContext);
   const { adminInfo } = state;
   const isDeliveryBoy = adminInfo?.role === "delivery-boy";
@@ -88,8 +88,8 @@ export function AppSidebar({ ...props }) {
             <img
               src={
                 theme === "dark"
-                  ? globalSetting?.logo || logoLight
-                  : globalSetting?.logo_light || logoDark
+                  ? fixUrl(globalSetting?.logo) || logoLight
+                  : fixUrl(globalSetting?.logo_light) || logoDark
               }
               alt="hautecouturejewellery"
               className="h-8 w-auto object-contain"

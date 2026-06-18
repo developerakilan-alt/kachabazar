@@ -21,6 +21,7 @@ const {
   validateUpdateManyProducts,
   validateProductStatus,
   validateDeleteMany,
+  validateMongoId,
 } = require("../middleware/validators");
 
 // ── Public Routes (storefront) ──
@@ -46,10 +47,17 @@ router.post("/add", isAuth, isAdmin, validateAddProduct, addProduct);
 router.post("/all", isAuth, isAdmin, addAllProducts);
 
 //get a product by id (admin)
-router.post("/:id", isAuth, isAdmin, getProductById);
+router.post("/:id", isAuth, isAdmin, validateMongoId, getProductById);
 
 //update a product
-router.patch("/:id", isAuth, isAdmin, validateUpdateProduct, updateProduct);
+router.patch(
+  "/:id",
+  isAuth,
+  isAdmin,
+  validateMongoId,
+  validateUpdateProduct,
+  updateProduct,
+);
 
 //update many products
 router.patch(
@@ -61,10 +69,17 @@ router.patch(
 );
 
 //update a product status
-router.put("/status/:id", isAuth, isAdmin, validateProductStatus, updateStatus);
+router.put(
+  "/status/:id",
+  isAuth,
+  isAdmin,
+  validateMongoId,
+  validateProductStatus,
+  updateStatus,
+);
 
 //delete a product
-router.delete("/:id", isAuth, isAdmin, deleteProduct);
+router.delete("/:id", isAuth, isAdmin, validateMongoId, deleteProduct);
 
 //delete many product
 router.patch(

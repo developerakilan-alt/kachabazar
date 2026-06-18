@@ -269,6 +269,4 @@ const OrderDetailsDrawer = ({ data }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(OrderDetailsDrawer), {
-  ssr: false,
-});
+export default OrderDetailsDrawer;

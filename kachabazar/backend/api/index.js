@@ -160,6 +160,25 @@ app.post("/v1/delivery-boy/login", loginDeliveryBoy);
 app.use("/v1/delivery-boy/", isAuth, isAdmin, deliveryBoyRoutes);
 app.use("/v1/delivery/", deliveryRoutes);
 
+// ── URL Fix Middleware: replace localhost URLs with public URL ──
+const publicUrl = (process.env.PUBLIC_API_URL || "").replace(/\/+$/, "");
+const localhostPattern = /https?:\/\/localhost:\d+(?=\/|"|'|,|})/g;
+if (publicUrl) {
+  app.use((req, res, next) => {
+    const originalJson = res.json.bind(res);
+    res.json = function (body) {
+      if (body && typeof body === "object") {
+        const str = JSON.stringify(body);
+        if (localhostPattern.test(str)) {
+          body = JSON.parse(str.replace(localhostPattern, publicUrl));
+        }
+      }
+      return originalJson(body);
+    };
+    next();
+  });
+}
+
 // ── Static Files ──
 app.use(
   "/static",

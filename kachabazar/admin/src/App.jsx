@@ -14,7 +14,7 @@ import UpdateNotification from "@/components/common/UpdateNotification";
 const Layout = lazy(() => import("@/layout/Layout"));
 const Login = lazy(() => import("@/pages/Login"));
 const SignUp = lazy(() => import("@/pages/SignUp"));
-const ForgetPassword = lazy(() => import("@/pages/ForgotPassword"));
+const ForgotPassword = lazy(() => import("@/pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 
 const App = () => {
@@ -24,12 +24,12 @@ const App = () => {
       <DynamicTheme />
       <UpdateNotification />
       <ErrorBoundary>
-        <Router>
+        <Router basename="/admin">
           <AccessibleNavigationAnnouncer />
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgetPassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route

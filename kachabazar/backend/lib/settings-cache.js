@@ -120,8 +120,12 @@ async function getSettings() {
     const raw = doc?.setting || {};
     const settings = decryptSensitiveFields(raw);
 
-    // Build a merged object: DB values override env, env is fallback
+    // Build a merged object: DB settings with env/fallback overrides
+    // Spread DB settings FIRST so explicit defaults below take priority
     cachedSettings = {
+      // ── pass through other DB fields as-is ──
+      ...settings,
+
       // ── Email Config ──
       email_service: settings.email_service || process.env.SERVICE || "gmail",
       email_host: settings.email_host || process.env.HOST || "smtp.gmail.com",
@@ -179,9 +183,6 @@ async function getSettings() {
         "",
       max_amount: settings.max_amount || process.env.MAX_AMOUNT || "10000",
       min_amount: settings.min_amount || process.env.MIN_AMOUNT || "10",
-
-      // ── pass through other DB fields as-is ──
-      ...settings,
     };
 
     lastFetch = now;
