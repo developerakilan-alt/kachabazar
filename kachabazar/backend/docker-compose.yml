@@ -16,12 +16,16 @@ services:
       dockerfile: Dockerfile
     container_name: kachabazar_backend
     environment:
-      PUBLIC_API_URL: http://192.168.29.108
+      PUBLIC_API_URL: http://192.168.1.100
     volumes:
       - ./public:/app/public
+      - uploads_data:/app/public/uploads
     restart: unless-stopped
     networks:
       - bf
+
+volumes:
+  uploads_data:
 
 networks:
   bf:

@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
     container_name: kachabazar_admin
     restart: unless-stopped
+    environment:
+      VITE_API_TARGET: http://kachabazar_backend:5056
     networks:
       - default
 

@@ -8,7 +8,7 @@ const getBaseURL = () => {
     process.env.NEXT_SERVER_API_BASE_URL ||
     process.env.NEXT_INTERNAL_API_BASE_URL ||
     (publicApiUrl.startsWith("/")
-      ? "http://kachabazar_backend:5056/v1"
+      ? "http://localhost:5056/v1"
       : publicApiUrl);
 
   if (typeof window === "undefined") {

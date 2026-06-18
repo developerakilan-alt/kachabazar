@@ -9,7 +9,7 @@ import path from "path";
 
 dns.setDefaultResultOrder("verbatim");
 
-const apiTarget = process.env.VITE_API_TARGET || "http://kachabazar_backend:5056";
+const apiTarget = process.env.VITE_API_TARGET || "http://localhost:5056";
 
 export default defineConfig({
   // root: "./", // Set the root directory of your project

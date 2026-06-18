@@ -436,6 +436,7 @@ const Products = () => {
       <DeleteModal
         open={open}
         title={title}
+        id={selectedId}
         ids={selectedIds?.length > 0 ? selectedIds : null}
         onOpenChange={() => setOpen(false)}
       />
