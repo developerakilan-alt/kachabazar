@@ -28,7 +28,7 @@ const Providers = ({ children, storeSetting }) => {
         enabled={storeSetting?.fb_pixel_status}
       />
       <QueryProvider>
-        <SessionProvider basePath="/store/api/auth">
+        <SessionProvider basePath="/api/auth">
           <LanguageProvider>
             <SidebarProvider>
               <UserProvider>

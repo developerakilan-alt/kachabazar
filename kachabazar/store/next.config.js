@@ -3,7 +3,6 @@
 const backend = process.env.NEXT_REWRITE_BACKEND || "http://localhost:5056";
 
 const nextConfig = {
-  basePath: "/store",
   reactStrictMode: true,
   allowedDevOrigins: [/^192\.168\./, /^10\./, /^127\./, /^172\.(1[6-9]|2[0-9]|3[0-1])\./, /^localhost/],
 

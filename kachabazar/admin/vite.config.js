@@ -13,7 +13,7 @@ const apiTarget = process.env.VITE_API_TARGET || "http://localhost:5056";
 
 export default defineConfig({
   // root: "./", // Set the root directory of your project
-  base: "/admin/",
+  base: "/",
 
   build: {
     outDir: "build", // comment this if you select vite as project when deploy
