@@ -7,8 +7,6 @@ import Cookies from "js-cookie";
 /**
  * SelectTheme — Hover dropdown for switching the active store theme.
  */
-const isDev = process.env.NODE_ENV === "development";
-
 const SelectTheme = ({
   themes,
   defaultTheme,
@@ -41,8 +39,6 @@ const SelectTheme = ({
     onThemeChange?.(theme);
   };
 
-  // Only show in development mode
-  if (!isDev) return null;
   if (!themes?.length) return null;
   if (!mounted) return null;
 

@@ -16,8 +16,6 @@ const layouts = [
 /**
  * SelectLayout — Hover dropdown for switching the store layout.
  */
-const isDev = process.env.NODE_ENV === "development";
-
 const SelectLayout = ({ currentLayout = "default", size = "text-sm" }) => {
   const router = useRouter();
 
@@ -41,8 +39,6 @@ const SelectLayout = ({ currentLayout = "default", size = "text-sm" }) => {
   const currentLabel =
     layouts.find((l) => l.value === activeLayout)?.label || "Layout";
 
-  // Only show in development mode, after mount
-  if (!isDev) return null;
   if (!mounted) return null;
 
   return (

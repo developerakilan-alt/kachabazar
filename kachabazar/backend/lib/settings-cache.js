@@ -172,7 +172,9 @@ async function getSettings() {
 
       // ── Application URLs ──
       store_url:
-        settings.store_url || process.env.STORE_URL || "http://localhost:3000",
+        settings.store_url?.startsWith("http")
+          ? settings.store_url
+          : process.env.STORE_URL || "http://localhost:3000",
       admin_url:
         settings.admin_url || process.env.ADMIN_URL || "http://localhost:4100",
 

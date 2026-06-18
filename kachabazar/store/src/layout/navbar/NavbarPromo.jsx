@@ -8,6 +8,8 @@ import MegaMenuCategory from "@components/mega-menu/MegaMenuCategory";
 import { SidebarContext } from "@context/SidebarContext";
 import useUtilsFunction from "@hooks/useUtilsFunction";
 import SelectLanguage from "@components/form/SelectLanguage";
+import TopNavbarTheme from "./TopNavbarTheme";
+import SelectLayout from "@components/form/SelectLayout";
 import StoreTheme from "@components/common/StoreTheme";
 import {
   AlertCircle,
@@ -287,6 +289,12 @@ const NavbarPromo = ({
           </div>
           <div className="flex items-center gap-3 text-sm font-medium text-foreground">
             <SelectLanguage data={languages} />
+            <TopNavbarTheme
+              themes={themes}
+              defaultTheme={defaultTheme}
+              size="text-xs"
+            />
+            <SelectLayout currentLayout={storeLayout} size="text-xs" />
 
             {navbar?.privacy_policy_status && (
               <Link

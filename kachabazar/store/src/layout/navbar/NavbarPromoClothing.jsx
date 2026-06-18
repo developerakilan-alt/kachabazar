@@ -3,9 +3,12 @@
 import { useState, useEffect } from "react";
 
 import MegaMenuCategory from "@components/mega-menu/MegaMenuCategory";
+import TopNavbarTheme from "./TopNavbarTheme";
+import SelectLayout from "@components/form/SelectLayout";
 import StoreTheme from "@components/common/StoreTheme";
 
 const NavbarPromoClothing = ({
+  languages,
   categories,
   categoryError,
   themes,
@@ -44,6 +47,14 @@ const NavbarPromoClothing = ({
                 storeLayout="clothing"
               />
             )}
+          </div>
+          <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+            <TopNavbarTheme
+              themes={themes}
+              defaultTheme={defaultTheme}
+              size="text-xs"
+            />
+            <SelectLayout currentLayout={storeLayout} size="text-xs" />
           </div>
         </div>
       </div>
