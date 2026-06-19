@@ -32,7 +32,7 @@ const HomeClothing = ({
         <div className="mx-auto max-w-screen-2xl">
           <div className="grid lg:grid-cols-2 min-h-[480px] lg:min-h-[560px]">
             {/* Left — Text */}
-            <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-12 lg:py-20 order-2 lg:order-1 bg-neutral-50 dark:bg-neutral-900">
+            <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-12 lg:py-20 order-2 lg:order-1 bg-[hsl(40_80%_50%)]">
               <div className="max-w-lg">
                 <span className="inline-block text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 dark:text-neutral-500 mb-4 border border-neutral-200 dark:border-neutral-700 px-3 py-1 rounded-full">
                   Imitation Jwels for Elegance
@@ -158,9 +158,9 @@ const HomeClothing = ({
                     />
                     <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                      <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+                      {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
                         {cat.children?.length || 0} styles
-                      </p>
+                      </p> */}
                       <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
                         {cat.name?.en || "Category"}
                       </h3>

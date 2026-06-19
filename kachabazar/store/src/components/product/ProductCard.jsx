@@ -116,7 +116,7 @@ const ProductCard = ({ product, attributes }) => {
             </button>
           </div>
 
-          <div className="absolute bottom-3 right-3 z-[5] flex items-center justify-center rounded-full bg-background text-muted-foreground shadow-lg transition-all duration-300 ease-in-out hover:bg-muted hover:text-primary">
+          <div className="absolute bottom-3 right-3 z-[5] flex items-center justify-center rounded-full bg-background text-muted-foreground shadow-lg transition-all duration-300 ease-in-out hover:bg-muted hover:text-primary" suppressHydrationWarning>
             {inCart(product._id) ? (
               <div>
                 {items.map(

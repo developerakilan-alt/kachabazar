@@ -25,6 +25,7 @@ const deliveryRoutes = require("../routes/deliveryRoutes");
 const trackingRoutes = require("../routes/trackingRoutes");
 const campaignRoutes = require("../routes/campaignRoutes");
 const uploadRoutes = require("../routes/uploadRoutes");
+const shiprocketRoutes = require("../routes/shiprocketRoutes");
 const { isAuth, isAdmin } = require("../config/auth");
 
 connectDB();
@@ -153,6 +154,9 @@ app.use("/v1/customer-tracking/", isAuth, trackingRoutes);
 app.use("/v1/admin/", adminRoutes);
 app.use("/v1/orders/", isAuth, isAdmin, orderRoutes);
 app.use("/v1/uploads/", uploadRoutes);
+
+// ── ShipRocket Routes ──
+app.use("/v1/shiprocket/", shiprocketRoutes);
 
 // ── Delivery Boy Routes ──
 const { loginDeliveryBoy } = require("../controller/deliveryBoyController");

@@ -33,7 +33,7 @@ const NavbarClothing = async ({
   return (
     <div className="sticky z-40 top-0 w-full">
       {/* Announcement Bar — Slim, elegant */}
-      <div className="hidden lg:block bg-neutral-950 text-white">
+      <div className="hidden lg:block bg-[#D97706] text-white">
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
           <div className="py-1.5 text-xs flex justify-between items-center">
             <a
@@ -43,18 +43,18 @@ const NavbarClothing = async ({
               SUPPORT: hautecouturejewellery@gmail.com
             </a>
             <div className="flex items-center gap-5 text-neutral-500">
-              <Link
+              {/* <Link
                 href="/about-us"
                 className="hover:text-white transition-colors text-[11px] tracking-wide"
               >
                 About
-              </Link>
-              <Link
+              </Link> */}
+              {/* <Link
                 href="/contact-us"
                 className="hover:text-white transition-colors text-[11px] tracking-wide"
               >
                 Contact
-              </Link>
+              </Link> */}
               <Link
                 href="/user/my-account"
                 className="hover:text-white transition-colors text-[11px] tracking-wide"
@@ -67,7 +67,7 @@ const NavbarClothing = async ({
       </div>
 
       {/* Main Navbar — Dark, premium fashion look */}
-      <header className="bg-neutral-900 dark:bg-neutral-950">
+      <header className="bg-[#D97706]">
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
           <div className="relative flex h-16 items-center justify-between gap-6">
             {/* Logo — use light logo on dark bg */}

@@ -244,17 +244,17 @@ const ProductScreen = ({ product, reviews, attributes, relatedProducts }) => {
                   </a>
                 </div>
 
-                <div className="mt-6 border-t border-border pt-6">
+                {/* <div className="mt-6 border-t border-border pt-6">
                   <h3 className="text-sm font-medium text-foreground">
                     Highlights
                   </h3>
                   <div className="mt-4">
-                    {/* shipping description card */}
+                    <span className="hidden">shipping description card</span>
                     <Card storeCustomization={storeCustomization} />
                   </div>
-                </div>
+                </div> */}
 
-                <div className="mt-6 border-t border-border pt-6">
+                {/* <div className="mt-6 border-t border-border pt-6">
                   <h3 className="text-sm font-medium text-foreground">
                     Share your social network
                   </h3>
@@ -328,7 +328,7 @@ const ProductScreen = ({ product, reviews, attributes, relatedProducts }) => {
                       </TwitterShareButton>
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="mx-auto w-full lg:col-span-3 lg:my-0 my-8 lg:max-w-none">

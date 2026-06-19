@@ -113,7 +113,7 @@ const MegaMenuClothing = ({ categories, categoryError }) => {
                   )}
 
                   {/* Featured Banner */}
-                  <div className="mt-6 rounded-lg bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/20 dark:to-purple-950/20 p-4">
+                  {/* <div className="mt-6 rounded-lg bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/20 dark:to-purple-950/20 p-4">
                     <p className="text-xs font-semibold uppercase tracking-wider text-pink-600 dark:text-pink-400">
                       Trending Now
                     </p>
@@ -127,7 +127,7 @@ const MegaMenuClothing = ({ categories, categoryError }) => {
                     >
                       Shop Now →
                     </Link>
-                  </div>
+                  </div> */}
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-center py-8">
