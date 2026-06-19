@@ -32,7 +32,7 @@ const setting = [
         "/logo/logo-color.png",
       copyright_text: "Copyright 2026 @ hautecouturejewellery, All rights reserved.",
       site_description:
-        "hautecouturejewellery - React Grocery & Organic Food Store e-commerce Template",
+        "hautecouturejewellery - Best Imitation Jewellery Store in India. Buy imitation jewellery online at best price. Shop for imitation jewellery online at hautecouturejewellery.",
 
       // ── Email Configuration (managed from admin) ──
       email_service: "",

@@ -81,7 +81,7 @@ const ProductCard = ({ product, attributes }) => {
         />
       )}
 
-      <div className="group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-all duration-200 ease-in-out hover:shadow-lg hover:-translate-y-1 hover:border-primary/50 ">
+      <div className="group relative flex flex-col overflow-hidden rounded-xl border bg-card temple-card transition-all duration-200 ease-in-out hover:shadow-lg hover:-translate-y-1">
         <div className="w-full flex justify-between">
           <Discount product={product} />
         </div>

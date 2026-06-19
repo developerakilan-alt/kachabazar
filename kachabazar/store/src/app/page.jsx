@@ -8,6 +8,7 @@ import HomeModern from "@components/home/HomeModern";
 import HomeMinimal from "@components/home/HomeMinimal";
 import HomeClothing from "@components/home/HomeClothing";
 import HomeElectronic from "@components/home/HomeElectronic";
+import HomeHeritage from "@components/home/HomeHeritage";
 import { getStoreProducts } from "@lib/actions/product.actions";
 import { getAttributes } from "@lib/actions/attribute.actions";
 import { getCategories } from "@lib/actions/category.actions";
@@ -61,8 +62,9 @@ const Home = async ({ searchParams }) => {
       {layout === "minimal" && <HomeMinimal {...layoutProps} />}
       {layout === "clothing" && <HomeClothing {...layoutProps} />}
       {layout === "electronic" && <HomeElectronic {...layoutProps} />}
+      {layout === "heritage" && <HomeHeritage {...layoutProps} />}
       {(layout === "default" ||
-        !["modern", "minimal", "clothing", "electronic"].includes(layout)) && (
+        !["modern", "minimal", "clothing", "electronic", "heritage"].includes(layout)) && (
         <HomeDefault {...layoutProps} />
       )}
     </>
