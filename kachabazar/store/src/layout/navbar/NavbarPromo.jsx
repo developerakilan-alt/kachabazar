@@ -62,7 +62,7 @@ const NavbarPromo = ({
 
       <div
         suppressHydrationWarning
-        className="hidden lg:block xl:block bg-background text-foreground border-b border-border"
+        className="hidden lg:block xl:block bg-background text-foreground border-b border-border temple-navbar"
       >
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10 h-12 flex justify-between items-center">
           <div className="inline-flex">
