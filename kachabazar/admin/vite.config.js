@@ -32,7 +32,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "prompt",
+      registerType: "autoUpdate",
       devOptions: {
         // enabled: process.env.SW_DEV === "true",
         enabled: false,
@@ -45,7 +45,7 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
         cleanupOutdatedCaches: true,
         // Skip waiting is controlled by the prompt flow
-        skipWaiting: false,
+        skipWaiting: true,
         clientsClaim: true,
         // Don't cache-bust URLs that already have hashes
         dontCacheBustURLsMatching: /\.[a-f0-9]{8}\./,

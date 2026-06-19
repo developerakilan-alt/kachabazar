@@ -24,7 +24,7 @@ const App = () => {
       <DynamicTheme />
       <UpdateNotification />
       <ErrorBoundary>
-        <Router basename="/admin">
+        <Router basename="/">
           <AccessibleNavigationAnnouncer />
           <Routes>
             <Route path="/login" element={<Login />} />
