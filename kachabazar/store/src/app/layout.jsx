@@ -6,10 +6,12 @@ import Providers from "./provider";
 import Navbar from "@layout/navbar/Navbar";
 import NavbarClothing from "@layout/navbar/NavbarClothing";
 import NavbarElectronic from "@layout/navbar/NavbarElectronic";
+import NavbarHeritage from "@layout/navbar/NavbarHeritage";
 import Footer from "@layout/footer/Footer";
 import FooterClothing from "@layout/footer/FooterClothing";
 import FooterElectronic from "@layout/footer/FooterElectronic";
 import FooterModern from "@layout/footer/FooterModern";
+import FooterHeritage from "@layout/footer/FooterHeritage";
 import FooterTop from "@layout/footer/FooterTop";
 import MobileFooter from "@layout/footer/MobileFooter";
 import FeatureCard from "@components/feature-card/FeatureCard";
@@ -127,6 +129,14 @@ export default async function RootLayout({ children }) {
             storeLayout={storeLayout}
           />
         );
+      case "heritage":
+        return (
+          <NavbarHeritage
+            globalSetting={globalSetting}
+            storeCustomization={storeCustomizationSetting}
+            storeLayout={storeLayout}
+          />
+        );
       default:
         return (
           <Navbar
@@ -161,6 +171,15 @@ export default async function RootLayout({ children }) {
       case "modern":
         return (
           <FooterModern
+            error={error}
+            storeCustomizationSetting={storeCustomizationSetting}
+            globalSetting={globalSetting}
+          />
+        );
+
+      case "heritage":
+        return (
+          <FooterHeritage
             error={error}
             storeCustomizationSetting={storeCustomizationSetting}
             globalSetting={globalSetting}
@@ -206,7 +225,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body
         suppressHydrationWarning
-        className="bg-background text-foreground antialiased"
+        className={`bg-background text-foreground antialiased temple-bg${storeLayout === 'heritage' ? ' layout-heritage' : ''}`}
       >
         <div>
           <SettingProvider

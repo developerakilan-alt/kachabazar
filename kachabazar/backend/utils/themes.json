@@ -1686,5 +1686,87 @@
         "hsl": "240 3.7% 15.9%"
       }
     }
+  },
+  {
+    "name": "Temple Lamps",
+    "slug": "temple-lamps",
+    "description": "A moody, atmospheric theme inspired by ancient temple sanctuaries — warm lamp glow against dark stone, treasures displayed like sacred offerings",
+    "status": "show",
+    "isDefault": false,
+    "colors": {
+      "primary": { "key": "amber-500", "hsl": "40 80% 50%" },
+      "primaryForeground": { "key": "warm-950", "hsl": "35 20% 8%" },
+      "secondary": { "key": "red-800", "hsl": "345 55% 28%" },
+      "secondaryForeground": { "key": "rose-100", "hsl": "350 40% 92%" },
+      "background": { "key": "warm-50", "hsl": "40 18% 92%" },
+      "foreground": { "key": "warm-900", "hsl": "35 25% 12%" },
+      "card": { "key": "warm-50", "hsl": "40 15% 96%" },
+      "cardForeground": { "key": "warm-900", "hsl": "35 25% 12%" },
+      "muted": { "key": "warm-100", "hsl": "40 12% 86%" },
+      "mutedForeground": { "key": "warm-500", "hsl": "35 10% 42%" },
+      "accent": { "key": "amber-600", "hsl": "38 65% 40%" },
+      "accentForeground": { "key": "amber-100", "hsl": "40 60% 90%" },
+      "destructive": { "key": "red-700", "hsl": "0 65% 45%" },
+      "destructiveForeground": { "key": "white", "hsl": "0 0% 100%" },
+      "border": { "key": "warm-300", "hsl": "35 12% 72%" },
+      "input": { "key": "warm-300", "hsl": "35 12% 72%" },
+      "ring": { "key": "amber-500", "hsl": "40 80% 50%" },
+      "popover": { "key": "warm-50", "hsl": "40 15% 96%" },
+      "popoverForeground": { "key": "warm-900", "hsl": "35 25% 12%" }
+    },
+    "darkColors": {
+      "primary": { "key": "amber-400", "hsl": "40 85% 58%" },
+      "primaryForeground": { "key": "warm-950", "hsl": "35 20% 8%" },
+      "secondary": { "key": "red-700", "hsl": "345 55% 35%" },
+      "secondaryForeground": { "key": "rose-200", "hsl": "350 35% 80%" },
+      "background": { "key": "warm-950", "hsl": "35 10% 8%" },
+      "foreground": { "key": "warm-200", "hsl": "40 20% 85%" },
+      "card": { "key": "warm-900", "hsl": "35 12% 14%" },
+      "cardForeground": { "key": "warm-200", "hsl": "40 20% 85%" },
+      "muted": { "key": "warm-800", "hsl": "35 10% 20%" },
+      "mutedForeground": { "key": "warm-400", "hsl": "35 8% 52%" },
+      "accent": { "key": "amber-700", "hsl": "38 50% 35%" },
+      "accentForeground": { "key": "amber-200", "hsl": "40 55% 80%" },
+      "destructive": { "key": "red-600", "hsl": "0 65% 50%" },
+      "destructiveForeground": { "key": "warm-100", "hsl": "40 15% 90%" },
+      "border": { "key": "warm-700", "hsl": "35 10% 26%" },
+      "input": { "key": "warm-700", "hsl": "35 10% 30%" },
+      "ring": { "key": "amber-400", "hsl": "40 85% 58%" },
+      "popover": { "key": "warm-900", "hsl": "35 12% 14%" },
+      "popoverForeground": { "key": "warm-200", "hsl": "40 20% 85%" }
+    },
+    "typography": {
+      "fontFamily": "Cormorant Garamond, Lato, system-ui, sans-serif",
+      "fontSizeBase": "16px",
+      "fontSizeSm": "13px",
+      "fontSizeLg": "20px",
+      "fontSizeXl": "24px",
+      "fontWeightNormal": "400",
+      "fontWeightMedium": "500",
+      "fontWeightBold": "700",
+      "lineHeight": "1.8"
+    },
+    "sizing": {
+      "radius": "0.5rem",
+      "radiusSm": "0.25rem",
+      "radiusMd": "0.375rem",
+      "radiusLg": "0.75rem",
+      "radiusXl": "1rem"
+    },
+    "borders": {
+      "borderWidth": "1px",
+      "borderStyle": "solid"
+    },
+    "sidebar": {
+      "width": "256px",
+      "bgColor": { "key": "warm-100", "hsl": "40 15% 88%" },
+      "textColor": { "key": "warm-800", "hsl": "35 20% 18%" },
+      "activeColor": { "key": "amber-500", "hsl": "40 80% 50%" }
+    },
+    "header": {
+      "height": "64px",
+      "bgColor": { "key": "warm-50", "hsl": "40 18% 92%" },
+      "textColor": { "key": "warm-900", "hsl": "35 25% 12%" }
+    }
   }
 ]

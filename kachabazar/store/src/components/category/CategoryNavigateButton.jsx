@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { IoChevronForwardSharp } from "react-icons/io5";
 
 //internal import
 
@@ -25,7 +24,7 @@ const CategoryNavigateButton = ({ category }) => {
 
   return (
     <>
-      <div className="pl-4">
+      <div className="pl-8 pb-4">
         <h3
           onClick={() =>
             handleCategoryClick(
@@ -33,35 +32,10 @@ const CategoryNavigateButton = ({ category }) => {
               showingTranslateValue(category?.name)
             )
           }
-          className="text-sm text-muted-foreground dark:text-muted-foreground hover:text-orange-400 font-medium leading-tight line-clamp-1  group-hover"
+          className="text-2xl font-bold text-white drop-shadow-lg hover:text-[#D4AF37] leading-tight line-clamp-2 group-hover transition-colors duration-300"
         >
           {showingTranslateValue(category?.name)}
         </h3>
-        <ul className="pt-1 mt-1">
-          {category?.children?.slice(0, 3).map((child) => (
-            <li key={child._id} className="pt-1">
-              <a
-                onClick={() =>
-                  handleCategoryClick(
-                    child._id,
-                    showingTranslateValue(child?.name)
-                  )
-                }
-                className="flex hover:translate-x-2 transition-transform duration-300 items-center  text-xs text-muted-foreground cursor-pointer"
-              >
-                <span className="text-xs text-muted-foreground ">
-                  <IoChevronForwardSharp />
-                </span>
-                {showingTranslateValue(child?.name)}
-                {/* {console.log(
-                  "showingTranslateValue(child?.name)",
-                  showingTranslateValue(child?.name),
-                  child?.name
-                )} */}
-              </a>
-            </li>
-          ))}
-        </ul>
       </div>
     </>
   );

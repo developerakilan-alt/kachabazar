@@ -40,6 +40,12 @@ const layouts = [
     label: "Electronic",
     color: "text-cyan-500",
   },
+  {
+    value: "heritage",
+    icon: FiLayout,
+    label: "Heritage",
+    color: "text-amber-500",
+  },
 ];
 
 const LayoutSwitcher = ({ currentLayout = "default" }) => {
