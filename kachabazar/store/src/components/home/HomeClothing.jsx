@@ -75,7 +75,7 @@ const HomeClothing = ({
               >
                 <span className="flex items-center gap-2">
                   <span className="w-1 h-1 rounded-full bg-white/40" />
-                  Free shipping over $75
+                  Free shipping over ₹75
                 </span>
                 <span className="flex items-center gap-2">
                   <span className="w-1 h-1 rounded-full bg-white/40" />

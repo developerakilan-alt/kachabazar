@@ -211,7 +211,7 @@ const customerRegisterBody = (option) => {
 
         <p style="margin-bottom:20px;">Click this link for active your account</p></p>
 
-                             <a href=${option.store_url || "http://localhost:3000"}/auth/email-verification/${option.token} style="background:#22c55e;color:white;border:1px solid #22c55e; padding: 10px 15px; border-radius: 4px; text-decoration:none;">Verify Account</a>
+                             <a href="${(option.store_url || 'http://localhost:3000').replace(/\/+$/, '')}/auth/email-verification/${option.token}" style="background:#22c55e;color:white;border:1px solid #22c55e; padding: 10px 15px; border-radius: 4px; text-decoration:none;">Verify Account</a>
 
                             <p style="margin-top: 35px;">If you did not initiate
                               this request, please contact us immediately at

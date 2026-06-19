@@ -8,9 +8,11 @@ export async function GET(request, { params }) {
   }
 
   try {
-    const apiBase =
-      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5056/v1";
-    const response = await fetch(`${apiBase}/customer/register/${token}`, {
+    const serverApiUrl =
+      process.env.NEXT_SERVER_API_BASE_URL ||
+      process.env.NEXT_INTERNAL_API_BASE_URL ||
+      "http://localhost:5056/v1";
+    const response = await fetch(`${serverApiUrl}/customer/register/${token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
