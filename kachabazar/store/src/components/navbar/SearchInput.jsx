@@ -44,7 +44,7 @@ const SearchInput = ({ variant = "default" }) => {
                 ? "pl-5 h-9 bg-transparent focus:bg-transparent text-foreground placeholder:text-muted-foreground rounded-l-full"
                 : "pl-5 h-9 rounded-md bg-background text-muted-foreground"
             }`}
-            placeholder="Search for products (e.g. shirt, pant)"
+            placeholder="Search for products"
           />
         </label>
         <button

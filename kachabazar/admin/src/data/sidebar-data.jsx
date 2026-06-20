@@ -74,11 +74,11 @@ export const sidebarData = {
           icon: FiCompass,
           url: "/orders",
         },
-        {
-          title: "DeliveryBoys",
-          icon: FiTruck,
-          url: "/delivery-boys",
-        },
+        // {
+        //   title: "DeliveryBoys",
+        //   icon: FiTruck,
+        //   url: "/delivery-boys",
+        // },
         {
           title: "Customers",
           icon: FiUsers,
@@ -86,16 +86,16 @@ export const sidebarData = {
         },
       ],
     },
-    {
-      title: "SidebarStaff",
-      items: [
-        {
-          title: "OurStaff",
-          icon: FiUser,
-          url: "/our-staff",
-        },
-      ],
-    },
+    // {
+    //   title: "SidebarStaff",
+    //   items: [
+    //     {
+    //       title: "OurStaff",
+    //       icon: FiUser,
+    //       url: "/our-staff",
+    //     },
+    //   ],
+    // },
     {
       title: "SidebarSettings",
       items: [

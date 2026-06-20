@@ -11,7 +11,7 @@ const layouts = [
   { value: "minimal", label: "Minimal", icon: "🎯" },
   { value: "clothing", label: "Fashion", icon: "👗" },
   { value: "electronic", label: "Electronics", icon: "💻" },
-  { value: "heritage", label: "Heritage", icon: "🏛️" },
+  // { value: "heritage", label: "Heritage", icon: "🏛️" },
 ];
 
 /**

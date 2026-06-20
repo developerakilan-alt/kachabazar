@@ -10,14 +10,13 @@ const useAddToCart = () => {
   // console.log("items", items);
 
   const handleAddItem = (product, quantity) => {
-    const qty = quantity || item;
+    const qty = Number(quantity || item);
     const result = items.find((i) => i.id === product.id);
     const { variants, categories, description, ...updatedProduct } = product;
 
-    const maxStock =
-      product?.variants?.length > 0
-        ? product?.variant?.quantity
-        : product?.stock;
+    const maxStock = Number(
+      product?.variant?.quantity ?? product?.quantity ?? product?.stock ?? 0,
+    );
 
     if (result !== undefined) {
       if (result?.quantity + qty <= maxStock) {
@@ -38,6 +37,9 @@ const useAddToCart = () => {
 
   const handleIncreaseQuantity = (product) => {
     const result = items?.find((p) => p.id === product.id);
+    const maxStock = Number(
+      product?.variant?.quantity ?? product?.quantity ?? product?.stock ?? 0,
+    );
     // console.log(
     //   "handleIncreaseQuantity",
     //   product,
@@ -47,12 +49,7 @@ const useAddToCart = () => {
     //     : product?.stock
     // );
     if (result) {
-      if (
-        result?.quantity + item <=
-        (product?.variants?.length > 0
-          ? product?.variant?.quantity
-          : product?.stock)
-      ) {
+      if (result?.quantity + item <= maxStock) {
         updateItemQuantity(product.id, product.quantity + 1);
       } else {
         notifyError("Insufficient stock!");
