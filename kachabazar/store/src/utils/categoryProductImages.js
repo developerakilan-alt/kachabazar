@@ -1,3 +1,5 @@
+import { normalizeStoreImageUrl } from "@utils/imageUtils";
+
 const PLACEHOLDER_IMAGE =
   "https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png";
 
@@ -43,7 +45,9 @@ const getCategoryProductImage = (category, products = []) => {
     productBelongsToCategory(product, categoryIds),
   );
 
-  return getProductImage(matchedProduct) || category?.icon || PLACEHOLDER_IMAGE;
+  return normalizeStoreImageUrl(
+    getProductImage(matchedProduct) || category?.icon || PLACEHOLDER_IMAGE,
+  );
 };
 
 export { PLACEHOLDER_IMAGE, getCategoryProductImage };

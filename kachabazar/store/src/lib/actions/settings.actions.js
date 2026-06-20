@@ -15,7 +15,7 @@ export async function getCustomizationSettings() {
     const response = await resilientFetch(
       `${baseURL}/setting/store/customization`,
       {
-        next: { revalidate: 60, tags: ["settings", "customization"] },
+        cache: "no-store",
       },
     );
 
