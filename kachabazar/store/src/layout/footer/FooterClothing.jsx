@@ -24,7 +24,7 @@ const FooterClothing = async ({
     "mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-8 2xl:px-10";
 
   return (
-    <div className="pb-16 lg:pb-0 xl:pb-0 bg-neutral-900 text-white">
+    <div className="pb-16 lg:pb-0 xl:pb-0 bg-[#EBD1B0] text-neutral-900">
       {/* Main Footer */}
       <div className={clothingContainer}>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-14 lg:py-20">
@@ -40,17 +40,17 @@ const FooterClothing = async ({
                   alt="logo"
                 />
               </Link>
-              <p className="text-sm leading-relaxed text-neutral-400 max-w-xs">
+              <p className="text-sm leading-relaxed text-neutral-700 max-w-xs">
                 {showingTranslateValue(footer?.block4_address) ||
                   "Curated fashion for the modern wardrobe."}
               </p>
               {footer?.block4_phone && (
-                <p className="mt-3 text-xs text-neutral-500">
+                <p className="mt-3 text-xs text-neutral-700">
                   Tel: {footer.block4_phone}
                 </p>
               )}
               {footer?.block4_email && (
-                <p className="text-xs text-neutral-500">
+                <p className="text-xs text-neutral-700">
                   Email: {footer.block4_email}
                 </p>
               )}
@@ -61,7 +61,7 @@ const FooterClothing = async ({
           {/*
           {footer?.block1_status && (
             <div>
-              <h4 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-neutral-500 mb-5">
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-neutral-700 mb-5">
                 {showingTranslateValue(footer?.block1_title) || "Shop"}
               </h4>
               <ul className="space-y-3">
@@ -88,7 +88,7 @@ const FooterClothing = async ({
                       <li key={i}>
                         <Link
                           href={item.link || "#"}
-                          className="text-sm text-neutral-400 hover:text-white transition-colors"
+                          className="text-sm text-neutral-700 hover:text-neutral-950 transition-colors"
                         >
                           {showingTranslateValue(item.title)}
                         </Link>
@@ -103,7 +103,7 @@ const FooterClothing = async ({
           {/* Block 2 */}
           {footer?.block2_status && (
             <div>
-              <h4 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-neutral-500 mb-5">
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-neutral-700 mb-5">
                 {showingTranslateValue(footer?.block2_title) || "Help"}
               </h4>
               <ul className="space-y-3">
@@ -130,7 +130,7 @@ const FooterClothing = async ({
                       <li key={i}>
                         <Link
                           href={item.link || "#"}
-                          className="text-sm text-neutral-400 hover:text-white transition-colors"
+                          className="text-sm text-neutral-700 hover:text-neutral-950 transition-colors"
                         >
                           {showingTranslateValue(item.title)}
                         </Link>
@@ -144,7 +144,7 @@ const FooterClothing = async ({
           {/* Block 3 */}
           {footer?.block3_status && (
             <div>
-              <h4 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-neutral-500 mb-5">
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-neutral-700 mb-5">
                 {showingTranslateValue(footer?.block3_title) || "Account"}
               </h4>
               <ul className="space-y-3">
@@ -171,7 +171,7 @@ const FooterClothing = async ({
                       <li key={i}>
                         <Link
                           href={userInfo?.email ? item.link || "#" : "#"}
-                          className="text-sm text-neutral-400 hover:text-white transition-colors"
+                          className="text-sm text-neutral-700 hover:text-neutral-950 transition-colors"
                         >
                           {showingTranslateValue(item.title)}
                         </Link>
@@ -184,8 +184,8 @@ const FooterClothing = async ({
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-neutral-800 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-neutral-500">
+        <div className="border-t border-neutral-900/15 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-neutral-700">
             {globalSetting?.copyright_text ||
               "© " + new Date().getFullYear() + " All rights reserved."}
           </p>
