@@ -26,7 +26,7 @@ const HomeClothing = ({
     "mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-8 2xl:px-10";
 
   return (
-    <div className="min-h-screen bg-[#D97706]">
+    <div className="min-h-screen bg-white">
       <StickyCart />
 
       {/* ═══ Fashion Hero — Split Layout ═══ */}
@@ -34,7 +34,7 @@ const HomeClothing = ({
         <div className="mx-auto w-full max-w-[1920px]">
           <div className="grid lg:grid-cols-2 min-h-[480px] lg:min-h-[560px]">
             {/* Left — Text */}
-            <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-12 lg:py-20 order-2 lg:order-1 bg-[hsl(40_80%_50%)]">
+            <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-12 lg:py-20 order-2 lg:order-1 bg-white">
               <div className="max-w-lg">
                 <span className="inline-block text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 dark:text-neutral-500 mb-4 border border-neutral-200 dark:border-neutral-700 px-3 py-1 rounded-full">
                   Imitation Jwels for Elegance
@@ -66,7 +66,7 @@ const HomeClothing = ({
       </section>
 
       {/* ═══ Marquee Trust Bar ═══ */}
-      <div className="bg-neutral-900 dark:bg-neutral-800 text-white overflow-hidden">
+      <div className="bg-white border-y border-neutral-100 text-neutral-700 overflow-hidden">
         <div className="flex animate-marquee whitespace-nowrap py-3">
           {Array(3)
             .fill(null)
@@ -76,19 +76,19 @@ const HomeClothing = ({
                 className="flex items-center gap-12 mx-6 text-[11px] font-medium uppercase tracking-[0.2em]"
               >
                 <span className="flex items-center gap-2">
-                  <span className="w-1 h-1 rounded-full bg-white/40" />
+                  <span className="w-1 h-1 rounded-full bg-neutral-400" />
                   Free shipping over ₹75
                 </span>
                 <span className="flex items-center gap-2">
-                  <span className="w-1 h-1 rounded-full bg-white/40" />
+                  <span className="w-1 h-1 rounded-full bg-neutral-400" />
                   Easy 30-day returns
                 </span>
                 <span className="flex items-center gap-2">
-                  <span className="w-1 h-1 rounded-full bg-white/40" />
+                  <span className="w-1 h-1 rounded-full bg-neutral-400" />
                   New arrivals weekly
                 </span>
                 <span className="flex items-center gap-2">
-                  <span className="w-1 h-1 rounded-full bg-white/40" />
+                  <span className="w-1 h-1 rounded-full bg-neutral-400" />
                   Sustainable materials
                 </span>
               </div>
@@ -98,7 +98,7 @@ const HomeClothing = ({
 
       {/* ═══ Featured Categories — Magazine Grid ═══ */}
       {storeCustomizationSetting?.home?.featured_status && (
-        <section className="py-16 lg:py-24 bg-[#D97706]">
+        <section className="py-16 lg:py-24 bg-white">
           <div className={wideContainer}>
             <div className="text-center mb-14">
               <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 mb-3">
@@ -235,7 +235,7 @@ const HomeClothing = ({
 
       {/* ═══ Popular Products ═══ */}
       {storeCustomizationSetting?.home?.popular_products_status && (
-        <section className="py-16 lg:py-24 bg-[#D97706]">
+        <section className="py-16 lg:py-24 bg-white">
           <div className={wideContainer}>
             <div className="flex items-end justify-between mb-10">
               <div>
@@ -288,7 +288,7 @@ const HomeClothing = ({
         discountedProducts?.length > 0 && (
           <section
             id="discount"
-            className="py-16 lg:py-24 bg-[#D97706]"
+            className="py-16 lg:py-24 bg-white"
           >
             <div className={wideContainer}>
               <div className="flex items-end justify-between mb-10">
@@ -335,7 +335,7 @@ const HomeClothing = ({
         )}
 
       {/* ═══ Trust Badges ═══ */}
-      <section className="bg-[#D97706] border-t border-neutral-100 dark:border-neutral-800 py-14">
+      <section className="bg-white border-t border-neutral-100 dark:border-neutral-800 py-14">
         <div className={wideContainer}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
             <div className="text-center">

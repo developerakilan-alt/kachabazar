@@ -162,6 +162,7 @@ const MegaMenuCategory = ({
 
   // Electronic layout uses pill-style trigger
   const isElectronic = storeLayout === "electronic" || storeLayout === "modern";
+  const isClothing = storeLayout === "clothing";
 
   return (
     <div className="relative group">
@@ -187,13 +188,23 @@ const MegaMenuCategory = ({
         {isElectronic && (
           <div className="absolute -top-2 left-6 h-4 w-4 rotate-45 bg-white dark:bg-neutral-900 border-l border-t border-gray-100 dark:border-neutral-700"></div>
         )}
-        <div className="overflow-hidden rounded-xl border border-border">
-          <div className="flex h-[70vh] bg-background text-sm">
+        <div
+          className={`overflow-hidden rounded-xl border border-border ${
+            isClothing ? "bg-white" : ""
+          }`}
+        >
+          <div
+            className={`flex h-[70vh] text-sm ${
+              isClothing ? "bg-white" : "bg-background"
+            }`}
+          >
             {/* Left: Category Sidebar */}
             <div
               suppressHydrationWarning
               className={
-                "w-64 shrink-0 border-r border-border overflow-y-auto bg-muted/50 py-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-300"
+                `w-64 shrink-0 border-r border-border overflow-y-auto py-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 ${
+                  isClothing ? "bg-white" : "bg-muted/50"
+                }`
               }
             >
               {categoryError ? (
@@ -208,8 +219,8 @@ const MegaMenuCategory = ({
                       onMouseEnter={() => setActiveCategory(category)}
                       className={`w-full flex items-center gap-2 px-3 py-3 text-sm text-left transition-all ${
                         activeCategory?._id === category._id
-                          ? "bg-background text-primary font-medium border-l-4 border-primary"
-                          : "text-foreground hover:bg-background/80 font-medium hover:text-primary border-l-4 border-transparent"
+                          ? `${isClothing ? "bg-white" : "bg-background"} text-primary font-medium border-l-4 border-primary`
+                          : `text-foreground ${isClothing ? "hover:bg-white" : "hover:bg-background/80"} font-medium hover:text-primary border-l-4 border-transparent`
                       }`}
                     >
                       {category.icon ? (

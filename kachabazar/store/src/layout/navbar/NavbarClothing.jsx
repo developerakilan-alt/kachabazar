@@ -35,19 +35,19 @@ const NavbarClothing = async ({
   return (
     <div className="sticky z-40 top-0 w-full">
       {/* Announcement Bar — Slim, elegant */}
-      <div className="hidden lg:block bg-[#D97706] text-white">
+      <div className="hidden lg:block bg-[#EBD1B0] text-neutral-900">
         <div className={clothingContainer}>
           <div className="py-1.5 text-xs flex justify-between items-center">
             <a
               href="mailto:hautecouturejewellery@gmail.com"
-              className="tracking-[0.25em] uppercase text-[10px] font-light text-neutral-400 hover:text-white transition-colors"
+              className="tracking-[0.25em] uppercase text-[10px] font-light text-neutral-700 hover:text-neutral-950 transition-colors"
             >
               SUPPORT: hautecouturejewellery@gmail.com
             </a>
-            <div className="flex items-center gap-5 text-neutral-500">
+            <div className="flex items-center gap-5 text-neutral-700">
               {/* <Link
                 href="/about-us"
-                className="hover:text-white transition-colors text-[11px] tracking-wide"
+                className="hover:text-neutral-950 transition-colors text-[11px] tracking-wide"
               >
                 About
               </Link> */}
@@ -69,7 +69,7 @@ const NavbarClothing = async ({
       </div>
 
       {/* Main Navbar — Dark, premium fashion look */}
-      <header className="bg-[#D97706]">
+      <header className="bg-[#EBD1B0]">
         <div className={clothingContainer}>
           <div className="relative flex h-16 items-center justify-between gap-6">
             {/* Logo — use light logo on dark bg */}
