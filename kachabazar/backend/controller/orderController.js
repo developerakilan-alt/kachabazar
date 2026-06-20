@@ -460,6 +460,9 @@ const getDashboardAmount = async (req, res) => {
   // console.log('total')
   let week = new Date();
   week.setDate(week.getDate() - 10);
+  const weeklyStartDate = new Date();
+  weeklyStartDate.setDate(weeklyStartDate.getDate() - 6);
+  weeklyStartDate.setHours(0, 0, 0, 0);
 
   // console.log('getDashboardAmount');
 
@@ -604,6 +607,67 @@ const getDashboardAmount = async (req, res) => {
       },
     );
 
+    const weeklySalesData = await Order.aggregate([
+      {
+        $match: {
+          status: { $regex: "delivered", $options: "i" },
+          updatedAt: { $gte: weeklyStartDate },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$updatedAt",
+              timezone: "Asia/Kolkata",
+            },
+          },
+          total: { $sum: "$total" },
+          order: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          date: "$_id",
+          total: 1,
+          order: 1,
+        },
+      },
+      {
+        $sort: { date: 1 },
+      },
+    ]);
+
+    const weeklySalesMap = weeklySalesData.reduce((report, item) => {
+      report[item.date] = item;
+      return report;
+    }, {});
+    const formatReportDate = (date) => {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+        .formatToParts(date)
+        .reduce((result, part) => {
+          result[part.type] = part.value;
+          return result;
+        }, {});
+
+      return `${parts.year}-${parts.month}-${parts.day}`;
+    };
+    const weeklySalesReport = Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(weeklyStartDate);
+      date.setDate(weeklyStartDate.getDate() + index);
+      const reportDate = formatReportDate(date);
+      return (
+        weeklySalesMap[reportDate] || { date: reportDate, total: 0, order: 0 }
+      );
+    });
+
     res.send({
       totalAmount:
         totalAmount.length === 0
@@ -612,6 +676,7 @@ const getDashboardAmount = async (req, res) => {
       thisMonthlyOrderAmount: thisMonthOrderAmount[0]?.total,
       lastMonthOrderAmount: lastMonthOrderAmount[0]?.total,
       ordersData: orderFilteringData,
+      weeklySalesReport,
     });
   } catch (err) {
     // console.log('err',err)
@@ -628,14 +693,39 @@ const getBestSellerProductChart = async (req, res) => {
     const totalDoc = await Order.countDocuments({});
     const bestSellingProduct = await Order.aggregate([
       {
+        $match: {
+          $or: [
+            { status: { $regex: "delivered", $options: "i" } },
+            { status: { $regex: "processing", $options: "i" } },
+          ],
+        },
+      },
+      {
         $unwind: "$cart",
       },
       {
+        $addFields: {
+          "cart.productTitle": {
+            $cond: {
+              if: { $eq: [{ $type: "$cart.title" }, "object"] },
+              then: { $ifNull: ["$cart.title.en", "Unknown"] },
+              else: { $ifNull: ["$cart.title", "Unknown"] },
+            },
+          },
+        },
+      },
+      {
         $group: {
-          _id: "$cart.title",
-
+          _id: "$cart.productTitle",
           count: {
-            $sum: "$cart.quantity",
+            $sum: {
+              $convert: {
+                input: "$cart.quantity",
+                to: "double",
+                onError: 0,
+                onNull: 0,
+              },
+            },
           },
         },
       },
@@ -645,7 +735,7 @@ const getBestSellerProductChart = async (req, res) => {
         },
       },
       {
-        $limit: 4,
+        $limit: 5,
       },
     ]);
 
@@ -906,18 +996,8 @@ const processRefund = async (req, res) => {
     const Setting = require("../models/Setting");
     const storeSetting = await Setting.findOne({ name: "storeSetting" });
     const Razorpay = require("razorpay");
-    const keyId =
-      storeSetting?.setting?.razorpay_id ||
-      process.env.Razor_API_KEY ||
-      process.env.Razorpay_API_Key ||
-      process.env.RAZORPAY_API_KEY ||
-      process.env.RAZORPAY_KEY_ID;
-    const keySecret =
-      storeSetting?.setting?.razorpay_secret ||
-      process.env.Razor_API_SECRET ||
-      process.env.Razorpay_Secret_Key ||
-      process.env.RAZORPAY_SECRET_KEY ||
-      process.env.RAZORPAY_KEY_SECRET;
+    const keyId = storeSetting?.setting?.razorpay_id;
+    const keySecret = storeSetting?.setting?.razorpay_secret;
 
     if (!keyId || !keySecret) {
       return res.status(500).send({

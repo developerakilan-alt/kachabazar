@@ -17,11 +17,22 @@ const PieChart = ({ data }) => {
       datasets: [
         {
           data: products.map((selling) => selling.count),
-          backgroundColor: ["#10B981", "#3B82F6", "#F97316", "#0EA5E9"],
+          backgroundColor: [
+            "#10B981",
+            "#3B82F6",
+            "#F97316",
+            "#0EA5E9",
+            "#8B5CF6",
+          ],
           label: "Dataset 1",
         },
       ],
-      labels: products.map((selling) => selling._id),
+      labels: products.map((selling) => {
+        const label = selling._id;
+        return typeof label === "object"
+          ? label?.en || Object.values(label || {})[0] || "Product"
+          : label || "Product";
+      }),
     },
     options: {
       responsive: true,

@@ -38,6 +38,28 @@ const CheckoutForm = ({
   useEffect(() => setMounted(true), []);
   const isEnabled = (value) => value === true || value === "true" || value === 1 || value === "1";
 
+  useEffect(() => {
+    if (!zipCode || zipCode.length < 6) {
+      setShiprocketRates([]);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setRatesLoading(true);
+      try {
+        const res = await fetch(`/api/shiprocket/rates?deliveryPostcode=${zipCode}`);
+        const data = await res.json();
+        if (data?.data?.available_courier_rates) {
+          setShiprocketRates(data.data.available_courier_rates);
+        }
+      } catch {
+        setShiprocketRates([]);
+      } finally {
+        setRatesLoading(false);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [zipCode]);
+
   const {
     error,
     stripe,
@@ -79,7 +101,8 @@ const CheckoutForm = ({
   const { formatPrice } = useUtilsFunction();
   const checkout = storeCustomization?.checkout;
   const selectedPaymentMethod = watch("paymentMethod");
-  if (!mounted) return null; // or a skeleton loader
+
+  if (!mounted) return null;
 
   return (
     <>
@@ -248,6 +271,7 @@ const CheckoutForm = ({
                     />
                     <Error errorMessage={errors.shippingOption} />
                   </div>
+
                 </div>
               </div>
 

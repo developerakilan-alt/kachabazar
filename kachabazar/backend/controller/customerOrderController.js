@@ -20,25 +20,13 @@ const { generateTrackingId } = require("../utils/tracking");
 
 const getRazorpayCredentials = async () => {
   const storeSetting = await Setting.findOne({ name: "storeSetting" });
-  const envKeyId =
-    process.env.Razor_API_KEY ||
-    process.env.Razorpay_API_Key ||
-    process.env.RAZORPAY_API_KEY ||
-    process.env.RAZORPAY_KEY_ID;
-  const envKeySecret =
-    process.env.Razor_API_SECRET ||
-    process.env.Razorpay_Secret_Key ||
-    process.env.RAZORPAY_SECRET_KEY ||
-    process.env.RAZORPAY_KEY_SECRET;
   const dbKeyId = storeSetting?.setting?.razorpay_id;
   const dbKeySecret = storeSetting?.setting?.razorpay_secret;
   const isPlaceholder = (value = "") =>
     value.includes("YourTestKeyHere") || value.includes("YourTestSecretHere");
 
-  const keyId =
-    envKeyId || (!isPlaceholder(dbKeyId) ? dbKeyId : undefined);
-  const keySecret =
-    envKeySecret || (!isPlaceholder(dbKeySecret) ? dbKeySecret : undefined);
+  const keyId = !isPlaceholder(dbKeyId) ? dbKeyId : undefined;
+  const keySecret = !isPlaceholder(dbKeySecret) ? dbKeySecret : undefined;
 
   return { keyId, keySecret };
 };

@@ -25,11 +25,7 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/auth/:path*",
-        destination: "/api/auth/:path*",
-      },
-      {
-        source: "/api/:path*",
+        source: "/api/:path((?!auth/).*)",
         destination: `${backend}/v1/:path*`,
       },
       {
@@ -104,8 +100,18 @@ const nextConfig = {
         ],
       },
       {
-        // Cache static assets aggressively
-        source: "/(.*)\\.(js|css|woff|woff2|png|jpg|jpeg|gif|svg|ico)",
+        // Let app bundles revalidate so clients do not keep stale chunks after deploys.
+        source: "/(.*)\\.(js|css)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+        ],
+      },
+      {
+        // Cache versioned media/font assets aggressively.
+        source: "/(.*)\\.(woff|woff2|png|jpg|jpeg|gif|svg|ico|webp|avif)",
         headers: [
           {
             key: "Cache-Control",

@@ -212,6 +212,42 @@ const TrackingPageClient = ({ trackingId, data, error, success }) => {
             </div>
           )}
 
+          {/* ShipRocket Tracking Info */}
+          {data?.shiprocketTracking?.tracking_data && (
+            <div className="bg-background border border-border rounded-xl p-5">
+              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                <Truck className="h-4 w-4" />
+                ShipRocket Shipping
+              </h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">AWB</span>
+                  <span className="font-mono font-medium">
+                    {order?.shiprocket?.awb || "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Courier</span>
+                  <span className="font-medium">
+                    {data.shiprocketTracking.tracking_data?.courier_name || "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Status</span>
+                  <span className="font-medium capitalize">
+                    {data.shiprocketTracking.tracking_data?.shipment_status?.toLowerCase().replace(/_/g, " ") || "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Current Location</span>
+                  <span className="font-medium">
+                    {data.shiprocketTracking.tracking_data?.current_status?.location || "—"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Estimated Delivery */}
           {tracking?.estimatedDeliveryTime && (
             <div className="bg-background border border-border rounded-xl p-5">

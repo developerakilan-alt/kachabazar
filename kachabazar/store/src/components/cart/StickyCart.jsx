@@ -27,11 +27,11 @@ const StickyCart = () => {
               <span className="text-2xl mb-1 text-primary">
                 <IoBagHandleOutline />
               </span>
-              <span className="px-2 text-sm  font-medium">
+              <span className="px-2 text-sm  font-medium" suppressHydrationWarning>
                 {totalItems} Items
               </span>
             </div>
-            <div className="flex flex-col items-center justify-center bg-primary p-2 text-primary-foreground text-base font-medium rounded-bl-lg mx-auto">
+            <div className="flex flex-col items-center justify-center bg-primary p-2 text-primary-foreground text-base font-medium rounded-bl-lg mx-auto" suppressHydrationWarning>
               {formatPrice(cartTotal)}
             </div>
           </div>

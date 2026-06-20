@@ -79,6 +79,16 @@ const orderSchema = new mongoose.Schema(
       ],
     },
 
+    // ShipRocket integration fields
+    shiprocket: {
+      orderId: { type: String },
+      shipmentId: { type: String },
+      awb: { type: String },
+      status: { type: String },
+      labelUrl: { type: String },
+      manifestUrl: { type: String },
+    },
+
     // Delivery & Tracking Fields
     trackingId: {
       type: String,

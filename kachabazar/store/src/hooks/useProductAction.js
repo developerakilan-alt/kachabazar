@@ -33,11 +33,42 @@ export default function useProductAction({
   const [isReadMore, setIsReadMore] = useState(false);
 
   const currency = globalSetting?.default_currency || "₹";
+  const variantMetaKeys = [
+    "_id",
+    "id",
+    "originalPrice",
+    "price",
+    "discount",
+    "quantity",
+    "stock",
+    "barcode",
+    "sku",
+    "productId",
+    "image",
+    "createdAt",
+    "updatedAt",
+  ];
+  const attributeIds = attributes?.map((att) => att?._id).filter(Boolean) || [];
+  const hasUsableVariants =
+    product?.isCombination === true &&
+    attributeIds.length > 0 &&
+    product?.variants?.some((variant) =>
+      Object.keys(variant || {}).some(
+        (key) =>
+          attributeIds.includes(key) &&
+          !variantMetaKeys.includes(key) &&
+          variant[key],
+      ),
+    );
+  const productStock = getNumber(product?.stock ?? product?.quantity ?? 0);
+  const resolvedStock = hasUsableVariants
+    ? getNumber(selectVariant?.quantity ?? stock ?? 0)
+    : productStock;
 
   // Handle variant & price updates
   useEffect(() => {
     // console.log('value', value, product);
-    if (value) {
+    if (hasUsableVariants && value) {
       const result = product?.variants?.filter((variant) =>
         Object.keys(selectVa).every((k) => selectVa[k] === variant[k]),
       );
@@ -80,7 +111,7 @@ export default function useProductAction({
       setSelectVariant(result2);
       setSelectVa(result2);
       setSelectedImage(result2?.image);
-      setStock(result2?.quantity);
+      setStock(getNumber(result2?.quantity ?? productStock));
       const price = getNumber(result2?.price);
       const originalPrice = getNumber(result2?.originalPrice);
       const discountPercentage = getNumber(
@@ -89,18 +120,24 @@ export default function useProductAction({
       setDiscount(getNumber(discountPercentage));
       setPrice(price);
       setOriginalPrice(originalPrice);
-    } else if (product?.variants?.length > 0) {
+    } else if (hasUsableVariants) {
       const result = product?.variants?.filter((variant) =>
         Object.keys(selectVa).every((k) => selectVa[k] === variant[k]),
       );
+      const firstVariant =
+        product.variants.find((variant) => getNumber(variant?.quantity) > 0) ||
+        product.variants[0] ||
+        {};
 
       setVariants(result);
-      setStock(product.variants[0]?.quantity);
-      setSelectVariant(product.variants[0]);
-      setSelectVa(product.variants[0]);
-      setSelectedImage(product.variants[0]?.image);
-      const price = getNumber(product.variants[0]?.price);
-      const originalPrice = getNumber(product.variants[0]?.originalPrice);
+      setStock(getNumber(firstVariant?.quantity ?? productStock));
+      setSelectVariant(firstVariant);
+      setSelectVa(firstVariant);
+      setSelectedImage(firstVariant?.image || product?.image?.[0] || null);
+      const price = getNumber(firstVariant?.price ?? product?.prices?.price);
+      const originalPrice = getNumber(
+        firstVariant?.originalPrice ?? product?.prices?.originalPrice,
+      );
       const discountPercentage = getNumber(
         ((originalPrice - price) / originalPrice) * 100,
       );
@@ -108,7 +145,7 @@ export default function useProductAction({
       setPrice(price);
       setOriginalPrice(originalPrice);
     } else {
-      setStock(product?.stock);
+      setStock(productStock);
       setSelectedImage(product?.image?.[0] || null);
       const price = getNumber(product?.prices?.price);
       const originalPrice = getNumber(product?.prices?.originalPrice);
@@ -123,20 +160,27 @@ export default function useProductAction({
     product?.prices?.discount,
     product?.prices?.originalPrice,
     product?.prices?.price,
+    product?.quantity,
     product?.stock,
     product?.variants,
+    product?.isCombination,
     selectVa,
     selectVariant,
     value,
+    productStock,
+    hasUsableVariants,
   ]);
 
   // Handle variant title mapping
   useEffect(() => {
-    if (!product?.variants || !attributes) return;
+    if (!hasUsableVariants || !attributes) {
+      setVariantTitle([]);
+      return;
+    }
     const res = Object.keys(Object.assign({}, ...product?.variants));
     const varTitle = attributes?.filter((att) => res.includes(att?._id));
     setVariantTitle(varTitle?.sort());
-  }, [variants, attributes, product?.variants]);
+  }, [variants, attributes, product?.variants, hasUsableVariants]);
 
   // Add to cart
   const handleAddToCart = (productOrQuantity) => {
@@ -144,9 +188,13 @@ export default function useProductAction({
     const quantity =
       typeof productOrQuantity === "number" ? productOrQuantity : 1;
 
-    if (product?.variants?.length === 1 && product?.variants[0].quantity < 1)
+    if (
+      hasUsableVariants &&
+      product?.variants?.length === 1 &&
+      product?.variants[0].quantity < 1
+    )
       return notifyError("Insufficient stock");
-    if (stock <= 0) return notifyError("Insufficient stock");
+    if (resolvedStock <= 0) return notifyError("Insufficient stock");
 
     const selectedVariantName = variantTitle
       ?.map((att) =>
@@ -154,37 +202,42 @@ export default function useProductAction({
       )
       .map((el) => showingTranslateValue(el?.name));
 
-    if (
-      product?.variants.map(
+    const hasSelectedVariant =
+      !hasUsableVariants ||
+      product?.variants?.some(
         (variant) =>
           Object.entries(variant).sort().toString() ===
           Object.entries(selectVariant).sort().toString(),
-      )
-    ) {
+      );
+
+    if (hasSelectedVariant) {
       const { variants, categories, description, ...updatedProduct } = product;
       // slug is kept in updatedProduct so cart items can link to product pages
       const newItem = {
         ...updatedProduct,
         id:
-          product?.variants.length <= 0
+          !hasUsableVariants
             ? product._id
             : product._id +
               "-" +
               variantTitle?.map((att) => selectVariant[att._id]).join("-"),
         title:
-          product?.variants.length <= 0
+          !hasUsableVariants
             ? showingTranslateValue(product.title)
             : showingTranslateValue(product.title) + "-" + selectedVariantName,
         image: selectedImage,
-        variant: selectVariant || {},
+        variant: hasUsableVariants
+          ? selectVariant || {}
+          : product?.prices || {},
         price:
-          product.variants.length === 0
+          !hasUsableVariants
             ? getNumber(product.prices.price)
             : getNumber(price),
         originalPrice:
-          product.variants.length === 0
+          !hasUsableVariants
             ? getNumber(product.prices.originalPrice)
             : getNumber(originalPrice),
+        stock: resolvedStock,
       };
 
       handleAddItem(newItem, quantity);

@@ -24,9 +24,9 @@ const FeatureCategory = () => {
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+            {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
               0 styles
-            </p>
+            </p> */}
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Tikka
             </h3>
@@ -46,9 +46,9 @@ const FeatureCategory = () => {
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+            {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
               0 styles
-            </p>
+            </p> */}
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Necklaces
             </h3>
@@ -68,9 +68,9 @@ const FeatureCategory = () => {
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+            {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
               0 styles
-            </p>
+            </p> */}
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Invisible Chains
             </h3>
@@ -90,9 +90,9 @@ const FeatureCategory = () => {
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+            {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
               0 styles
-            </p>
+            </p> */}
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Hip Chains
             </h3>
@@ -112,9 +112,9 @@ const FeatureCategory = () => {
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+            {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
               0 styles
-            </p>
+            </p> */}
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Harams
             </h3>
@@ -134,9 +134,9 @@ const FeatureCategory = () => {
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-            <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+            {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
               0 styles
-            </p>
+            </p> */}
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Earrings
             </h3>

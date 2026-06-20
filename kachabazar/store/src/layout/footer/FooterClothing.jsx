@@ -1,13 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import {
-//   XIcon,
-//   FacebookIcon,
-//   LinkedinIcon,
-//   PinterestIcon,
-//   WhatsappIcon,
-// } from "react-share";
 
 import { cookies } from "next/headers";
 import { getUserServerSession } from "@lib/auth-server";
@@ -27,11 +20,13 @@ const FooterClothing = async ({
   };
   const footer = storeCustomizationSetting?.footer;
   const userInfo = await getUserServerSession();
+  const clothingContainer =
+    "mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-8 2xl:px-10";
 
   return (
     <div className="pb-16 lg:pb-0 xl:pb-0 bg-neutral-900 text-white">
       {/* Main Footer */}
-      <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
+      <div className={clothingContainer}>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-14 lg:py-20">
           {/* Brand Column */}
           {footer?.block4_status && (
@@ -63,6 +58,7 @@ const FooterClothing = async ({
           )}
 
           {/* Block 1 */}
+          {/*
           {footer?.block1_status && (
             <div>
               <h4 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-neutral-500 mb-5">
@@ -102,6 +98,7 @@ const FooterClothing = async ({
               </ul>
             </div>
           )}
+          */}
 
           {/* Block 2 */}
           {footer?.block2_status && (
