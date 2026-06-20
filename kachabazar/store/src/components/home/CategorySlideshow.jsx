@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { getCategoryProductImage } from "@utils/categoryProductImages";
+import { normalizeStoreImageUrl } from "@utils/imageUtils";
 
 const CategorySlideshow = ({
   categories = [],
@@ -12,11 +13,26 @@ const CategorySlideshow = ({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const sliderImages = [
-    { src: slider?.first_img, label: slider?.first_title?.en || "Slide 1" },
-    { src: slider?.second_img, label: slider?.second_title?.en || "Slide 2" },
-    { src: slider?.third_img, label: slider?.third_title?.en || "Slide 3" },
-    { src: slider?.four_img, label: slider?.four_title?.en || "Slide 4" },
-    { src: slider?.five_img, label: slider?.five_title?.en || "Slide 5" },
+    {
+      src: normalizeStoreImageUrl(slider?.first_img),
+      label: slider?.first_title?.en || "Slide 1",
+    },
+    {
+      src: normalizeStoreImageUrl(slider?.second_img),
+      label: slider?.second_title?.en || "Slide 2",
+    },
+    {
+      src: normalizeStoreImageUrl(slider?.third_img),
+      label: slider?.third_title?.en || "Slide 3",
+    },
+    {
+      src: normalizeStoreImageUrl(slider?.four_img),
+      label: slider?.four_title?.en || "Slide 4",
+    },
+    {
+      src: normalizeStoreImageUrl(slider?.five_img),
+      label: slider?.five_title?.en || "Slide 5",
+    },
   ].filter((item) => item.src);
 
   const categoryImages = categories
@@ -27,7 +43,8 @@ const CategorySlideshow = ({
     }))
     .filter((item) => item.src);
 
-  const defaultImage = slider?.first_img || "/slider/slider-1.jpg";
+  const defaultImage =
+    normalizeStoreImageUrl(slider?.first_img) || "/slider/slider-1.jpg";
 
   const images = sliderImages.length > 0
     ? sliderImages
