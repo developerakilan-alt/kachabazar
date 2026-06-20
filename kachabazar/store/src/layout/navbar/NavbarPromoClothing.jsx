@@ -38,7 +38,7 @@ const NavbarPromoClothing = ({
     <>
       <StoreTheme theme={activeTheme} />
 
-      <div className="hidden lg:block xl:block bg-white dark:bg-neutral-950 border-b border-neutral-100 dark:border-neutral-800">
+      <div className="hidden lg:block xl:block bg-[#EBD1B0] border-b border-[#d9bd99]">
         <div
           className={`${clothingContainer} h-11 flex justify-between items-center`}
         >
