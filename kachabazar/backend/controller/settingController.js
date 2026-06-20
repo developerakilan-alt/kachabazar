@@ -146,15 +146,10 @@ const getStoreSetting = async (req, res) => {
       facebook_login_status,
       github_login_status,
     } = storeSetting.setting;
-    const envRazorpayId =
-      process.env.Razor_API_KEY ||
-      process.env.Razorpay_API_Key ||
-      process.env.RAZORPAY_API_KEY ||
-      process.env.RAZORPAY_KEY_ID;
     const isPlaceholder = (value = "") =>
       value.includes("YourTestKeyHere") || value.includes("YourTestSecretHere");
     const publicRazorpayId =
-      envRazorpayId || (!isPlaceholder(razorpay_id) ? razorpay_id : undefined);
+      !isPlaceholder(razorpay_id) ? razorpay_id : undefined;
 
     res.send({
       cod_status,
@@ -199,22 +194,11 @@ const getStoreSecretKeys = async (req, res) => {
       stripe_secret,
       nextauth_secret,
     } = storeSetting.setting;
-    const envRazorpayId =
-      process.env.Razor_API_KEY ||
-      process.env.Razorpay_API_Key ||
-      process.env.RAZORPAY_API_KEY ||
-      process.env.RAZORPAY_KEY_ID;
-    const envRazorpaySecret =
-      process.env.Razor_API_SECRET ||
-      process.env.Razorpay_Secret_Key ||
-      process.env.RAZORPAY_SECRET_KEY ||
-      process.env.RAZORPAY_KEY_SECRET;
     const isPlaceholder = (value = "") =>
       value.includes("YourTestKeyHere") || value.includes("YourTestSecretHere");
     const resolvedRazorpayId =
-      envRazorpayId || (!isPlaceholder(razorpay_id) ? razorpay_id : undefined);
+      !isPlaceholder(razorpay_id) ? razorpay_id : undefined;
     const resolvedRazorpaySecret =
-      envRazorpaySecret ||
       (!isPlaceholder(razorpay_secret) ? razorpay_secret : undefined);
 
     res.send({

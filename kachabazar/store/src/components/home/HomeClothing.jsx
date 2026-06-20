@@ -22,17 +22,19 @@ const HomeClothing = ({
   const topCategories = categories?.[0]?.children?.slice(0, 6) || [];
   const slider = storeCustomizationSetting?.slider;
   const home = storeCustomizationSetting?.home;
+  const wideContainer =
+    "mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-8 2xl:px-10";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950">
+    <div className="min-h-screen bg-[#D97706]">
       <StickyCart />
 
       {/* ═══ Fashion Hero — Split Layout ═══ */}
       <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-screen-2xl">
+        <div className="mx-auto w-full max-w-[1920px]">
           <div className="grid lg:grid-cols-2 min-h-[480px] lg:min-h-[560px]">
             {/* Left — Text */}
-            <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-12 lg:py-20 order-2 lg:order-1 bg-neutral-50 dark:bg-neutral-900">
+            <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-12 lg:py-20 order-2 lg:order-1 bg-[hsl(40_80%_50%)]">
               <div className="max-w-lg">
                 <span className="inline-block text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 dark:text-neutral-500 mb-4 border border-neutral-200 dark:border-neutral-700 px-3 py-1 rounded-full">
                   Imitation Jwels for Elegance
@@ -96,8 +98,8 @@ const HomeClothing = ({
 
       {/* ═══ Featured Categories — Magazine Grid ═══ */}
       {storeCustomizationSetting?.home?.featured_status && (
-        <section className="py-16 lg:py-24 bg-white dark:bg-neutral-950">
-          <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
+        <section className="py-16 lg:py-24 bg-[#D97706]">
+          <div className={wideContainer}>
             <div className="text-center mb-14">
               <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 mb-3">
                 Shop by Category
@@ -158,9 +160,9 @@ const HomeClothing = ({
                     />
                     <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                      <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+                      {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
                         {cat.children?.length || 0} styles
-                      </p>
+                      </p> */}
                       <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
                         {cat.name?.en || "Category"}
                       </h3>
@@ -233,8 +235,8 @@ const HomeClothing = ({
 
       {/* ═══ Popular Products ═══ */}
       {storeCustomizationSetting?.home?.popular_products_status && (
-        <section className="py-16 lg:py-24 bg-white dark:bg-neutral-950">
-          <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
+        <section className="py-16 lg:py-24 bg-[#D97706]">
+          <div className={wideContainer}>
             <div className="flex items-end justify-between mb-10">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 mb-2">
@@ -257,7 +259,7 @@ const HomeClothing = ({
                 View All →
               </Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 lg:gap-5">
               {popularProducts
                 ?.slice(
                   0,
@@ -286,9 +288,9 @@ const HomeClothing = ({
         discountedProducts?.length > 0 && (
           <section
             id="discount"
-            className="py-16 lg:py-24 bg-neutral-50 dark:bg-neutral-900/50"
+            className="py-16 lg:py-24 bg-[#D97706]"
           >
-            <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
+            <div className={wideContainer}>
               <div className="flex items-end justify-between mb-10">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-red-500 mb-2">
@@ -313,7 +315,7 @@ const HomeClothing = ({
                   Shop All Sale →
                 </Link>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 lg:gap-5">
                 {discountedProducts
                   ?.slice(
                     0,
@@ -333,8 +335,8 @@ const HomeClothing = ({
         )}
 
       {/* ═══ Trust Badges ═══ */}
-      <section className="bg-white dark:bg-neutral-950 border-t border-neutral-100 dark:border-neutral-800 py-14">
-        <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
+      <section className="bg-[#D97706] border-t border-neutral-100 dark:border-neutral-800 py-14">
+        <div className={wideContainer}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
             <div className="text-center">
               <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">

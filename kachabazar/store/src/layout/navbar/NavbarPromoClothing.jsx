@@ -18,6 +18,8 @@ const NavbarPromoClothing = ({
 }) => {
 
   const [activeTheme, setActiveTheme] = useState(defaultTheme || null);
+  const clothingContainer =
+    "mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-8 2xl:px-10";
 
   useEffect(() => {
     const Cookies = require("js-cookie");
@@ -37,7 +39,9 @@ const NavbarPromoClothing = ({
       <StoreTheme theme={activeTheme} />
 
       <div className="hidden lg:block xl:block bg-white dark:bg-neutral-950 border-b border-neutral-100 dark:border-neutral-800">
-        <div className="max-w-screen-2xl mx-auto px-3 sm:px-10 h-11 flex justify-between items-center">
+        <div
+          className={`${clothingContainer} h-11 flex justify-between items-center`}
+        >
           <div className="flex items-center gap-6">
             {/* Mega Menu */}
             {categoriesMenuStatus && (

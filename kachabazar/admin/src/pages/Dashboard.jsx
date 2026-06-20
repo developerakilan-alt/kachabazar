@@ -85,8 +85,8 @@ const Dashboard = () => {
   } = useQuery({
     queryKey: ["bestSellerProductChart"],
     queryFn: OrderServices.getBestSellerProductChart,
-    staleTime: 20 * 60 * 1000, // Cache for 20 minutes
-    gcTime: 25 * 60 * 1000, // Garbage collect after 25 minutes
+    staleTime: 2 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 
   // const { data: dashboardRecentOrder, loading: loadingRecentOrder } = useAsync(
@@ -100,8 +100,8 @@ const Dashboard = () => {
     queryKey: ["dashboardRecentOrder", currentPage],
     queryFn: () =>
       OrderServices.getDashboardRecentOrder({ page: currentPage, limit: 8 }),
-    staleTime: 10 * 60 * 1000, // Cache for 10 minutes
-    gcTime: 15 * 60 * 1000, // Garbage collect after 15 minutes
+    staleTime: 2 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
     placeholderData: keepPreviousData,
   });
 
@@ -116,7 +116,8 @@ const Dashboard = () => {
   } = useQuery({
     queryKey: ["dashboardOrderCount"],
     queryFn: OrderServices.getDashboardCount,
-    staleTime: 15 * 60 * 1000,
+    staleTime: 2 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 
   // const { data: dashboardOrderAmount, loading: loadingOrderAmount } = useAsync(
@@ -129,7 +130,8 @@ const Dashboard = () => {
   } = useQuery({
     queryKey: ["dashboardOrderAmount"],
     queryFn: OrderServices.getDashboardAmount,
-    staleTime: 15 * 60 * 1000,
+    staleTime: 2 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 
   // Combined error flag — true if any dashboard query failed
@@ -151,7 +153,7 @@ const Dashboard = () => {
 
     // yesterday orders
     const yesterdayOrder = dashboardOrderAmount?.ordersData?.filter((order) =>
-      dayjs(order.updatedAt).set(-1, "day").isYesterday(),
+      dayjs(order.updatedAt).isYesterday(),
     );
 
     const yesterdayReport = yesterdayOrder?.reduce(
@@ -161,27 +163,30 @@ const Dashboard = () => {
     setYesterdayOrderAmount(yesterdayReport);
 
     // sales orders chart data
-    const salesOrderChartData = dashboardOrderAmount?.ordersData?.filter(
-      (order) =>
-        dayjs(order.updatedAt).isBetween(
-          new Date().setDate(new Date().getDate() - 7),
-          new Date(),
-        ),
-    );
+    if (dashboardOrderAmount?.weeklySalesReport) {
+      setSalesReport(dashboardOrderAmount.weeklySalesReport);
+    } else {
+      const salesOrderChartData = dashboardOrderAmount?.ordersData?.filter(
+        (order) =>
+          dayjs(order.updatedAt).isBetween(
+            new Date().setDate(new Date().getDate() - 7),
+            new Date(),
+          ),
+      );
 
-    salesOrderChartData?.reduce((res, value) => {
-      let onlyDate = value.updatedAt.split("T")[0];
+      const report = salesOrderChartData?.reduce((res, value) => {
+        let onlyDate = value.updatedAt.split("T")[0];
 
-      if (!res[onlyDate]) {
-        res[onlyDate] = { date: onlyDate, total: 0, order: 0 };
-        salesReport.push(res[onlyDate]);
-      }
-      res[onlyDate].total += value.total;
-      res[onlyDate].order += 1;
-      return res;
-    }, {});
+        if (!res[onlyDate]) {
+          res[onlyDate] = { date: onlyDate, total: 0, order: 0 };
+        }
+        res[onlyDate].total += value.total;
+        res[onlyDate].order += 1;
+        return res;
+      }, {});
 
-    setSalesReport(salesReport);
+      setSalesReport(Object.values(report || {}));
+    }
 
     const todayPaymentMethodData = [];
     const yesterDayPaymentMethodData = [];
@@ -220,7 +225,7 @@ const Dashboard = () => {
     });
     // yesterday order payment method
     dashboardOrderAmount?.ordersData?.filter((item, value) => {
-      if (dayjs(item.updatedAt).set(-1, "day").isYesterday()) {
+      if (dayjs(item.updatedAt).isYesterday()) {
         if (item.paymentMethod === "Cash") {
           let cashMethod = {
             paymentMethod: "Cash",
