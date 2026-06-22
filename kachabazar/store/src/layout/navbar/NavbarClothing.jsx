@@ -9,6 +9,7 @@ import { getShowingCategory } from "@services/CategoryService";
 import { getShowingThemes, getDefaultTheme } from "@services/ThemeServices";
 import MobileFooter from "@layout/footer/MobileFooter";
 import Image from "next/image";
+import SelectLayout from "@components/form/SelectLayout";
 
 const NavbarClothing = async ({
   globalSetting,
@@ -35,28 +36,17 @@ const NavbarClothing = async ({
   return (
     <div className="sticky z-40 top-0 w-full">
       {/* Announcement Bar — Slim, elegant */}
-      <div className="hidden lg:block bg-[#EBD1B0] text-neutral-900">
+      <div className="hidden lg:block bg-black text-white">
         <div className={clothingContainer}>
           <div className="py-1.5 text-xs flex justify-between items-center">
             <a
               href="mailto:hautecouturejewellery@gmail.com"
-              className="tracking-[0.25em] uppercase text-[10px] font-light text-neutral-700 hover:text-neutral-950 transition-colors"
+              className="tracking-[0.25em] uppercase text-[10px] font-light text-neutral-400 hover:text-white transition-colors"
             >
               SUPPORT: hautecouturejewellery@gmail.com
             </a>
-            <div className="flex items-center gap-5 text-neutral-700">
-              {/* <Link
-                href="/about-us"
-                className="hover:text-neutral-950 transition-colors text-[11px] tracking-wide"
-              >
-                About
-              </Link> */}
-              {/* <Link
-                href="/contact-us"
-                className="hover:text-white transition-colors text-[11px] tracking-wide"
-              >
-                Contact
-              </Link> */}
+            <div className="flex items-center gap-5 text-neutral-500">
+              <SelectLayout currentLayout={storeLayout} size="text-[10px]" />
               <Link
                 href="/user/my-account"
                 className="hover:text-white transition-colors text-[11px] tracking-wide"
@@ -69,7 +59,7 @@ const NavbarClothing = async ({
       </div>
 
       {/* Main Navbar — Dark, premium fashion look */}
-      <header className="bg-[#EBD1B0]">
+      <header className="bg-black">
         <div className={clothingContainer}>
           <div className="relative flex h-16 items-center justify-between gap-6">
             {/* Logo — use light logo on dark bg */}

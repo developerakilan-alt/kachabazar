@@ -15,7 +15,6 @@ import {
   FiTruck,
   FiCreditCard,
   FiShield,
-  FiHeadphones,
 } from "react-icons/fi";
 
 const HomeDefault = ({
@@ -27,27 +26,34 @@ const HomeDefault = ({
   storeCustomizationError,
   featuredCampaign,
   categories: categoryData,
+  globalSetting,
 }) => {
-  const featurePromo = [
-    {
-      id: 1,
-      title: "Quick Delivery",
-      desc: "Within Tamil Nadu, 3-5 day delivery; other states: 6-8 day delivery.",
-      icon: FiTruck,
-    },
-    {
-      id: 2,
-      title: "Important Order Policy",
-      desc: "No Cash on Delivery (COD). Re-shipping charges applicable for returned couriers.",
-      icon: FiShield,
-    },
-    {
-      id: 3,
-      title: "Exchange Policy",
-      desc: "No Refunds. 360° Unboxing Video mandatory for replacement requests (damaged only).",
-      icon: FiCreditCard,
-    },
-  ];
+  const t = (obj) => obj?.en || obj || "";
+  const home = storeCustomizationSetting?.home || {};
+  const promoActive = home?.feature_promo_status !== false;
+
+  const featurePromo = promoActive
+    ? [
+        {
+          id: 1,
+          title: t(home?.quick_delivery_title) || "Quick Delivery",
+          desc: t(home?.quick_delivery_description) || "Fast and reliable delivery service.",
+          icon: FiTruck,
+        },
+        {
+          id: 2,
+          title: t(home?.promotion_title) || "Special Offers",
+          desc: t(home?.promotion_description) || "Exclusive deals and promotions.",
+          icon: FiShield,
+        },
+        {
+          id: 3,
+          title: t(home?.popular_title) || "Popular Products",
+          desc: t(home?.popular_description) || "Trending items chosen by customers.",
+          icon: FiCreditCard,
+        },
+      ]
+    : [];
 
   const rootCategories = categoryData?.filter?.(
     (c) => c?.name?.en && !["Uncategorized"].includes(c?.name?.en)
@@ -59,11 +65,7 @@ const HomeDefault = ({
         img: getCategoryProductImage(c, categoryProducts || popularProducts),
         slug: c?.slug || "",
       }))
-    : [
-        { title: "Imitation Jewels", slug: "imitation-jewels", id: "", img: "/collections/imitation-jewels.jpg" },
-        { title: "Diamond Look Like", slug: "diamond-look-like", id: "", img: "/collections/diamond-look-like.jpg" },
-        { title: "Accessories", slug: "accessories", id: "", img: "/collections/accessories.jpg" },
-      ];
+    : [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -89,45 +91,38 @@ const HomeDefault = ({
       </div>
 
       {/* Explore Our Collections */}
-      <div
-        className="w-full py-12"
-        style={{ backgroundColor: "#F8E6D0" }}
-      >
-        <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
-          <div className="text-center mb-8">
-            <h2
-              className="text-2xl md:text-3xl font-serif font-semibold mb-2"
-              style={{ color: "#EB8B10" }}
-            >
-              Explore Our Collections
-            </h2>
-            <div className="text-3xl text-primary mt-2">✦</div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {collections.map((col) => (
-              <Link
-                key={col.slug || col.id}
-                href={col.id ? `/search?category=${col.slug}&_id=${col.id}` : `/search?query=${encodeURIComponent(col.title)}`}
-                className="group block overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
-              >
-                <div
-                  className="aspect-[16/9] bg-cover bg-center"
-                  style={{
-                    backgroundColor: "#EBD1B0",
-                    backgroundImage: `url(${col.img})`,
-                  }}
+      {collections.length > 0 && (
+        <div className="w-full py-12 bg-muted/30">
+          <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-serif font-semibold mb-2 text-foreground">
+                {t(home?.feature_title) || "Explore Our Collections"}
+              </h2>
+              <div className="text-3xl text-primary mt-2">✦</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {collections.map((col) => (
+                <Link
+                  key={col.slug || col.id}
+                  href={col.id ? `/search?category=${col.slug}&_id=${col.id}` : `/search?query=${encodeURIComponent(col.title)}`}
+                  className="group block overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
                 >
-                  <div className="w-full h-full flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors duration-300">
-                    <span className="text-white text-xl md:text-2xl font-serif font-semibold drop-shadow-lg">
-                      {col.title}
-                    </span>
+                  <div
+                    className="aspect-[16/9] bg-cover bg-center bg-muted"
+                    style={{ backgroundImage: `url(${col.img})` }}
+                  >
+                    <div className="w-full h-full flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors duration-300">
+                      <span className="text-white text-xl md:text-2xl font-serif font-semibold drop-shadow-lg">
+                        {col.title}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Latest Collections - Tabbed Products */}
       {storeCustomizationSetting?.home?.popular_products_status && (
@@ -254,56 +249,33 @@ const HomeDefault = ({
           </div>
         )}
 
-      {/* Customers Reviews Section */}
-      <div
-        className="w-full py-12"
-        style={{ backgroundColor: "#F8E6D0" }}
-      >
-        <div className="mx-auto max-w-screen-2xl px-3 sm:px-10 text-center">
-          <h2 className="text-2xl md:text-3xl font-serif font-semibold mb-2" style={{ color: "#EB8B10" }}>
-            Customers Reviews
-          </h2>
-          <div className="text-3xl text-primary mt-2 mb-8">✦</div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { name: "Ananya R.", excerpt: "Elegant & Timeless", text: "Absolutely in love with these hoops! The design is elegant and they instantly elevate any outfit." },
-              { name: "Priya S.", excerpt: "Premium Look & Comfort", text: "Mesmerizing is the right word! The finish is premium and they feel super comfortable to wear all day." },
-              { name: "Sneha K.", excerpt: "Perfect Statement Piece", text: "These hoops are classy and trendy at the same time. I've received so many compliments already." },
-            ].map((review, i) => (
-              <div key={i} className="bg-white rounded-lg p-6 shadow-sm border border-border">
-                <div className="text-4xl text-primary mb-3">✦</div>
-                <h4 className="text-lg font-serif font-semibold text-foreground mb-2">{review.excerpt}</h4>
-                <p className="text-sm text-muted-foreground mb-4 italic">&ldquo;{review.text}&rdquo;</p>
-                <p className="text-sm font-semibold text-foreground">- {review.name}</p>
-              </div>
-            ))}
+      {/* Feature / Service Cards — using store settings */}
+      {promoActive && featurePromo.length > 0 && (
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-10 py-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{featurePromo.map((promo) => {
+              const Icon = promo.icon;
+              return (
+                <div
+                  key={promo.id}
+                  className="flex items-start gap-4 p-5 bg-card rounded-xl border border-border"
+                >
+                  <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-primary/10">
+                    <Icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-foreground mb-1">
+                      {promo.title}
+                    </h4>
+                    <p className="text-xs text-muted-foreground leading-5">
+                      {promo.desc}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </div>
-
-      {/* Feature / Service Cards */}
-      <div className="mx-auto max-w-screen-2xl px-4 sm:px-10 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {featurePromo.map((promo) => (
-            <div
-              key={promo.id}
-              className="flex items-start gap-4 p-5 bg-card rounded-xl border border-border"
-            >
-              <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full" style={{ backgroundColor: "#F8E6D0" }}>
-                <promo.icon className="h-5 w-5" style={{ color: "#dd8e25" }} />
-              </div>
-              <div>
-                <h4 className="text-sm font-semibold text-foreground mb-1">
-                  {promo.title}
-                </h4>
-                <p className="text-xs text-muted-foreground leading-5">
-                  {promo.desc}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
     </div>
   );
 };

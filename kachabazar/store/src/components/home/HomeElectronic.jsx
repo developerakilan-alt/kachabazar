@@ -21,6 +21,8 @@ const HomeElectronic = ({
   featuredCampaign,
 }) => {
   const topCategories = categories?.[0]?.children?.slice(0, 8) || [];
+  const t = (obj) => obj?.en || obj || "";
+  const home = storeCustomizationSetting?.home || {};
 
   return (
     <div className="min-h-screen bg-background">
@@ -42,7 +44,7 @@ const HomeElectronic = ({
             <div className="text-primary-foreground relative z-10">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-500/15 border border-cyan-500/20 text-cyan-400 text-xs font-semibold rounded-full mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                New Season Tech
+                {t(home?.promotion_title) || "New Season Tech"}
               </div>
               <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight mb-5 leading-[1.1]">
                 {globalSetting?.shop_name || "Latest Tech"}{" "}
@@ -132,30 +134,7 @@ const HomeElectronic = ({
       {/* Campaign / Flash Sale Section */}
       {featuredCampaign ? (
         <CampaignSection campaign={featuredCampaign} attributes={attributes} />
-      ) : (
-        /* Static Flash Deals Banner fallback */
-        <div className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500">
-          <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
-            <div className="flex items-center justify-between py-3 text-white">
-              <div className="flex items-center gap-3">
-                <span className="text-lg">⚡</span>
-                <span className="text-sm font-bold uppercase tracking-wider">
-                  Flash Deals
-                </span>
-                <span className="hidden sm:inline text-sm opacity-80">
-                  — Limited time offers on top electronics
-                </span>
-              </div>
-              <Link
-                href="/offers"
-                className="text-xs font-semibold bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full hover:bg-white/30 transition-colors"
-              >
-                View All
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
+      ) : null}
 
       {/* Popular Products */}
       {storeCustomizationSetting?.home?.popular_products_status && (
@@ -214,30 +193,30 @@ const HomeElectronic = ({
       )}
 
       {/* Feature Highlights */}
-      {storeCustomizationSetting?.home?.delivery_status && (
+      {home?.delivery_status && (
         <section className="bg-foreground py-14 lg:py-16">
           <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
               {[
                 {
                   Icon: Truck,
-                  title: "Free Express Shipping",
-                  desc: "On orders over $50",
+                  title: t(home?.quick_delivery_title) || "Free Express Shipping",
+                  desc: t(home?.quick_delivery_description) || "Fast delivery on all orders",
                 },
                 {
                   Icon: ShieldCheck,
-                  title: "Secure Payment",
-                  desc: "256-bit SSL encryption",
+                  title: t(home?.popular_title) || "Secure Payment",
+                  desc: t(home?.popular_description) || "Protected transactions",
                 },
                 {
                   Icon: RotateCcw,
-                  title: "Easy Returns",
-                  desc: "30-day return policy",
+                  title: t(home?.promotion_button_name) || "Easy Returns",
+                  desc: t(home?.promotion_title) || "Hassle-free process",
                 },
                 {
                   Icon: Headphones,
-                  title: "24/7 Support",
-                  desc: "Expert tech assistance",
+                  title: t(home?.feature_title) || "24/7 Support",
+                  desc: t(home?.feature_description) || "Always here to help",
                 },
               ].map((item, i) => {
                 const IconComp = item.Icon;

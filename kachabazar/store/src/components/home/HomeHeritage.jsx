@@ -18,9 +18,39 @@ const HomeHeritage = ({
   categories,
   featuredCampaign,
 }) => {
+  const t = (obj) => obj?.en || obj || "";
+  const home = storeCustomizationSetting?.home || {};
+
   return (
     <div className="min-h-screen bg-background temple-bg">
       <StickyCart />
+
+      {/* Heritage Hero Section */}
+      <div className="relative mx-auto max-w-screen-xl px-4 sm:px-10 py-16 lg:py-24 text-center overflow-hidden">
+        <div className="absolute inset-0 temple-glow opacity-20 pointer-events-none" />
+        <div className="kolam-divider mb-6" />
+        <h1 className="text-3xl lg:text-5xl font-bold gold-text mb-4">
+          {globalSetting?.shop_name || "Heritage Collection"}
+        </h1>
+        <p className="text-[rgba(216,163,96,0.7)] max-w-2xl mx-auto mb-8 text-sm lg:text-base leading-relaxed">
+          {globalSetting?.site_description || "Timeless craftsmanship passed down through generations."}
+        </p>
+        <div className="flex gap-4 justify-center">
+          <Link
+            href="/search"
+            className="inline-flex items-center px-6 py-2.5 border border-primary/40 rounded-lg font-medium text-primary hover:bg-primary/10 transition-colors text-sm"
+          >
+            Explore Collection
+          </Link>
+          <Link
+            href="#popular"
+            className="inline-flex items-center px-6 py-2.5 border border-border rounded-lg font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors text-sm"
+          >
+            Browse Products
+          </Link>
+        </div>
+        <div className="kolam-divider mt-6" />
+      </div>
 
       {/* Category pills */}
       {storeCustomizationSetting?.home?.featured_status && (

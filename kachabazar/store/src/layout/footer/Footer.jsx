@@ -41,7 +41,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${footer?.block1_sub_link1}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -54,7 +54,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${footer?.block1_sub_link2}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -67,7 +67,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${footer?.block1_sub_link3}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     {showingTranslateValue(
                       storeCustomizationSetting?.footer_block_one_link_three_title,
@@ -83,7 +83,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${footer?.block1_sub_link4}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -110,7 +110,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${footer?.block2_sub_link1}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -124,7 +124,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${footer?.block2_sub_link2}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -137,7 +137,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${footer?.block2_sub_link3}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -150,7 +150,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${footer?.block2_sub_link4}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -177,7 +177,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${userInfo?.email ? footer?.block3_sub_link1 : "#"}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -190,7 +190,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${userInfo?.email ? footer?.block3_sub_link2 : "#"}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -203,7 +203,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${userInfo?.email ? footer?.block3_sub_link3 : "#"}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}
@@ -216,7 +216,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <li className="flex items-baseline">
                   <Link
                     href={`${userInfo?.email ? footer?.block3_sub_link4 : "#"}`}
-                    className="text-white/80 inline-block w-full hover:text-[#dd8e25]"
+                    className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
                       count={1}

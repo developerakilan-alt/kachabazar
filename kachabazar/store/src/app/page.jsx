@@ -17,6 +17,7 @@ import {
   getCustomizationSettings,
 } from "@lib/actions/settings.actions";
 import { getFeaturedCampaign } from "@lib/actions/campaign.actions";
+import { getShowingLayouts } from "@services/ThemeServices";
 
 const Home = async ({ searchParams }) => {
   const [
@@ -26,6 +27,7 @@ const Home = async ({ searchParams }) => {
     { globalSetting },
     { categories },
     featuredCampaignResult,
+    { layouts: storeLayouts },
   ] = await Promise.all([
     getAttributes(),
     getCustomizationSettings(),
@@ -33,6 +35,7 @@ const Home = async ({ searchParams }) => {
     getGlobalSettings(),
     getCategories(),
     getFeaturedCampaign(),
+    getShowingLayouts(),
   ]);
 
   // Read layout from cookie first, then query param, then admin setting
@@ -54,6 +57,8 @@ const Home = async ({ searchParams }) => {
     globalSetting,
     categories,
     featuredCampaign: featuredCampaignResult?.campaign || null,
+    storeLayout: layout,
+    storeLayouts,
   };
 
   return (

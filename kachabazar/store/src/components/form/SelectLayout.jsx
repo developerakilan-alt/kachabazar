@@ -4,15 +4,7 @@ import React, { useState, useEffect } from "react";
 import { LayoutGrid } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-
-const layouts = [
-  { value: "default", label: "Grocery", icon: "🛒" },
-  { value: "modern", label: "Modern", icon: "✨" },
-  { value: "minimal", label: "Minimal", icon: "🎯" },
-  { value: "clothing", label: "Fashion", icon: "👗" },
-  { value: "electronic", label: "Electronics", icon: "💻" },
-  // { value: "heritage", label: "Heritage", icon: "🏛️" },
-];
+import { getShowingLayouts } from "@services/ThemeServices";
 
 /**
  * SelectLayout — Hover dropdown for switching the store layout.
@@ -21,6 +13,8 @@ const SelectLayout = ({ currentLayout = "default", size = "text-sm" }) => {
   const router = useRouter();
 
   const [activeLayout, setActiveLayout] = useState(currentLayout);
+  const [layouts, setLayouts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -31,16 +25,38 @@ const SelectLayout = ({ currentLayout = "default", size = "text-sm" }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchLayouts = async () => {
+      try {
+        const { layouts: data } = await getShowingLayouts();
+        if (data && data.length > 0) {
+          setLayouts(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch layouts:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLayouts();
+  }, []);
+
+  useEffect(() => {
+    setActiveLayout(currentLayout);
+  }, [currentLayout]);
+
   const handleSelect = (layout) => {
     setActiveLayout(layout);
     Cookies.set("_store_layout", layout, { expires: 365, path: "/" });
     window.location.reload();
   };
 
-  const currentLabel =
-    layouts.find((l) => l.value === activeLayout)?.label || "Layout";
+  const visibleLayouts = layouts.filter((l) => l.value !== "heritage");
 
-  if (!mounted) return null;
+  const currentLabel =
+    visibleLayouts.find((l) => l.value === activeLayout)?.label || "Layout";
+
+  if (!mounted || loading || visibleLayouts.length === 0) return null;
 
   return (
     <div className="relative group">
@@ -68,7 +84,7 @@ const SelectLayout = ({ currentLayout = "default", size = "text-sm" }) => {
       {/* Hover dropdown panel */}
       <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute right-0 top-full pt-2 z-50 transition-all duration-200 ease-in-out">
         <div className="w-48 origin-top-right rounded-lg bg-card py-2 shadow-xl ring-1 ring-border">
-          {layouts.map((layout) => (
+          {visibleLayouts.map((layout) => (
             <div key={layout.value} className="px-4 py-1.5 hover:bg-accent">
               <button
                 onClick={() => handleSelect(layout.value)}

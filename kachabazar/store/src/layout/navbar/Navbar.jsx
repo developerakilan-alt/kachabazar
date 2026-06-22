@@ -37,7 +37,7 @@ const Navbar = async ({
     <div className="sticky z-40 top-0 w-full">
       {/* navbar top section */}
 
-      <TopNavbar storeCustomization={storeCustomization} />
+      <TopNavbar storeCustomization={storeCustomization} storeLayout={storeLayout} />
 
       <header as="header" className="bg-white shadow-sm border-b border-border">
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">

@@ -1,27 +1,20 @@
 import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 
-//internal import
-import CMSkeletonTwo from "@components/preloader/CMSkeletonTwo";
-
-const FooterTop = async ({ error, storeCustomizationSetting }) => {
-  // console.log("storeCustomizationSetting", storeCustomizationSetting?.footer);
-
+const FooterTop = async ({ error, storeCustomizationSetting, globalSetting }) => {
   const home = storeCustomizationSetting?.home;
+  const t = (obj) => obj?.en || obj || "";
 
   return (
     <div
       id="footerTop"
-      className="bg-repeat bg-center overflow-hidden"
-      style={{ backgroundColor: "#F8E6D0" }}
+      className="bg-repeat bg-center overflow-hidden bg-secondary"
     >
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-10 py-8 text-center">
-        <div className="text-3xl text-[#dd8e25] mb-2">✦</div>
-        <p className="text-lg font-serif font-medium" style={{ color: "#EB8B10" }}>
-          Elegant &amp; Timeless Imitation Jewellery
+        <div className="text-3xl text-primary mb-2">✦</div>
+        <p className="text-lg font-serif font-medium text-accent">
+          {t(home?.popular_title) || globalSetting?.site_description || "Elegant & Timeless Collection"}
         </p>
-        <div className="text-3xl text-[#dd8e25] mt-2">✦</div>
+        <div className="text-3xl text-primary mt-2">✦</div>
       </div>
     </div>
   );

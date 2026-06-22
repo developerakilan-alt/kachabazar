@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { FiTruck, FiFileText, FiStar } from "react-icons/fi";
 import StickyCart from "@components/cart/StickyCart";
 import ProductCard from "@components/product/ProductCard";
 import CMSkeletonTwo from "@components/preloader/CMSkeleton";
@@ -20,10 +21,10 @@ const HomeClothing = ({
   featuredCampaign,
 }) => {
   const topCategories = categories?.[0]?.children?.slice(0, 6) || [];
-  const slider = storeCustomizationSetting?.slider;
   const home = storeCustomizationSetting?.home;
   const wideContainer =
     "mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-8 2xl:px-10";
+  const t = (obj) => obj?.en || obj || "";
 
   return (
     <div className="min-h-screen bg-white">
@@ -37,13 +38,13 @@ const HomeClothing = ({
             <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-12 lg:py-20 order-2 lg:order-1 bg-white">
               <div className="max-w-lg">
                 <span className="inline-block text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 dark:text-neutral-500 mb-4 border border-neutral-200 dark:border-neutral-700 px-3 py-1 rounded-full">
-                  Imitation Jwels for Elegance
+                  {t(home?.promotion_title) || globalSetting?.shop_name || "New Collection"}
                 </span>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white leading-[1.1] tracking-tight mb-5">
-                  Stylish Affordable Jwellery
+                  {globalSetting?.shop_name || "Shop the Look"}
                 </h1>
                 <p className="text-base text-neutral-500 dark:text-neutral-400 leading-relaxed mb-8 max-w-md">
-                  Designed perfect for everyday wear and special occasions.
+                  {globalSetting?.site_description || "Discover curated styles for every occasion."}
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Link
@@ -66,35 +67,35 @@ const HomeClothing = ({
       </section>
 
       {/* ═══ Marquee Trust Bar ═══ */}
-      <div className="bg-white border-y border-neutral-100 text-neutral-700 overflow-hidden">
-        <div className="flex animate-marquee whitespace-nowrap py-3">
-          {Array(3)
-            .fill(null)
-            .map((_, ri) => (
+      {home?.delivery_status && (
+        <div className="bg-white border-y border-neutral-100 text-neutral-700 overflow-hidden">
+          <div className="flex animate-marquee whitespace-nowrap py-3">
+            {Array(3).fill(null).map((_, ri) => (
               <div
                 key={ri}
                 className="flex items-center gap-12 mx-6 text-[11px] font-medium uppercase tracking-[0.2em]"
               >
                 <span className="flex items-center gap-2">
                   <span className="w-1 h-1 rounded-full bg-neutral-400" />
-                  Free shipping over ₹75
+                  {t(home?.quick_delivery_title) || "Fast Delivery"}
                 </span>
                 <span className="flex items-center gap-2">
                   <span className="w-1 h-1 rounded-full bg-neutral-400" />
-                  Easy 30-day returns
+                  {t(home?.promotion_button_name) || "Easy Returns"}
                 </span>
                 <span className="flex items-center gap-2">
                   <span className="w-1 h-1 rounded-full bg-neutral-400" />
-                  New arrivals weekly
+                  {t(home?.feature_title) || "New Arrivals"}
                 </span>
                 <span className="flex items-center gap-2">
                   <span className="w-1 h-1 rounded-full bg-neutral-400" />
-                  Sustainable materials
+                  Premium Quality
                 </span>
               </div>
             ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ═══ Featured Categories — Magazine Grid ═══ */}
       {storeCustomizationSetting?.home?.featured_status && (
@@ -335,53 +336,47 @@ const HomeClothing = ({
         )}
 
       {/* ═══ Trust Badges ═══ */}
-      <section className="bg-white border-t border-neutral-100 dark:border-neutral-800 py-14">
-        <div className={wideContainer}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-            <div className="text-center">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                <svg className="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-                </svg>
+      {home?.delivery_status && (
+        <section className="bg-white border-t border-neutral-100 dark:border-neutral-800 py-14">
+          <div className={wideContainer}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+              <div className="text-center">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                  <FiTruck className="w-7 h-7 text-primary" strokeWidth={1.5} />
+                </div>
+                <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
+                  {t(home?.quick_delivery_title) || "Quick Delivery"}
+                </h4>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
+                  {t(home?.quick_delivery_description) || "Fast and reliable delivery to your doorstep."}
+                </p>
               </div>
-              <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
-                Quick Delivery
-              </h4>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
-                Within Tamil Nadu, 3- to 5-day delivery; other states: 6- to 8-day delivery.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                <svg className="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
-                </svg>
+              <div className="text-center">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                  <FiFileText className="w-7 h-7 text-primary" strokeWidth={1.5} />
+                </div>
+                <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
+                  {t(home?.promotion_title) || "Order Policy"}
+                </h4>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
+                  {t(home?.promotion_description) || "Clear and transparent ordering process."}
+                </p>
               </div>
-              <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
-                Important Order Policy
-              </h4>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
-                No Cash on Delivery (COD). If the courier is returned due to call not picked up or incorrect address, re-shipping charges will be applicable.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                <svg className="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
-                </svg>
+              <div className="text-center">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                  <FiStar className="w-7 h-7 text-primary" strokeWidth={1.5} />
+                </div>
+                <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
+                  {t(home?.feature_title) || "Premium Quality"}
+                </h4>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
+                  {t(home?.feature_description) || "Curated selection of the finest products."}
+                </p>
               </div>
-              <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
-                Naturally Derived
-              </h4>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
-                No Refunds Under Any Circumstances. 360° Unboxing Video is Mandatory for replacement requests (only for damaged products).
-              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ═══ Newsletter ═══ */}
       {/* <section className="bg-neutral-900 dark:bg-neutral-800 text-white py-16 lg:py-20">

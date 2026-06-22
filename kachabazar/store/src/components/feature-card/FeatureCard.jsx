@@ -46,16 +46,16 @@ const FeatureCard = async ({ storeCustomizationSetting }) => {
       {featurePromo.map((promo) => (
         <div
           key={promo.id}
-          className="py-3 px-4 flex items-center justify-center rounded-xl border" style={{ backgroundColor: "#F8E6D0", borderColor: "#EBD1B0" }}
+          className="py-3 px-4 flex items-center justify-center rounded-xl border bg-secondary border-border"
         >
           <div className="mr-3">
             <promo.icon
-              className="flex-shrink-0 h-4 w-4" style={{ color: "#dd8e25" }}
+              className="flex-shrink-0 h-4 w-4 text-primary"
               aria-hidden="true"
             />
           </div>
           <div className="">
-            <span className="block text-sm font-medium leading-5" style={{ color: "#5C3D1A" }}>
+            <span className="block text-sm font-medium leading-5 text-secondary-foreground">
               {promo?.title}
             </span>
           </div>
