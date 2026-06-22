@@ -12,6 +12,8 @@ const {
   deleteCategory,
   deleteManyCategory,
   updateManyCategory,
+  applyCategoryScope,
+  flattenCategories,
 } = require("../controller/categoryController");
 const { isAuth, isAdmin } = require("../config/auth");
 const {
@@ -39,6 +41,12 @@ router.post("/add/all", isAuth, isAdmin, addAllCategory);
 
 //get all category (admin)
 router.get("/", isAuth, isAdmin, getAllCategory);
+
+// apply scope: show only scoped categories, hide all others
+router.put("/apply-scope", isAuth, isAdmin, applyCategoryScope);
+
+// flatten categories: merge duplicates, clear parentId, remove non-jewelry
+router.put("/flatten", isAuth, isAdmin, flattenCategories);
 
 //get a category
 router.get("/:id", isAuth, isAdmin, getCategoryById);

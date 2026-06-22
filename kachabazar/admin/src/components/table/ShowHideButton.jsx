@@ -20,6 +20,13 @@ const ShowHideButton = ({ id, status, category, currencyStatusName }) => {
 
   const queryClient = useQueryClient();
 
+  const refreshCategoryQueries = () => {
+    queryClient.invalidateQueries({ queryKey: ["categories"] });
+    queryClient.invalidateQueries({ queryKey: ["categoryTree"] });
+    queryClient.invalidateQueries({ queryKey: ["allCategories"] });
+    queryClient.invalidateQueries({ queryKey: ["categories-all"] });
+  };
+
   const handleChangeStatus = async () => {
     try {
       let newStatus;
@@ -35,8 +42,7 @@ const ShowHideButton = ({ id, status, category, currencyStatusName }) => {
         });
         setIsUpdate(true);
         notifySuccess(res.message);
-        // Invalidate query to trigger refetch
-        queryClient.invalidateQueries(["categories"]);
+        refreshCategoryQueries();
       }
 
       if (location.pathname === "/products") {

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Category = require("../models/Category");
 const Review = require("../models/Review");
 const { languageCodes } = require("../utils/data");
+const { getScopedCategoryIds } = require("../utils/adminCategoryScope");
 
 const addProduct = async (req, res) => {
   try {
@@ -320,6 +321,11 @@ const getShowingStoreProducts = async (req, res) => {
       queryObject.categories = {
         $in: [category],
       };
+    } else {
+      const scopedIds = await getScopedCategoryIds(Category);
+      if (scopedIds.length > 0) {
+        queryObject.categories = { $in: scopedIds };
+      }
     }
 
     if (title) {
@@ -383,20 +389,20 @@ const getShowingStoreProducts = async (req, res) => {
     } else {
       // Homepage — fetch popular and discounted products in parallel
       const [productsRes, popularRes, discountedRes] = await Promise.all([
-        Product.find({ status: "show" })
+        Product.find(queryObject)
           .populate({ path: "category", select: "name _id" })
           .select(selectFields)
           .sort({ _id: -1 })
           .limit(200)
           .lean(),
-        Product.find({ status: "show" })
+        Product.find(queryObject)
           .populate({ path: "category", select: "name _id" })
           .select(selectFields)
           .sort({ sales: -1 })
           .limit(20)
           .lean(),
         Product.find({
-          status: "show",
+          ...queryObject,
           $or: [
             {
               $and: [

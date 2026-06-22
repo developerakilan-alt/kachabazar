@@ -60,7 +60,7 @@ const Category = () => {
     handleModalOpen,
   } = useToggleDrawer();
 
-  const [showChild, setShowChild] = useState(false);
+  const [showChild, setShowChild] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,7 +95,7 @@ const Category = () => {
         status: statusFilter || undefined,
         sortBy: sortBy || undefined,
         sortOrder: sortOrder || undefined,
-        parentOnly: showChild ? "false" : "true", // Only show parent categories unless showChild is true
+        parentOnly: showChild ? "false" : "true",
       }),
     staleTime: 10 * 60 * 1000,
     gcTime: 15 * 60 * 1000,
@@ -113,6 +113,16 @@ const Category = () => {
     staleTime: 10 * 60 * 1000,
     gcTime: 15 * 60 * 1000,
   });
+
+  const categoryNameById = useMemo(() => {
+    const map = new Map();
+    if (Array.isArray(allCategories)) {
+      allCategories.forEach((category) => {
+        map.set(category._id, showingTranslateValue(category.name));
+      });
+    }
+    return map;
+  }, [allCategories, showingTranslateValue]);
 
   // Fetch category tree for drawer (parent picker)
   const { data: categoryTree } = useQuery({
@@ -137,7 +147,7 @@ const Category = () => {
   const handleResetFilters = useCallback(() => {
     setSearchText("");
     setStatusFilter("");
-    setShowChild(false);
+    setShowChild(true);
     setCurrentPage(1);
   }, []);
 
@@ -210,6 +220,25 @@ const Category = () => {
             </div>
           );
         },
+        enableSorting: true,
+      },
+      {
+        accessorKey: "parentName",
+        header: ({ column }) => (
+          <DynamicTableColumnHeader
+            column={column}
+            title={t("ParentCategory")}
+          />
+        ),
+        cell: ({ row }) => (
+          <span className="text-sm text-muted-foreground">
+            {row.original?.parentId
+              ? categoryNameById.get(row.original.parentId) ||
+                row.original.parentName ||
+                "Home"
+              : "Home"}
+          </span>
+        ),
         enableSorting: true,
       },
       {
@@ -288,7 +317,14 @@ const Category = () => {
         enableHiding: false,
       },
     ],
-    [t, showChild, showingTranslateValue, handleUpdate, handleModalOpen],
+    [
+      t,
+      showChild,
+      showingTranslateValue,
+      categoryNameById,
+      handleUpdate,
+      handleModalOpen,
+    ],
   );
 
   return (
@@ -381,7 +417,7 @@ const Category = () => {
             },
             {
               title: "Children",
-              options: [{ label: "Show Children", value: "yes" }],
+              options: [{ label: "All Categories", value: "yes" }],
               value: showChild ? "yes" : "",
               onChange: (v) => setShowChild(v === "yes"),
             },

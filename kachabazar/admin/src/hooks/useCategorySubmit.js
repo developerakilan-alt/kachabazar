@@ -27,6 +27,13 @@ const useCategorySubmit = (id, data) => {
 
   const queryClient = useQueryClient();
 
+  const refreshCategoryQueries = () => {
+    queryClient.invalidateQueries({ queryKey: ["categories"] });
+    queryClient.invalidateQueries({ queryKey: ["categoryTree"] });
+    queryClient.invalidateQueries({ queryKey: ["allCategories"] });
+    queryClient.invalidateQueries({ queryKey: ["categories-all"] });
+  };
+
   const {
     control,
     register,
@@ -88,16 +95,14 @@ const useCategorySubmit = (id, data) => {
         notifySuccess(res.message);
         closeDrawer();
         reset();
-        // Invalidate query to trigger refetch
-        queryClient.invalidateQueries(["categories"]);
+        refreshCategoryQueries();
       } else {
         const res = await CategoryServices.addCategory(categoryData);
         setIsUpdate(true);
         setIsSubmitting(false);
         notifySuccess(res.message);
         closeDrawer();
-        // Invalidate query to trigger refetch
-        queryClient.invalidateQueries(["categories"]);
+        refreshCategoryQueries();
       }
     } catch (err) {
       setIsSubmitting(false);

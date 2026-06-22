@@ -995,6 +995,8 @@ const useStoreHomeSubmit = () => {
             social_pinterest: data.social_pinterest,
             social_linkedin: data.social_linkedin,
             social_whatsapp: data.social_whatsapp,
+            social_instagram: data.social_instagram,
+            social_youtube: data.social_youtube,
             payment_method_img: paymentImage,
             block4_phone: data.footer_block_four_phone,
             block4_email: data.footer_block_four_email,
@@ -1617,6 +1619,8 @@ const useStoreHomeSubmit = () => {
           setValue("social_pinterest", res?.footer?.social_pinterest);
           setValue("social_linkedin", res?.footer?.social_linkedin);
           setValue("social_whatsapp", res?.footer?.social_whatsapp);
+          setValue("social_instagram", res?.footer?.social_instagram);
+          setValue("social_youtube", res?.footer?.social_youtube);
           setValue("footer_Bottom_Contact", res?.footer?.bottom_contact);
 
           // slug

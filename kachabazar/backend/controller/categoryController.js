@@ -1,5 +1,14 @@
 const Category = require("../models/Category");
 const Product = require("../models/Product");
+const {
+  filterScopedCategories,
+  sortScopedCategories,
+  getScopedCategoryIds,
+  isScopedCategory,
+  getCategoryOrder,
+} = require("../utils/adminCategoryScope");
+
+// Store sortScopedCategories as a reference so sortScopedCategories aliased properly
 
 const addCategory = async (req, res) => {
   try {
@@ -53,11 +62,15 @@ const getShowingCategory = async (req, res) => {
     ]);
     const countMap = new Map(counts.map((c) => [c._id.toString(), c.count]));
 
+    const catIds = new Set(categories.map((c) => c._id.toString()));
+
     const buildCategoryTree = (cats, parentId = null) => {
       const categoryList = [];
-      const filtered = cats.filter((cat) =>
-        parentId ? cat.parentId == parentId : !cat.parentId,
-      );
+      const filtered = cats.filter((cat) => {
+        if (parentId) return cat.parentId == parentId;
+        const pid = cat.parentId ? cat.parentId.toString() : null;
+        return !pid || !catIds.has(pid);
+      });
 
       for (let cate of filtered) {
         const children = buildCategoryTree(cats, cate._id.toString());
@@ -84,7 +97,7 @@ const getShowingCategory = async (req, res) => {
       return categoryList;
     };
 
-    const categoryList = buildCategoryTree(categories);
+    const categoryList = sortScopedCategories(buildCategoryTree(categories));
     res.send(categoryList);
   } catch (err) {
     res.status(500).send({
@@ -103,13 +116,16 @@ const getAllCategory = async (req, res) => {
       status: catStatus,
       sortBy,
       sortOrder,
+      allowedOnly,
       parentOnly, // New param: if "true", only return parent categories (no parentId)
     } = req.query;
 
     // If no page/limit provided, return tree (legacy behavior for store-front / dropdowns)
     if (!page && !limit) {
-      const categories = await Category.find({}).sort({ _id: -1 });
-      const categoryList = readyToParentAndChildrenCategory(categories);
+      const categories = await Category.find({}).sort({ _id: -1 }).lean();
+      const categoryList = readyToParentAndChildrenCategory(
+        allowedOnly === "true" ? filterScopedCategories(categories) : categories,
+      );
       return res.send(categoryList);
     }
 
@@ -161,10 +177,18 @@ const getAllCategory = async (req, res) => {
     const skip = (pages - 1) * limits;
 
     const totalDoc = await Category.countDocuments(queryObject);
-    const categories = await Category.find(queryObject)
+    const matchedCategories = await Category.find(queryObject)
       .sort(sortObject)
-      .skip(skip)
-      .limit(limits);
+      .lean();
+
+    const filteredCategories =
+      allowedOnly === "true"
+        ? filterScopedCategories(matchedCategories)
+        : matchedCategories;
+
+    const totalFilteredDoc =
+      allowedOnly === "true" ? filteredCategories.length : totalDoc;
+    const categories = filteredCategories.slice(skip, skip + limits);
 
     // Build parent-child data for display (only the children of each returned category)
     const allCategories = await Category.find({}).select(
@@ -175,14 +199,14 @@ const getAllCategory = async (req, res) => {
         (c) => c.parentId && c.parentId.toString() === cat._id.toString(),
       );
       return {
-        ...cat.toObject(),
+        ...cat,
         children,
       };
     });
 
     res.send({
       categories: categoriesWithChildren,
-      totalDoc,
+      totalDoc: totalFilteredDoc,
       limits,
       pages,
     });
@@ -195,9 +219,13 @@ const getAllCategory = async (req, res) => {
 
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find({}).sort({ _id: -1 });
+    const categories = await Category.find({}).sort({ _id: -1 }).lean();
 
-    res.send(categories);
+    res.send(
+      req.query.allowedOnly === "true"
+        ? sortScopedCategories(filterScopedCategories(categories))
+        : categories,
+    );
   } catch (err) {
     res.status(500).send({
       message: err.message,
@@ -352,6 +380,106 @@ const deleteManyCategory = async (req, res) => {
     });
   }
 };
+// Apply category scope: show only scoped categories, hide all others
+const applyCategoryScope = async (req, res) => {
+  try {
+    const categories = await Category.find({}).lean();
+    let updated = 0;
+    for (const cat of categories) {
+      const shouldShow = isScopedCategory(cat);
+      if (shouldShow && cat.status !== "show") {
+        await Category.updateOne({ _id: cat._id }, { $set: { status: "show" } });
+        updated++;
+      } else if (!shouldShow && cat.status !== "hide") {
+        await Category.updateOne({ _id: cat._id }, { $set: { status: "hide" } });
+        updated++;
+      }
+    }
+    res.send({
+      message: `Category scope applied. ${updated} categories updated.`,
+      total: categories.length,
+      updated,
+    });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+// Flatten categories: merge duplicates by alias, clear parentId, remove non-jewelry
+const flattenCategories = async (req, res) => {
+  try {
+    const categories = await Category.find({}).lean();
+    const Product = require("../models/Product");
+
+    // 1. Group by alias order index (so "Choker" and "Chokers" merge)
+    const groups = {};
+    for (const cat of categories) {
+      const order = getCategoryOrder(cat);
+      if (order === Number.MAX_SAFE_INTEGER) {
+        // Non-scoped — remove
+        await Category.deleteOne({ _id: cat._id });
+        continue;
+      }
+      if (!groups[order]) groups[order] = [];
+      groups[order].push(cat);
+    }
+
+    const merged = [];
+    let productsUpdated = 0;
+    let categoriesRemoved = 0;
+
+    for (const [order, cats] of Object.entries(groups)) {
+      // Pick survivor (first one)
+      const survivor = cats[0];
+      const duplicates = cats.filter((c) => c._id.toString() !== survivor._id.toString());
+
+      for (const dup of duplicates) {
+        const affectedProducts = await Product.find(
+          { categories: dup._id },
+          { _id: 1 },
+        ).lean();
+        const affectedIds = affectedProducts.map((p) => p._id);
+
+        if (affectedIds.length > 0) {
+          await Product.updateMany(
+            { _id: { $in: affectedIds } },
+            { $pull: { categories: dup._id } },
+          );
+          await Product.updateMany(
+            { _id: { $in: affectedIds } },
+            { $addToSet: { categories: survivor._id } },
+          );
+          productsUpdated += affectedIds.length;
+        }
+
+        const catResult = await Product.updateMany(
+          { category: dup._id },
+          { $set: { category: survivor._id } },
+        );
+        productsUpdated += catResult.modifiedCount;
+
+        await Category.deleteOne({ _id: dup._id });
+        categoriesRemoved++;
+      }
+
+      await Category.updateOne(
+        { _id: survivor._id },
+        { $set: { parentId: null, parentName: "" } },
+      );
+      merged.push(survivor);
+    }
+
+    res.send({
+      message: `Categories flattened. ${merged.length} categories remain, ${categoriesRemoved} removed, ${productsUpdated} product category refs updated.`,
+      remaining: merged.length,
+      removed: categoriesRemoved,
+      productsUpdated,
+    });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
 const readyToParentAndChildrenCategory = (categories, parentId = null) => {
   const categoryList = [];
   let Categories;
@@ -389,4 +517,6 @@ module.exports = {
   deleteManyCategory,
   getAllCategories,
   updateManyCategory,
+  applyCategoryScope,
+  flattenCategories,
 };

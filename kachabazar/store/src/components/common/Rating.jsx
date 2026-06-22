@@ -16,47 +16,7 @@ const Rating = ({
   const textSize =
     size === "lg" ? "text-base" : size === "sm" ? "text-sm" : "text-xs";
 
-  return (
-    <div className="flex items-center space-x-1">
-      <div className="flex items-center">
-        {/* Full stars */}
-        {[...Array(fullStars)].map((_, index) => (
-          <FiStar
-            key={`full-${index}`}
-            className={`${starSize} text-yellow-400 fill-current`}
-          />
-        ))}
-
-        {/* Half star */}
-        {hasHalfStar && (
-          <div className="relative">
-            <FiStar className={`${starSize} text-muted-foreground`} />
-            <div
-              className="absolute inset-0 overflow-hidden"
-              style={{ width: "50%" }}
-            >
-              <FiStar className={`${starSize} text-yellow-400 fill-current`} />
-            </div>
-          </div>
-        )}
-
-        {/* Empty stars */}
-        {[...Array(emptyStars)].map((_, index) => (
-          <FiStar
-            key={`empty-${index}`}
-            className={`${starSize} text-muted-foreground`}
-          />
-        ))}
-      </div>
-
-      {showReviews && (
-        <div className={`${textSize} ml-1 text-muted-foreground`}>
-          <span className="font-medium">{parseFloat(rating).toFixed(1)}</span>
-          <span> ( {totalReviews} reviews )</span>
-        </div>
-      )}
-    </div>
-  );
+  return null;
 };
 
 export default Rating;

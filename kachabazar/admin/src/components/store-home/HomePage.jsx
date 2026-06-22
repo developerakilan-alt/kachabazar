@@ -2549,6 +2549,38 @@ const HomePage = ({
                     <Error errorName={errors.social_whatsapp} />
                   </div>
                 </div>
+
+                <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-3">
+                  <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-muted-foreground mb-1">
+                    Instagram
+                  </label>
+                  <div className="sm:col-span-4">
+                    <InputAreaTwo
+                      register={register}
+                      label="Title"
+                      name="social_instagram"
+                      type="text"
+                      placeholder="Instagram Link"
+                    />
+                    <Error errorName={errors.social_instagram} />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-3">
+                  <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-muted-foreground mb-1">
+                    YouTube
+                  </label>
+                  <div className="sm:col-span-4">
+                    <InputAreaTwo
+                      register={register}
+                      label="Title"
+                      name="social_youtube"
+                      type="text"
+                      placeholder="YouTube Link"
+                    />
+                    <Error errorName={errors.social_youtube} />
+                  </div>
+                </div>
               </div>
 
               <div className="inline-flex md:text-base text-sm mb-3 text-muted-foreground relative mt-24 md:mt-0">

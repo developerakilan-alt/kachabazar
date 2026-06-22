@@ -54,6 +54,13 @@ const DeleteModal = ({
 
   const { handleDisableForDemo } = useDisableForDemo();
 
+  const refreshCategoryQueries = () => {
+    queryClient.invalidateQueries({ queryKey: ["categories"] });
+    queryClient.invalidateQueries({ queryKey: ["categoryTree"] });
+    queryClient.invalidateQueries({ queryKey: ["allCategories"] });
+    queryClient.invalidateQueries({ queryKey: ["categories-all"] });
+  };
+
   const handleDelete = async () => {
     if (handleDisableForDemo()) {
       return; // Exit the function if the feature is disabled
@@ -118,8 +125,7 @@ const DeleteModal = ({
           });
           //  console.log('delete many category res',res)
           handleSuccess(res);
-          // Invalidate query to trigger refetch
-          queryClient.invalidateQueries(["categories"]);
+          refreshCategoryQueries();
         } else {
           if (id === undefined || !id) {
             notifyError("Please select a category first!");
@@ -129,8 +135,7 @@ const DeleteModal = ({
           // console.log('delete modal open',id)
           const res = await CategoryServices.deleteCategory(id);
           handleSuccess(res);
-          // Invalidate query to trigger refetch
-          queryClient.invalidateQueries(["categories"]);
+          refreshCategoryQueries();
         }
       } else if (
         location.pathname === `/categories/${useParamId}` ||
@@ -145,8 +150,7 @@ const DeleteModal = ({
 
         const res = await CategoryServices.deleteCategory(id);
         handleSuccess(res);
-        // Invalidate query to trigger refetch
-        queryClient.invalidateQueries(["categories"]);
+        refreshCategoryQueries();
       }
 
       if (location.pathname === "/customers") {
