@@ -30,9 +30,9 @@ const FeatureCategory = () => {
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Tikka
             </h3>
-            <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
+            {/* <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
               Shop now
-            </span>
+            </span> */}
           </div>
         </a>
         <a
@@ -52,9 +52,9 @@ const FeatureCategory = () => {
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Necklaces
             </h3>
-            <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
+            {/* <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
               Shop now
-            </span>
+            </span> */}
           </div>
         </a>
         <a
@@ -74,9 +74,9 @@ const FeatureCategory = () => {
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Invisible Chains
             </h3>
-            <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
+            {/* <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
               Shop now
-            </span>
+            </span> */}
           </div>
         </a>
         <a
@@ -96,9 +96,9 @@ const FeatureCategory = () => {
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Hip Chains
             </h3>
-            <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
+            {/* <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
               Shop now
-            </span>
+            </span> */}
           </div>
         </a>
         <a
@@ -111,16 +111,16 @@ const FeatureCategory = () => {
             src="https://hautecouturejewellery.in/wp-content/uploads/2026/01/img_5738-scaled-1.jpeg"
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+          <div className="absolute inset-0 flex flex-col items-center justify-end text-center p-6 pb-8">
             {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
               0 styles
             </p> */}
             <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
               Harams
             </h3>
-            <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
+            {/* <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
               Shop now
-            </span>
+            </span> */}
           </div>
         </a>
         <a
@@ -133,17 +133,17 @@ const FeatureCategory = () => {
             src="https://hautecouturejewellery.in/wp-content/uploads/2026/01/img_2962-scaled-1.jpeg"
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-            {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
-              0 styles
-            </p> */}
-            <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
-              Earrings
-            </h3>
-            <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
-              Shop now
-            </span>
-          </div>
+            <div className="absolute inset-0 flex flex-col items-center justify-end text-center p-6 pb-8">
+              {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+                0 styles
+              </p> */}
+              <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
+                Earrings
+              </h3>
+              {/* <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
+                Shop now
+              </span> */}
+            </div>
         </a>
       </div>
     </div>

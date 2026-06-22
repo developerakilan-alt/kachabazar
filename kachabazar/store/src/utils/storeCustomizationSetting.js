@@ -850,6 +850,8 @@ export const storeCustomization = {
     social_pinterest: "https://www.pinterest.com/",
     social_linkedin: "https://www.linkedin.com/",
     social_whatsapp: "https://web.whatsapp.com/",
+    social_instagram: "https://www.instagram.com/",
+    social_youtube: "https://www.youtube.com/",
     payment_method_img:
       "https://res.cloudinary.com/ahossain/image/upload/v1697688607/settings/payment-logo_qhslgz.webp",
     bottom_contact: " +91 6379156116",

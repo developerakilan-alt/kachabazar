@@ -4,10 +4,10 @@ import Link from "next/link";
 import NavbarPromoClothing from "@layout/navbar/NavbarPromoClothing";
 import SearchInput from "@components/navbar/SearchInput";
 import NavbarIconsClothing from "@components/navbar/NavbarIconsClothing";
+import MobileNavIconsClothing from "@components/navbar/MobileNavIconsClothing";
 import { getShowingLanguage } from "@services/SettingServices";
 import { getShowingCategory } from "@services/CategoryService";
 import { getShowingThemes, getDefaultTheme } from "@services/ThemeServices";
-import MobileFooter from "@layout/footer/MobileFooter";
 import Image from "next/image";
 import SelectLayout from "@components/form/SelectLayout";
 
@@ -61,8 +61,17 @@ const NavbarClothing = async ({
       {/* Main Navbar — Dark, premium fashion look */}
       <header className="bg-black">
         <div className={clothingContainer}>
-          <div className="relative flex h-16 items-center justify-between gap-6">
-            {/* Logo — use light logo on dark bg */}
+          {/* Mobile layout: [left icons] [logo center] [right icons] */}
+          <div className="flex sm:hidden h-16 items-center gap-2">
+            <MobileNavIconsClothing
+              categories={categories}
+              categoryError={categoryError}
+              storeCustomization={storeCustomization}
+            />
+          </div>
+
+          {/* Desktop layout: [logo left] [search center] [icons right] */}
+          <div className="hidden sm:flex relative h-16 items-center justify-between gap-6">
             <Link href="/" className="flex-shrink-0 flex items-center gap-2">
               <Image
                 width={160}
@@ -73,13 +82,9 @@ const NavbarClothing = async ({
                 alt="logo"
               />
             </Link>
-
-            {/* Center — Search */}
             <div className="hidden md:flex flex-1 max-w-xl mx-6">
               <SearchInput variant="dark" />
             </div>
-
-            {/* Right — Icons */}
             <NavbarIconsClothing />
           </div>
         </div>
@@ -96,11 +101,6 @@ const NavbarClothing = async ({
         categoriesMenuStatus={categoriesMenuStatus}
       />
 
-      <MobileFooter
-        categories={categories}
-        categoryError={categoryError}
-        globalSetting={globalSetting}
-      />
     </div>
   );
 };

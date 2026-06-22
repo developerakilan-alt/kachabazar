@@ -57,11 +57,12 @@ export const normalizeStoreImageUrl = (url) => {
 
   try {
     const parsed = new URL(value);
-    if (isUploadPath(parsed.pathname) && storeOrigin) {
-      return `${storeOrigin}${parsed.pathname}${parsed.search}`;
-    }
     if (isUploadPath(parsed.pathname)) {
-      return `${parsed.pathname}${parsed.search}`;
+      if (storeOrigin) {
+        return `${storeOrigin}${parsed.pathname}${parsed.search}`;
+      }
+      // Keep original URL when no store origin (avoids stripping admin domain)
+      return value;
     }
   } catch {
     return value;

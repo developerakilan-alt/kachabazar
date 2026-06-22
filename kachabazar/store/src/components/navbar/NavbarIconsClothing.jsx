@@ -41,7 +41,7 @@ const NavbarIconsClothing = () => {
           type="button"
           aria-label={isHydrated ? `Cart with ${totalItems} items` : "Cart"}
           onClick={() => setOpenCartDrawer(!openCartDrawer)}
-          className="relative p-2 rounded-full text-neutral-800 hover:bg-white/55 hover:text-neutral-950 transition-colors"
+          className="relative p-2 rounded-full text-white hover:bg-white/20 hover:text-white transition-colors"
         >
           {isHydrated && totalItems > 0 && (
             <span className="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center h-5 w-5 text-[10px] font-bold text-white bg-emerald-500 rounded-full">
@@ -55,18 +55,18 @@ const NavbarIconsClothing = () => {
         <Link
           href="/user/notifications"
           aria-label="Notifications"
-          className="relative p-2 rounded-full text-neutral-800 hover:bg-white/55 hover:text-neutral-950 transition-colors"
+          className="relative p-2 rounded-full text-white hover:bg-white/20 hover:text-white transition-colors"
         >
           <BellIcon className="h-5 w-5" aria-hidden="true" />
         </Link>
 
         {/* Divider */}
-        <span className="mx-2 h-5 w-px bg-neutral-900/20" aria-hidden="true" />
+        <span className="mx-2 h-5 w-px bg-white/20" aria-hidden="true" />
 
         {/* Profile / Login */}
         <Menu as="div" className="relative">
           {userInfo?.email ? (
-            <MenuButton className="flex items-center p-1 rounded-full hover:bg-white/55 transition-colors">
+            <MenuButton className="flex items-center p-1 rounded-full hover:bg-white/20 transition-colors">
               <span className="sr-only">Open user menu</span>
               {hasValidImage ? (
                 <Image
@@ -77,7 +77,7 @@ const NavbarIconsClothing = () => {
                   alt={userInfo?.name?.[0] || "U"}
                 />
               ) : (
-                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-white/60 text-sm font-semibold text-neutral-800">
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-white/20 text-sm font-semibold text-white">
                   {userInfo?.name?.charAt(0) || "U"}
                 </div>
               )}
@@ -85,7 +85,7 @@ const NavbarIconsClothing = () => {
           ) : (
             <Link
               href="/auth/login"
-              className="flex items-center p-2 rounded-full text-neutral-800 hover:bg-white/55 hover:text-neutral-950 transition-colors"
+              className="flex items-center p-2 rounded-full text-white hover:bg-white/20 hover:text-white transition-colors"
             >
               <span className="sr-only">Login</span>
               <UserIcon className="h-5 w-5" aria-hidden="true" />

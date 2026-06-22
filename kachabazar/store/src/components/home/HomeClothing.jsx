@@ -20,7 +20,7 @@ const HomeClothing = ({
   categories,
   featuredCampaign,
 }) => {
-  const topCategories = categories?.[0]?.children?.slice(0, 6) || [];
+  const topCategories = categories || [];
   const home = storeCustomizationSetting?.home;
   const wideContainer =
     "mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-8 2xl:px-10";
@@ -33,30 +33,8 @@ const HomeClothing = ({
       {/* ═══ Fashion Hero — Split Layout ═══ */}
       <section className="relative overflow-hidden">
         <div className="mx-auto w-full max-w-[1920px]">
-          <div className="grid lg:grid-cols-2 min-h-[480px] lg:min-h-[560px]">
-            {/* Left — Text */}
-            <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-12 lg:py-20 order-2 lg:order-1 bg-white">
-              <div className="max-w-lg">
-                <span className="inline-block text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 dark:text-neutral-500 mb-4 border border-neutral-200 dark:border-neutral-700 px-3 py-1 rounded-full">
-                  {t(home?.promotion_title) || globalSetting?.shop_name || "New Collection"}
-                </span>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white leading-[1.1] tracking-tight mb-5">
-                  {globalSetting?.shop_name || "Shop the Look"}
-                </h1>
-                <p className="text-base text-neutral-500 dark:text-neutral-400 leading-relaxed mb-8 max-w-md">
-                  {globalSetting?.site_description || "Discover curated styles for every occasion."}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="/search"
-                    className="inline-flex items-center px-8 py-3.5 bg-primary text-primary-foreground text-sm font-semibold tracking-wide uppercase rounded-none hover:opacity-90 transition-colors"
-                  >
-                    Shop Collection
-                  </Link>
-                </div>
-              </div>
-            </div>
-            {/* Right — Category Slideshow */}
+          <div>
+            {/* Category Slideshow */}
             <CategorySlideshow
               categories={topCategories}
               products={categoryProducts || popularProducts}
@@ -67,6 +45,7 @@ const HomeClothing = ({
       </section>
 
       {/* ═══ Marquee Trust Bar ═══ */}
+      {/*
       {home?.delivery_status && (
         <div className="bg-white border-y border-neutral-100 text-neutral-700 overflow-hidden">
           <div className="flex animate-marquee whitespace-nowrap py-3">
@@ -96,6 +75,7 @@ const HomeClothing = ({
           </div>
         </div>
       )}
+      */}
 
       {/* ═══ Featured Categories — Magazine Grid ═══ */}
       {storeCustomizationSetting?.home?.featured_status && (
@@ -125,34 +105,18 @@ const HomeClothing = ({
               </p>
             </div>
 
-            {/* Asymmetric category grid */}
-            <div className="grid grid-cols-2 md:grid-cols-12 gap-3 lg:gap-4">
-              {topCategories.map((cat, index) => {
-                const categoryImage = getCategoryProductImage(
+            {/* 6-per-row category grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
+              {topCategories.map((cat) => {
+                const categoryImage = cat.icon || getCategoryProductImage(
                   cat,
                   categoryProducts || popularProducts,
                 );
-                const spans = [
-                  "md:col-span-4",
-                  "md:col-span-4",
-                  "md:col-span-4",
-                  "md:col-span-6",
-                  "md:col-span-3",
-                  "md:col-span-3",
-                ];
-                const heights = [
-                  "h-72 md:h-96",
-                  "h-72 md:h-96",
-                  "h-72 md:h-96",
-                  "h-64 md:h-80",
-                  "h-64 md:h-80",
-                  "h-64 md:h-80",
-                ];
                 return (
                   <Link
                     key={cat._id}
                     href={`/search?_id=${cat._id}`}
-                    className={`group relative overflow-hidden ${spans[index] || "md:col-span-4"} ${heights[index] || "h-72 md:h-80"}`}
+                    className="group relative overflow-hidden aspect-square rounded-2xl"
                   >
                     <img
                       src={categoryImage}
@@ -160,16 +124,10 @@ const HomeClothing = ({
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                     />
                     <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                      {/* <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
-                        {cat.children?.length || 0} styles
-                      </p> */}
-                      <h3 className="text-white font-bold text-lg lg:text-2xl tracking-wide uppercase">
+                    <div className="absolute inset-0 flex flex-col items-center justify-end text-center p-4 pb-5">
+                      <h3 className="text-white font-bold text-lg lg:text-xl tracking-wide uppercase drop-shadow-lg">
                         {cat.name?.en || "Category"}
                       </h3>
-                      <span className="mt-3 text-white/70 text-xs font-medium uppercase tracking-wider group-hover:text-white transition-colors border-b border-white/30 group-hover:border-white pb-0.5">
-                        Shop now
-                      </span>
                     </div>
                   </Link>
                 );
@@ -240,17 +198,8 @@ const HomeClothing = ({
           <div className={wideContainer}>
             <div className="flex items-end justify-between mb-10">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 mb-2">
-                  Just Dropped
-                </p>
                 <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">
-                  <CMSkeletonTwo
-                    count={1}
-                    height={32}
-                    loading={false}
-                    error={storeCustomizationError}
-                    data={storeCustomizationSetting?.home?.popular_title}
-                  />
+                  New Releases
                 </h2>
               </div>
               <Link
@@ -285,7 +234,7 @@ const HomeClothing = ({
       )}
 
       {/* ═══ Discounted Products ═══ */}
-      {storeCustomizationSetting?.home?.discount_product_status &&
+      {/* {storeCustomizationSetting?.home?.discount_product_status &&
         discountedProducts?.length > 0 && (
           <section
             id="discount"
@@ -333,7 +282,7 @@ const HomeClothing = ({
               </div>
             </div>
           </section>
-        )}
+        )} */}
 
       {/* ═══ Trust Badges ═══ */}
       {home?.delivery_status && (

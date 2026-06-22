@@ -74,7 +74,7 @@ const LayoutSwitcher = ({ currentLayout = "default", storeLayouts = [] }) => {
         </div>
       )}
 
-      <button
+      {/* <button
         onClick={() => setIsOpen(!isOpen)}
         className="group flex items-center gap-2 bg-primary text-primary-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
         title="Switch layout"
@@ -86,7 +86,7 @@ const LayoutSwitcher = ({ currentLayout = "default", storeLayouts = [] }) => {
             isOpen ? "rotate-180" : ""
           }`}
         />
-      </button>
+      </button> */}
     </div>
   );
 };
