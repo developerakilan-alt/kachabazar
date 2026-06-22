@@ -20,6 +20,7 @@ const currencyRoutes = require("../routes/currencyRoutes");
 const languageRoutes = require("../routes/languageRoutes");
 const notificationRoutes = require("../routes/notificationRoutes");
 const themeRoutes = require("../routes/themeRoutes");
+const storeLayoutRoutes = require("../routes/storeLayoutRoutes");
 const deliveryBoyRoutes = require("../routes/deliveryBoyRoutes");
 const deliveryRoutes = require("../routes/deliveryRoutes");
 const trackingRoutes = require("../routes/trackingRoutes");
@@ -135,6 +136,7 @@ app.use("/v1/attributes/", attributeRoutes);
 app.use("/v1/setting/", settingRoutes);
 app.use("/v1/language/", languageRoutes);
 app.use("/v1/theme/", themeRoutes);
+app.use("/v1/store-layout/", storeLayoutRoutes);
 app.use("/v1/tracking/", trackingRoutes);
 app.use("/v1/campaign/", campaignRoutes);
 

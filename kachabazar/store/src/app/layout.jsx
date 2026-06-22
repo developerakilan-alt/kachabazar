@@ -23,6 +23,8 @@ import {
 
 import { SettingProvider } from "@context/SettingContext";
 import ConditionalLayoutWrapper from "@components/layout/ConditionalLayoutWrapper";
+import LayoutSwitcher from "@components/home/LayoutSwitcher";
+import { getShowingLayouts } from "@services/ThemeServices";
 
 // Force dynamic rendering so settings/customization are always fresh
 export const dynamic = "force-dynamic";
@@ -94,6 +96,9 @@ export default async function RootLayout({ children }) {
 
   // Fetch all customization data at once (adjust your API to return full data)
   const { storeCustomizationSetting, error } = await getCustomizationSettings();
+
+  // Fetch layout metadata from DB
+  const { layouts: storeLayouts } = await getShowingLayouts();
 
   // Read layout cookie (set by SelectLayout on client) — falls back to globalSetting
   const cookieStore = await cookies();
@@ -191,6 +196,7 @@ export default async function RootLayout({ children }) {
             <FooterTop
               error={error}
               storeCustomizationSetting={storeCustomizationSetting}
+              globalSetting={globalSetting}
             />
             <div className="hidden relative lg:block mx-auto max-w-screen-2xl py-6 px-3 sm:px-10">
               <FeatureCard
@@ -238,6 +244,7 @@ export default async function RootLayout({ children }) {
                 {renderNavbar()}
               </ConditionalLayoutWrapper>
               <main className="bg-background z-10">{children}</main>
+              <LayoutSwitcher currentLayout={storeLayout} storeLayouts={storeLayouts} />
               <ConditionalLayoutWrapper>
                 <div className="w-full">{renderFooter()}</div>
               </ConditionalLayoutWrapper>

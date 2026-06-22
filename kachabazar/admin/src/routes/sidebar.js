@@ -120,6 +120,10 @@ const sidebar = [
         path: "/store/store-settings",
         name: "StoreSettings",
       },
+      {
+        path: "/store-layouts",
+        name: "StoreLayouts",
+      },
     ],
   },
 

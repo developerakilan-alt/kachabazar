@@ -22,6 +22,7 @@ const Languages = lazy(() => import("@/pages/Languages"));
 const Currencies = lazy(() => import("@/pages/Currencies"));
 const Setting = lazy(() => import("@/pages/Setting"));
 const Themes = lazy(() => import("@/pages/Themes"));
+const StoreLayouts = lazy(() => import("@/pages/StoreLayouts"));
 const StoreHome = lazy(() => import("@/pages/StoreHome"));
 const StoreSetting = lazy(() => import("@/pages/StoreSetting"));
 const Notifications = lazy(() => import("@/pages/Notifications"));
@@ -125,6 +126,10 @@ const routes = [
   },
   { path: "/settings", component: Setting },
   { path: "/themes", component: Themes },
+  {
+    path: "/store-layouts",
+    component: StoreLayouts,
+  },
   {
     path: "/store/customization",
     component: StoreHome,

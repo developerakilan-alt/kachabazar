@@ -16,6 +16,7 @@ import {
   FiEye,
   FiEdit,
   FiTruck,
+  FiLayout,
 } from "react-icons/fi";
 
 export const sidebarData = {
@@ -160,6 +161,11 @@ export const sidebarData = {
               title: "StoreSettings",
               url: "/store/store-settings",
               icon: FiSettings,
+            },
+            {
+              title: "StoreLayouts",
+              url: "/store-layouts",
+              icon: FiLayout,
             },
           ],
         },

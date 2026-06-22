@@ -29,6 +29,8 @@ const HomeModern = ({
       <ModernHero
         discountedProducts={discountedProducts}
         attributes={attributes}
+        globalSetting={globalSetting}
+        storeCustomizationSetting={storeCustomizationSetting}
       />
 
       {/* Feature categories — horizontal scroll */}
@@ -78,7 +80,10 @@ const HomeModern = ({
       )}
 
       {/* Modern Banner Cards */}
-      <ModernBanner />
+      <ModernBanner
+        storeCustomizationSetting={storeCustomizationSetting}
+        globalSetting={globalSetting}
+      />
 
       {/* Popular products — larger cards */}
       {storeCustomizationSetting?.home?.popular_products_status && (

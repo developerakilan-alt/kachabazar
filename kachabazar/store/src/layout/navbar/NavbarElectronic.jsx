@@ -18,10 +18,12 @@ const NavbarElectronic = async ({
     getShowingCategory(),
   ]);
 
+  const storeLayout = layoutProp || globalSetting?.store_layout || "electronic";
+
   return (
     <div className="sticky z-40 top-0 w-full">
       {/* Top bar with language/theme/layout selectors */}
-      <TopNavbar storeCustomization={storeCustomization} />
+      <TopNavbar storeCustomization={storeCustomization} storeLayout={storeLayout} />
 
       {/* Main Navbar — Temu style */}
       <header className="bg-primary">
