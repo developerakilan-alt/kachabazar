@@ -174,12 +174,12 @@ const checkoutFormSchema = (shippingOptions) => {
       .regex(/^\d+$/, { message: "Zip code must only contain numbers." })
       .trim(),
 
-    paymentMethod: z.enum(["Cash", "Card", "RazorPay"], {
+    paymentMethod: z.enum(["RazorPay"], {
       message: "Payment method is required.",
     }),
     shippingOption: z.enum(shippingOptions, {
       message: "Shipping Cost is required.",
-    }),
+    }).optional(),
   });
 };
 

@@ -227,7 +227,7 @@ const addRazorpayOrder = async (req, res) => {
 
     const newOrder = new Order({
       ...req.body,
-      user: req.user._id,
+      user: req.user?._id,
       invoice: nextInvoice,
       trackingId,
       paymentStatus: "captured",
@@ -271,7 +271,7 @@ const addRazorpayOrder = async (req, res) => {
       razorpaySignature: razorpay?.razorpaySignature,
       orderId: order._id,
       invoice: nextInvoice,
-      customerId: req.user._id,
+      customerId: req.user?._id,
       customerEmail: req.user?.email,
       amount: req.body.total,
       status: "captured",
@@ -661,14 +661,16 @@ const addGuestOrder = async (req, res) => {
     });
 
     // Create customer notification for the guest user
-    await CustomerNotification.create({
-      customerId: customer._id,
-      orderId: order._id,
-      trackingId,
-      type: "order-placed",
-      title: "Order Placed! 🎉",
-      message: `Your order #${nextInvoice} has been placed successfully. Track your order with ID: ${trackingId}`,
-    });
+    if (req.user?._id) {
+      await CustomerNotification.create({
+        customerId: req.user._id,
+        orderId: order._id,
+        trackingId,
+        type: "order-placed",
+        title: "Order Placed! 🎉",
+        message: `Your order #${nextInvoice} has been placed successfully. Track your order with ID: ${trackingId}`,
+      });
+    }
 
     res.status(201).send(order);
     handleProductQuantity(order.cart);

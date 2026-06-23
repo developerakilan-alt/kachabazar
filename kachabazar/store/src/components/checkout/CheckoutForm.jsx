@@ -35,30 +35,10 @@ const CheckoutForm = ({
 }) => {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const [shiprocketRates, setShiprocketRates] = useState([]);
+  const [ratesLoading, setRatesLoading] = useState(false);
   useEffect(() => setMounted(true), []);
   const isEnabled = (value) => value === true || value === "true" || value === 1 || value === "1";
-
-  useEffect(() => {
-    if (!zipCode || zipCode.length < 6) {
-      setShiprocketRates([]);
-      return;
-    }
-    const timer = setTimeout(async () => {
-      setRatesLoading(true);
-      try {
-        const res = await fetch(`/api/shiprocket/rates?deliveryPostcode=${zipCode}`);
-        const data = await res.json();
-        if (data?.data?.available_courier_rates) {
-          setShiprocketRates(data.data.available_courier_rates);
-        }
-      } catch {
-        setShiprocketRates([]);
-      } finally {
-        setRatesLoading(false);
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [zipCode]);
 
   const {
     error,
@@ -89,6 +69,7 @@ const CheckoutForm = ({
     storeCustomization,
     showingTranslateValue,
     handleDefaultShippingAddress,
+    zipCode,
     showOrderSuccess,
     orderSuccessData,
     setShowOrderSuccess,
@@ -101,6 +82,28 @@ const CheckoutForm = ({
   const { formatPrice } = useUtilsFunction();
   const checkout = storeCustomization?.checkout;
   const selectedPaymentMethod = watch("paymentMethod");
+
+  useEffect(() => {
+    if (!zipCode || zipCode.length < 6) {
+      setShiprocketRates([]);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setRatesLoading(true);
+      try {
+        const res = await fetch(`/api/shiprocket/rates?deliveryPostcode=${zipCode}`);
+        const data = await res.json();
+        if (data?.data?.available_courier_rates) {
+          setShiprocketRates(data.data.available_courier_rates);
+        }
+      } catch {
+        setShiprocketRates([]);
+      } finally {
+        setRatesLoading(false);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [zipCode]);
 
   if (!mounted) return null;
 
@@ -123,6 +126,7 @@ const CheckoutForm = ({
           <div className="mt-5 md:mt-0 md:col-span-2">
             {/* <Elements stripe={stripePromise}> */}
             <form onSubmit={handleSubmit(submitHandler)}>
+              {/*
               {isGuest && (
                 <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
                   <p className="text-sm text-primary font-medium">
@@ -131,6 +135,7 @@ const CheckoutForm = ({
                   </p>
                 </div>
               )}
+              */}
               {!isGuest && hasShippingAddress && (
                 <div className="flex justify-end my-2">
                   <SwitchToggle
@@ -244,6 +249,7 @@ const CheckoutForm = ({
                   </div>
                 </div>
 
+                {/*
                 <Label label={showingTranslateValue(checkout?.shipping_cost)} />
                 <div className="grid grid-cols-6 gap-6">
                   <div className="col-span-6 sm:col-span-3">
@@ -273,19 +279,23 @@ const CheckoutForm = ({
                   </div>
 
                 </div>
+                */}
               </div>
 
               <div className="form-group mt-12">
                 <h2 className="font-semibold text-base text-muted-foreground pb-3">
                   03. {showingTranslateValue(checkout?.payment_method)}
                 </h2>
+                {/*
                 {!isGuest && showCard && (
                   <div className="mb-3">
                     <CardElement />{" "}
                     <p className="text-red-400 text-sm mt-1">{error}</p>
                   </div>
                 )}
+                */}
                 <div className="grid sm:grid-cols-3 grid-cols-1 gap-4">
+                  {/*
                   {isEnabled(storeSetting?.cod_status) && (
                     <div className="">
                       <InputPayment
@@ -311,8 +321,9 @@ const CheckoutForm = ({
                       <Error errorMessage={errors.paymentMethod} />
                     </div>
                   )}
+                  */}
 
-                  {!isGuest && isEnabled(storeSetting?.razorpay_status) && (
+                  {isEnabled(storeSetting?.razorpay_status) && (
                     <div className="">
                       <InputPayment
                         setShowCard={setShowCard}

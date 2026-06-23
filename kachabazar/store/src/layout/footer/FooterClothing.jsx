@@ -70,11 +70,10 @@ const FooterClothing = async ({
                 </div>
               )}
               {/* Social Icons */}
-              {(footer?.social_instagram || footer?.social_youtube) && (
-                <div className="flex items-center gap-3 mt-4">
-                  {footer?.social_instagram && (
+              <div className="flex items-center gap-3 mt-4">
+                  {(footer?.social_instagram || true) && (
                     <Link
-                      href={footer.social_instagram}
+                      href={footer?.social_instagram || "https://www.instagram.com/"}
                       aria-label="Instagram"
                       rel="noreferrer"
                       target="_blank"
@@ -85,9 +84,9 @@ const FooterClothing = async ({
                       </svg>
                     </Link>
                   )}
-                  {footer?.social_youtube && (
+                  {(footer?.social_youtube || true) && (
                     <Link
-                      href={footer.social_youtube}
+                      href={footer?.social_youtube || "https://www.youtube.com/"}
                       aria-label="YouTube"
                       rel="noreferrer"
                       target="_blank"
@@ -99,7 +98,6 @@ const FooterClothing = async ({
                     </Link>
                   )}
                 </div>
-              )}
             </div>
           )}
 

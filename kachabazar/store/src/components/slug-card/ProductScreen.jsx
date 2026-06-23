@@ -304,9 +304,9 @@ const ProductScreen = ({ product, reviews, attributes, relatedProducts }) => {
               <TabGroup>
                 <div className="border-b border-border">
                   <TabList className="-mb-px flex space-x-8">
-                    <Tab className="cursor-pointer border-b-2 border-transparent pb-3 text-sm font-medium whitespace-nowrap text-muted-foreground hover:border-border focus:outline-0 hover:text-foreground data-selected:border-primary data-selected:text-primary">
+                    {/* <Tab className="cursor-pointer border-b-2 border-transparent pb-3 text-sm font-medium whitespace-nowrap text-muted-foreground hover:border-border focus:outline-0 hover:text-foreground data-selected:border-primary data-selected:text-primary">
                       Customer Reviews
-                    </Tab>
+                    </Tab> */}
 
                     <Tab className="cursor-pointer border-b-2 border-transparent pb-3 text-sm font-medium whitespace-nowrap text-muted-foreground hover:border-border focus:outline-0 hover:text-foreground data-selected:border-primary data-selected:text-primary">
                       Description
@@ -314,10 +314,10 @@ const ProductScreen = ({ product, reviews, attributes, relatedProducts }) => {
                   </TabList>
                 </div>
                 <TabPanels as={Fragment}>
-                  <TabPanel className="-mb-10">
+                  {/* <TabPanel className="-mb-10">
                     <h3 className="sr-only">Customer Reviews</h3>
                     <ProductReviews reviews={reviews} />
-                  </TabPanel>
+                  </TabPanel> */}
                   <TabPanel className="pt-8">
                     <h3 className="sr-only">Product Description</h3>
                     <p className="text-sm leading-6 text-muted-foreground md:leading-6 mb-3">
