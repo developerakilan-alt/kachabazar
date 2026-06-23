@@ -11,6 +11,7 @@ import useUtilsFunction from "@/hooks/useUtilsFunction";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import Container from "@/components/image-uploader/Container";
 import UploadServices from "@/services/UploadServices";
+import { normalizeImageUrl } from "@/utils/imageUtils";
 
 const fileToDataUrl = (file) =>
   new Promise((resolve, reject) => {
@@ -141,11 +142,11 @@ const Uploader = ({
               fileName: file.name,
             });
 
-            if (!res?.secure_url) {
+            if (!res?.relativeUrl && !res?.secure_url) {
               throw new Error("Upload did not return an image URL");
             }
 
-            return res.secure_url;
+            return res.relativeUrl || res.secure_url;
           }),
         );
 
@@ -233,7 +234,7 @@ const Uploader = ({
           <div className="relative">
             <img
               className="inline-flex border rounded-md border-border w-24 max-h-24 p-2"
-              src={imageUrl}
+              src={normalizeImageUrl(imageUrl)}
               alt="product"
             />
             <button
