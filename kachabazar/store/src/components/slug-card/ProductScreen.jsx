@@ -21,7 +21,7 @@ import useProductAction from "@hooks/useProductAction";
 import Rating from "@components/common/Rating";
 import { Button } from "@components/ui/button";
 import ProductReviews from "./ProductReviews";
-import { FiChevronRight, FiHeadphones, FiMinus, FiPlus } from "react-icons/fi";
+import { FiChevronRight, FiMinus, FiPlus } from "react-icons/fi";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { Fragment, useEffect } from "react";
 
@@ -83,8 +83,6 @@ const ProductScreen = ({ product, reviews, attributes, relatedProducts }) => {
       setItem(availableStock);
     }
   }, [availableStock, isOutOfStock, item, setItem]);
-
-  // console.log("discount", discount);
 
   return (
     <>
@@ -263,35 +261,11 @@ const ProductScreen = ({ product, reviews, attributes, relatedProducts }) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center text-sm text-muted-foreground mt-3">
-                  <FiHeadphones className="mr-1 text-md" />
-                  Call Us for Order
-                  <a
-                    href={`tel:${globalSetting?.contact || "+099949343"}`}
-                    className="font-bold text-primary ml-1"
-                  >
-                    {globalSetting?.contact || "+099949343"}
-                  </a>
-                </div>
 
                 <div className="mt-6 border-t border-border pt-6">
                   <h3 className="text-sm font-medium text-foreground">
                     Highlights
                   </h3>
-                  {/* {productDetails.length > 0 && (
-                    <div className="mt-4 grid grid-cols-1 gap-2 rounded-md border border-border bg-muted/30 p-3 text-sm sm:grid-cols-2">
-                      {productDetails.map((detail) => (
-                        <div key={detail.label} className="min-w-0">
-                          <p className="text-xs text-muted-foreground">
-                            {detail.label}
-                          </p>
-                          <p className="truncate font-medium text-foreground">
-                            {detail.value}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )} */}
                   <div className="mt-4">
                     <span className="hidden">shipping description card</span>
                     <Card storeCustomization={storeCustomization} />
