@@ -52,6 +52,7 @@ const useCategorySubmit = (id, data) => {
   // console.log("resData", resData);
 
   const onSubmit = async ({ name, description }) => {
+    console.log("[CategorySubmit] onSubmit called:", { name, description, id });
     try {
       setIsSubmitting(true);
       const nameTranslates = await handlerTextTranslateHandler(
@@ -84,7 +85,7 @@ const useCategorySubmit = (id, data) => {
         lang: language,
       };
 
-      // console.log("category submit", categoryData);
+      console.log("[CategorySubmit] Submitting data:", { categoryData, resData, checked, imageUrl });
       // setIsSubmitting(false);
       // return;
 
@@ -105,6 +106,7 @@ const useCategorySubmit = (id, data) => {
         refreshCategoryQueries();
       }
     } catch (err) {
+      console.error("[CategorySubmit] Error:", err);
       setIsSubmitting(false);
       // Handle validation errors from API and set field-level errors
       handleApiValidationErrors(err, setError, notifyError);
@@ -143,36 +145,38 @@ const useCategorySubmit = (id, data) => {
       return;
     }
   }, [setValue, id, openDrawer, clearErrors, lang]);
-  useEffect(() => {
-    if (id) {
-      (async () => {
-        try {
-          const res = await CategoryServices.getCategoryById(id);
-          // console.log("res category", res);
+    useEffect(() => {
+      if (id) {
+        (async () => {
+          try {
+            const res = await CategoryServices.getCategoryById(id);
+            console.log("[CategorySubmit] Fetched category:", { id, res });
 
-          if (res) {
-            setResData(res);
-            setValue("name", res.name[language ? language : "en"]);
-            setValue(
-              "description",
-              res.description[language ? language : "en"],
+            if (res) {
+              setResData(res);
+              setValue("name", res.name[language ? language : "en"]);
+              setValue(
+                "description",
+                res.description[language ? language : "en"],
+              );
+              setValue("language", language);
+              const parentIdValue = res.parentId || "";
+              setValue("parentId", parentIdValue);
+              setValue("parentName", res.parentName);
+              setSelectCategoryName(res.parentName);
+              setChecked(parentIdValue);
+              setImageUrl(res.icon);
+              setPublished(res.status === "show" ? true : false);
+            }
+          } catch (err) {
+            console.error("[CategorySubmit] Fetch error:", err);
+            notifyError(
+              err?.response?.data?.message || err?.message || "Failed to load category"
             );
-            setValue("language", language);
-            setValue("parentId", res.parentId);
-            setValue("parentName", res.parentName);
-            setSelectCategoryName(res.parentName);
-            setChecked(res.parentId);
-            setImageUrl(res.icon);
-            setPublished(res.status === "show" ? true : false);
           }
-        } catch (err) {
-          notifyError(
-            err?.response?.data?.message || err?.message || "Failed to load category"
-          );
-        }
-      })();
-    }
-  }, [id]);
+        })();
+      }
+    }, [id]);
 
   return {
     control,
