@@ -8,6 +8,7 @@ import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
 import CategorySlideshow from "@components/home/CategorySlideshow";
 import { getCategoryProductImage } from "@utils/categoryProductImages";
+import { normalizeStoreImageUrl } from "@utils/imageUtils";
 
 const HomeClothing = ({
   popularProducts,
@@ -108,7 +109,7 @@ const HomeClothing = ({
             {/* 6-per-row category grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
               {topCategories.map((cat) => {
-                const categoryImage = cat.icon || getCategoryProductImage(
+                const categoryImage = normalizeStoreImageUrl(cat.icon) || getCategoryProductImage(
                   cat,
                   categoryProducts || popularProducts,
                 );
