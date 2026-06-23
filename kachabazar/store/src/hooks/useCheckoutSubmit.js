@@ -82,6 +82,7 @@ const useCheckoutSubmit = ({
     watch,
     formState: { errors },
   } = useForm();
+  const zipCode = watch("zipCode");
 
   useEffect(() => {
     if (Cookies.get("couponInfo")) {
@@ -555,6 +556,7 @@ const useCheckoutSubmit = ({
     showOrderSuccess,
     orderSuccessData,
     setShowOrderSuccess,
+    zipCode,
   };
 };
 

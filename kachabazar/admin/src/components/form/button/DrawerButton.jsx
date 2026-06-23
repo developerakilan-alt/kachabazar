@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { useAction } from "@/context/ActionContext";
 
-const DrawerButton = ({ id, title, isSubmitting, zIndex = "z-10" }) => {
+const DrawerButton = ({ id, title, isSubmitting, zIndex = "z-10", onClick }) => {
   const { t } = useTranslation();
 
   const { toggleDrawer } = useAction();
@@ -31,6 +31,7 @@ const DrawerButton = ({ id, title, isSubmitting, zIndex = "z-10" }) => {
         <div className="flex-1">
           <Button
             type="submit"
+            onClick={onClick}
             className="w-full h-11"
             disabled={isSubmitting}
             isLoading={isSubmitting}

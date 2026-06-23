@@ -143,7 +143,10 @@ const CategoryDrawer = ({ id, data }) => {
       </div>
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          console.log("[CategoryDrawer] Native form submit fired");
+          handleSubmit(onSubmit)(e);
+        }}
         className="flex flex-col flex-1 overflow-hidden"
       >
         <Scrollbars className="flex-1 mb-8">
@@ -230,7 +233,17 @@ const CategoryDrawer = ({ id, data }) => {
           </div>
         </Scrollbars>
 
-        <DrawerButton id={id} title="Category" isSubmitting={isSubmitting} />
+        <DrawerButton
+          id={id}
+          title="Category"
+          isSubmitting={isSubmitting}
+          onClick={(e) => {
+            console.log("[CategoryDrawer] Manual submit clicked", e);
+            e.preventDefault();
+            console.log("[CategoryDrawer] Form errors before submit:", JSON.stringify(errors, null, 2));
+            handleSubmit(onSubmit)(e);
+          }}
+        />
       </form>
     </div>
   );

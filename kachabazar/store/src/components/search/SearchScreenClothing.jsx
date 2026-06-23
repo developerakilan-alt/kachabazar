@@ -107,7 +107,7 @@ const SearchScreenClothing = ({
 
   const handleCategoryClick = (id) => router.push(`/search?_id=${id}`);
 
-  const topCategories = categories?.[0]?.children || [];
+  const topCategories = categories || [];
 
   return (
     <div className="min-h-screen bg-background">
