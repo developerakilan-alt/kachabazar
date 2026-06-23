@@ -11,6 +11,7 @@ import ShowHideButton from "@/components/table/ShowHideButton";
 import EditDeleteButton from "@/components/table/EditDeleteButton";
 import useUtilsFunction from "@/hooks/useUtilsFunction";
 import { useAction } from "@/context/ActionContext";
+import { normalizeImageUrl } from "@/utils/imageUtils";
 
 const CategoryTable = ({ categories, showChild }) => {
   const { handleModalOpen, handleUpdate } = useToggleDrawer();
@@ -38,7 +39,7 @@ const CategoryTable = ({ categories, showChild }) => {
             <TableCell>
               {category?.icon ? (
                 <Avatar className="hidden mr-3 md:block bg-muted p-1">
-                  <AvatarImage src={category?.icon} alt={category?.parent} />
+                  <AvatarImage src={normalizeImageUrl(category?.icon)} alt={category?.parent} />
                   <AvatarFallback>C</AvatarFallback>
                 </Avatar>
               ) : (
