@@ -118,27 +118,27 @@ export const sidebarData = {
         },
       ],
     },
-    {
-      title: "International",
-      items: [
-        {
-          title: "SidebarLocalization",
-          icon: FiGlobe,
-          items: [
-            {
-              title: "SidebarLanguages",
-              url: "/languages",
-              icon: FiFileText,
-            },
-            {
-              title: "Currencies",
-              url: "/currencies",
-              icon: FiSlack,
-            },
-          ],
-        },
-      ],
-    },
+    // {
+    //   title: "International",
+    //   items: [
+    //     {
+    //       title: "SidebarLocalization",
+    //       icon: FiGlobe,
+    //       items: [
+    //         {
+    //           title: "SidebarLanguages",
+    //           url: "/languages",
+    //           icon: FiFileText,
+    //         },
+    //         {
+    //           title: "Currencies",
+    //           url: "/currencies",
+    //           icon: FiSlack,
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
     {
       title: "OnlineStore",
       items: [

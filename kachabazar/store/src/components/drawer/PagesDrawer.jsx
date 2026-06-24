@@ -11,7 +11,6 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import Link from "next/link";
-import { pages } from "@utils/data";
 import { X } from "lucide-react";
 import Category from "@components/category/Category";
 import { useSetting } from "@context/SettingContext";
@@ -95,7 +94,7 @@ const PagesDrawer = ({ open, setOpen, categories, categoryError }) => {
                     >
                       Category
                     </Tab>
-                    <Tab
+                    {/* <Tab
                       className={({ selected }) =>
                         classNames(
                           selected
@@ -106,7 +105,7 @@ const PagesDrawer = ({ open, setOpen, categories, categoryError }) => {
                       }
                     >
                       Pages
-                    </Tab>
+                    </Tab> */}
                   </TabList>
                 </div>
 
@@ -124,7 +123,7 @@ const PagesDrawer = ({ open, setOpen, categories, categoryError }) => {
                   </TabPanel>
 
                   {/* Pages Panel */}
-                  <TabPanel>
+                  {/* <TabPanel>
                     <div className="py-2">
                       {pages.map((page) => (
                         <Link
@@ -138,7 +137,7 @@ const PagesDrawer = ({ open, setOpen, categories, categoryError }) => {
                         </Link>
                       ))}
                     </div>
-                  </TabPanel>
+                  </TabPanel> */}
                 </TabPanels>
               </TabGroup>
             </DialogPanel>

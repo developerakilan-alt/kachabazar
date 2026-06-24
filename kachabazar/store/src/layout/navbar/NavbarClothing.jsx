@@ -9,7 +9,6 @@ import { getShowingLanguage } from "@services/SettingServices";
 import { getShowingCategory } from "@services/CategoryService";
 import { getShowingThemes, getDefaultTheme } from "@services/ThemeServices";
 import Image from "next/image";
-import SelectLayout from "@components/form/SelectLayout";
 
 const NavbarClothing = async ({
   globalSetting,
@@ -46,7 +45,7 @@ const NavbarClothing = async ({
               SUPPORT: hautecouturejewellery@gmail.com
             </a>
             <div className="flex items-center gap-5 text-neutral-500">
-              <SelectLayout currentLayout={storeLayout} size="text-[10px]" />
+              {/* <SelectLayout currentLayout={storeLayout} size="text-[10px]" /> */}
               <Link
                 href="/user/my-account"
                 className="hover:text-white transition-colors text-[11px] tracking-wide"

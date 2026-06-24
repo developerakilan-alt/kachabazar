@@ -140,14 +140,13 @@ app.use("/v1/store-layout/", storeLayoutRoutes);
 app.use("/v1/tracking/", trackingRoutes);
 app.use("/v1/campaign/", campaignRoutes);
 
-// ── Guest order route (no auth required) ──
-const { addGuestOrder } = require("../controller/customerOrderController");
+// ── Guest order routes (no auth required) ──
 const { validateGuestOrder } = require("../middleware/validators");
-app.post("/v1/order/add/guest", validateGuestOrder, addGuestOrder);
+app.post("/v1/order/add/guest", validateGuestOrder, require("../controller/customerOrderController").addGuestOrder);
 
 // ── Authenticated Routes ──
 app.use("/v1/reviews/", isAuth, reviewRoutes);
-app.use("/v1/order/", isAuth, customerOrderRoutes);
+app.use("/v1/order/", customerOrderRoutes);
 app.use("/v1/currency/", isAuth, currencyRoutes);
 app.use("/v1/notification/", isAuth, notificationRoutes);
 app.use("/v1/customer-tracking/", isAuth, trackingRoutes);

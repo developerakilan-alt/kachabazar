@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { FiUser } from "react-icons/fi";
-import Image from "next/image";
 
 //internal imports
 import { userNavigation } from "@utils/data";
@@ -22,7 +21,7 @@ const ProfileDropDown = () => {
             <span className="sr-only">Open user menu</span>
 
             {hasValidImage ? (
-              <Image
+              <img
                 src={userInfo.image}
                 width={32}
                 height={32}

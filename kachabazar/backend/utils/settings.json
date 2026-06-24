@@ -46,7 +46,7 @@
       "aws_access_key_id": "",
       "aws_secret_access_key": "",
       "aws_region": "us-east-1",
-      "store_url": "http://localhost:3000",
+      "store_url": "http://store.hautecouturejewellery.in",
       "admin_url": "http://localhost:4100"
     },
     "name": "globalSetting"

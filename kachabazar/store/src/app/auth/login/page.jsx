@@ -3,6 +3,7 @@
 import { FiLock, FiMail } from "react-icons/fi";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
@@ -15,6 +16,7 @@ import { notifyError } from "@utils/toast";
 import Error from "@components/form/Error";
 import InputArea from "@components/form/InputArea";
 import ShowToast from "@components/common/ShowToast";
+import { useSetting } from "@context/SettingContext";
 
 // Zod validation schema for login
 const loginSchema = z.object({
@@ -25,6 +27,7 @@ const loginSchema = z.object({
 });
 
 const Login = () => {
+  const { globalSetting } = useSetting();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
@@ -80,6 +83,18 @@ const Login = () => {
         {/* Right Side: Form Area */}
         <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-24 relative">
           <div className="max-w-md w-full">
+            {/* Logo */}
+            <div className="mb-8">
+              <Link href="/" className="inline-block relative h-10 w-40">
+                <Image
+                  src={globalSetting?.logo || "/logo/logo-color.png"}
+                  alt={globalSetting?.shop_name || "hautecouturejewellery"}
+                  fill
+                  unoptimized
+                  className="object-contain object-left"
+                />
+              </Link>
+            </div>
             {/* Headers */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-foreground mb-2">

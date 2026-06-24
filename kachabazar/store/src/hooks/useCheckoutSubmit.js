@@ -190,23 +190,10 @@ const useCheckoutSubmit = ({
         });
       }
 
-      // Guest users can only use Cash payment
-      if (isGuest && data.paymentMethod !== "Cash") {
-        notifyError("Guest checkout only supports Cash on Delivery");
-        setIsCheckoutSubmit(false);
-        return;
-      }
-
       // Handle payment based on method
       switch (data.paymentMethod) {
-        case "Card":
-          await handlePaymentWithStripe(orderInfo);
-          break;
         case "RazorPay":
           await handlePaymentWithRazorpay(orderInfo);
-          break;
-        case "Cash":
-          await handleCashPayment(orderInfo);
           break;
         default:
           throw new Error("Invalid payment method selected");
@@ -307,77 +294,77 @@ const useCheckoutSubmit = ({
   //     throw new Error(err.message);
   //   }
   // };
-  const handleCashPayment = async (orderInfo) => {
-    try {
-      let result;
-      if (isGuest) {
-        result = await addGuestOrder(orderInfo);
-      } else {
-        result = await addOrder(orderInfo);
-      }
-      const { orderResponse, error } = result;
+  // const handleCashPayment = async (orderInfo) => {
+  //   try {
+  //     let result;
+  //     if (isGuest) {
+  //       result = await addGuestOrder(orderInfo);
+  //     } else {
+  //       result = await addOrder(orderInfo);
+  //     }
+  //     const { orderResponse, error } = result;
 
-      if (error) {
-        setIsCheckoutSubmit(false);
-        return notifyError(error);
-      }
+  //     if (error) {
+  //       setIsCheckoutSubmit(false);
+  //       return notifyError(error);
+  //     }
 
-      if (!orderResponse) {
-        setIsCheckoutSubmit(false);
-        return notifyError("Order response is empty!");
-      }
+  //     if (!orderResponse) {
+  //       setIsCheckoutSubmit(false);
+  //       return notifyError("Order response is empty!");
+  //     }
 
-      await handleOrderSuccess(orderResponse, orderInfo);
-    } catch (err) {
-      // console.error("Cash payment error:", err.message);
-      setIsCheckoutSubmit(false);
-      notifyError(err.message);
-    }
-  };
+  //     await handleOrderSuccess(orderResponse, orderInfo);
+  //   } catch (err) {
+  //     // console.error("Cash payment error:", err.message);
+  //     setIsCheckoutSubmit(false);
+  //     notifyError(err.message);
+  //   }
+  // };
 
   //handle stripe payment
-  const handlePaymentWithStripe = async (orderInfo) => {
-    try {
-      if (!stripe || !elements) {
-        throw new Error("Stripe is not initialized");
-      }
+  // const handlePaymentWithStripe = async (orderInfo) => {
+  //   try {
+  //     if (!stripe || !elements) {
+  //       throw new Error("Stripe is not initialized");
+  //     }
 
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: "card",
-        card: elements.getElement(CardElement),
-      });
+  //     const { error, paymentMethod } = await stripe.createPaymentMethod({
+  //       type: "card",
+  //       card: elements.getElement(CardElement),
+  //     });
 
-      if (error || !paymentMethod) {
-        throw new Error(error?.message || "Stripe payment failed");
-      }
+  //     if (error || !paymentMethod) {
+  //       throw new Error(error?.message || "Stripe payment failed");
+  //     }
 
-      const order = {
-        ...orderInfo,
-        cardInfo: paymentMethod,
-      };
+  //     const order = {
+  //       ...orderInfo,
+  //       cardInfo: paymentMethod,
+  //     };
 
-      const { stripeInfo } = await createPaymentIntent(order);
-      // console.log("res", stripeInfo, "order", order);
-      stripe.confirmCardPayment(stripeInfo?.client_secret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      });
+  //     const { stripeInfo } = await createPaymentIntent(order);
+  //     // console.log("res", stripeInfo, "order", order);
+  //     stripe.confirmCardPayment(stripeInfo?.client_secret, {
+  //       payment_method: {
+  //         card: elements.getElement(CardElement),
+  //       },
+  //     });
 
-      // console.log("stripeInfo", stripeInfo);
+  //     // console.log("stripeInfo", stripeInfo);
 
-      const orderData = { ...orderInfo, cardInfo: stripeInfo };
-      const { orderResponse, error: orderError } = await addOrder(orderData);
-      if (orderError) {
-        setIsCheckoutSubmit(false);
-        return notifyError(orderError);
-      }
-      await handleOrderSuccess(orderResponse, orderInfo);
-    } catch (err) {
-      // Instead of just throwing the error, rethrow it so that it can be caught by the main submit handler
-      throw new Error(err.message); // Ensure the error is propagated properly
-    }
-  };
+  //     const orderData = { ...orderInfo, cardInfo: stripeInfo };
+  //     const { orderResponse, error: orderError } = await addOrder(orderData);
+  //     if (orderError) {
+  //       setIsCheckoutSubmit(false);
+  //       return notifyError(orderError);
+  //     }
+  //     await handleOrderSuccess(orderResponse, orderInfo);
+  //   } catch (err) {
+  //     // Instead of just throwing the error, rethrow it so that it can be caught by the main submit handler
+  //     throw new Error(err.message); // Ensure the error is propagated properly
+  //   }
+  // };
 
   //handle razorpay payment
   const handlePaymentWithRazorpay = async (orderInfo) => {

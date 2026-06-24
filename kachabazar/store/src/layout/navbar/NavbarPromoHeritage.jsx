@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 
 import MegaMenuCategory from "@components/mega-menu/MegaMenuCategory";
-import TopNavbarTheme from "./TopNavbarTheme";
-import SelectLayout from "@components/form/SelectLayout";
 import StoreTheme from "@components/common/StoreTheme";
 import { useSetting } from "@context/SettingContext";
+import Link from "next/link";
 
 const NavbarPromoHeritage = ({
   categories,
@@ -58,13 +57,9 @@ const NavbarPromoHeritage = ({
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-3 text-sm font-medium text-[rgba(216,163,96,0.8)]">
-            <TopNavbarTheme
-              themes={themes}
-              defaultTheme={defaultTheme}
-              size="text-xs"
-            />
-            <SelectLayout currentLayout={storeLayout} size="text-xs" />
+          <div className="flex items-center gap-4 text-sm font-medium text-[rgba(216,163,96,0.8)]">
+            <Link href="/privacy-policy" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</Link>
+            <Link href="/terms-and-conditions" className="hover:text-[#D4AF37] transition-colors">Terms & Conditions</Link>
           </div>
         </div>
       </div>

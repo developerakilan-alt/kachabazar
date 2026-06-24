@@ -9,6 +9,7 @@ import Image from "next/image";
 
 //internal import
 import BottomNavigation from "@components/login/BottomNavigation";
+import LoginSlideshow from "@components/login/LoginSlideshow";
 import { notifyError, notifySuccess } from "@utils/toast";
 import ShowToast from "@components/common/ShowToast";
 import Error from "@components/form/Error";
@@ -76,14 +77,8 @@ const ForgetPassword = () => {
       <ShowToast />
       <div className="min-h-screen flex flex-col lg:flex-row bg-background">
         {/* Left Side: Background Image Area (hidden on mobile) */}
-        <div className="hidden lg:flex lg:w-1/2 relative bg-muted">
-          <Image
-            src="https://images.unsplash.com/photo-1632406897798-e5472b4a989e?q=80" // Large image placeholder
-            alt="Forgot Password Background"
-            fill
-            className="object-cover"
-            priority
-          />
+        <div className="hidden lg:block lg:w-1/2">
+          <LoginSlideshow />
         </div>
 
         {/* Right Side: Form Area */}
@@ -96,6 +91,7 @@ const ForgetPassword = () => {
                   src={globalSetting?.logo || "/logo/logo-color.png"}
                   alt={globalSetting?.shop_name || "hautecouturejewellery"}
                   fill
+                  unoptimized
                   className="object-contain object-left"
                 />
               </Link>

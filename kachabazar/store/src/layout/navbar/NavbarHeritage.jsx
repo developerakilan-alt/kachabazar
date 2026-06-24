@@ -8,7 +8,6 @@ import NotifyIcon from "@components/navbar/NotifyIcon";
 import ProfileDropDown from "@components/navbar/ProfileDropDown";
 import MobileFooter from "@layout/footer/MobileFooter";
 import NavbarPromoHeritage from "@layout/navbar/NavbarPromoHeritage";
-import SelectLayout from "@components/form/SelectLayout";
 
 const NavbarHeritage = async ({
   globalSetting,
@@ -80,7 +79,7 @@ const NavbarHeritage = async ({
 
                 {/* Icons */}
                 <div className="lg:relative lg:z-10 sm:flex sm:items-center hidden gap-3">
-                  <SelectLayout currentLayout={storeLayout} size="text-xs" />
+                  {/* <SelectLayout currentLayout={storeLayout} size="text-xs" /> */}
                   <NotifyIcon />
                   <ProfileDropDown />
                 </div>

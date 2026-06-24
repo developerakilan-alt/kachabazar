@@ -39,21 +39,19 @@ const MyAccount = async () => {
               Edit
             </Link>
             <div className="flex items-center justify-center rounded-full text-xl text-center mr-4 bg-muted">
-              {userInfo?.image &&
-              (userInfo.image.startsWith("http://") ||
-                userInfo.image.startsWith("https://")) ? (
-                <img
-                  src={userInfo.image}
-                  width={64}
-                  height={64}
-                  className="h-16 w-16 rounded-full bg-muted"
-                  alt={userInfo?.name?.[0] || "U"}
-                />
-              ) : (
-                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-muted text-xl font-bold text-center mr-4">
-                  {userInfo?.name?.charAt(0) || "U"}
-                </div>
-              )}
+{userInfo?.image ? (
+  <img
+    src={userInfo.image}
+    width={64}
+    height={64}
+    className="h-16 w-16 rounded-full bg-muted"
+    alt={userInfo?.name?.[0] || "U"}
+  />
+) : (
+  <div className="flex items-center justify-center h-16 w-16 rounded-full bg-muted text-xl font-bold text-center mr-4">
+    {userInfo?.name?.charAt(0) || "U"}
+  </div>
+)}
             </div>
             <div>
               <h5 className="leading-none mb-2 text-base font-medium text-muted-foreground">

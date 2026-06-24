@@ -15,7 +15,7 @@ const useAddToCart = () => {
     const { variants, categories, description, ...updatedProduct } = product;
 
     const maxStock = Number(
-      product?.variant?.quantity ?? product?.quantity ?? product?.stock ?? 0,
+      product?.variant?.quantity ?? product?.stock ?? product?.quantity ?? 0,
     );
 
     if (result !== undefined) {
@@ -38,16 +38,8 @@ const useAddToCart = () => {
   const handleIncreaseQuantity = (product) => {
     const result = items?.find((p) => p.id === product.id);
     const maxStock = Number(
-      product?.variant?.quantity ?? product?.quantity ?? product?.stock ?? 0,
+      product?.variant?.quantity ?? product?.stock ?? product?.quantity ?? 0,
     );
-    // console.log(
-    //   "handleIncreaseQuantity",
-    //   product,
-    //   result?.quantity + item,
-    //   product?.variants?.length > 0
-    //     ? product?.variant?.quantity
-    //     : product?.stock
-    // );
     if (result) {
       if (result?.quantity + item <= maxStock) {
         updateItemQuantity(product.id, product.quantity + 1);

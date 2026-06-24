@@ -3,9 +3,8 @@
 import { useState, useEffect } from "react";
 
 import MegaMenuCategory from "@components/mega-menu/MegaMenuCategory";
-import TopNavbarTheme from "./TopNavbarTheme";
-import SelectLayout from "@components/form/SelectLayout";
 import StoreTheme from "@components/common/StoreTheme";
+import Link from "next/link";
 
 const NavbarPromoClothing = ({
   languages,
@@ -52,13 +51,9 @@ const NavbarPromoClothing = ({
               />
             )}
           </div>
-          <div className="flex items-center gap-3 text-sm font-medium text-foreground">
-            <TopNavbarTheme
-              themes={themes}
-              defaultTheme={defaultTheme}
-              size="text-xs"
-            />
-            <SelectLayout currentLayout={storeLayout} size="text-xs" />
+          <div className="flex items-center gap-4 text-sm font-medium text-foreground">
+            <Link href="/privacy-policy" className="hover:text-[#8B6914] transition-colors">Privacy Policy</Link>
+            <Link href="/terms-and-conditions" className="hover:text-[#8B6914] transition-colors">Terms & Conditions</Link>
           </div>
         </div>
       </div>

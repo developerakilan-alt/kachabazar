@@ -14,7 +14,6 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/24/outline";
 import useUtilsFunction from "@hooks/useUtilsFunction";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { signOut } from "next-auth/react";
@@ -56,11 +55,11 @@ const Sidebar = () => {
       href: "/user/notifications",
       icon: BellIcon,
     },
-    {
-      title: "My Review",
-      href: "/user/my-reviews",
-      icon: StarIcon,
-    },
+    // {
+    //   title: "My Review",
+    //   href: "/user/my-reviews",
+    //   icon: StarIcon,
+    // },
     {
       title: "My Account",
       href: "/user/my-account",
@@ -89,10 +88,8 @@ const Sidebar = () => {
           <div className="flex flex-row items-center">
             <div className="relative w-10 h-10">
               <div className="relative rounded-full w-10 h-10 border-2 border-border flex items-center justify-center bg-muted overflow-hidden">
-                {userInfo?.image &&
-                (userInfo.image.startsWith("http://") ||
-                  userInfo.image.startsWith("https://")) ? (
-                  <Image
+                {userInfo?.image ? (
+                  <img
                     src={userInfo.image}
                     width={32}
                     height={32}
@@ -156,9 +153,7 @@ const Sidebar = () => {
             <div className="flex flex-row items-center mb-6 pb-5 border-b border-border">
               <div className="relative w-16 h-16">
                 <div className="relative w-16 h-16 rounded-full border-2 border-primary/20 flex items-center justify-center bg-muted overflow-hidden">
-                  {userInfo?.image &&
-                  (userInfo.image.startsWith("http://") ||
-                    userInfo.image.startsWith("https://")) ? (
+                  {userInfo?.image ? (
                     <img
                       src={userInfo.image}
                       width={64}

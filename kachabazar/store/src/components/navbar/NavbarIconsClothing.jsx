@@ -8,7 +8,6 @@ import {
 import React, { useState, useEffect, Fragment } from "react";
 import { useCart } from "react-use-cart";
 import Link from "next/link";
-import Image from "next/image";
 import { Transition, Menu, MenuButton } from "@headlessui/react";
 
 // Internal imports
@@ -69,7 +68,7 @@ const NavbarIconsClothing = () => {
             <MenuButton className="flex items-center p-1 rounded-full hover:bg-white/20 transition-colors">
               <span className="sr-only">Open user menu</span>
               {hasValidImage ? (
-                <Image
+                <img
                   src={userInfo.image}
                   width={32}
                   height={32}

@@ -229,7 +229,7 @@ const FooterElectronic = async ({
                     item.title && (
                       <li key={i}>
                         <Link
-                          href={userInfo?.email ? item.link || "#" : "#"}
+                          href={userInfo?.email ? item.link || "#" : `/auth/login?callbackUrl=${encodeURIComponent(item.link || "/user/dashboard")}`}
                           className="text-sm text-slate-400 hover:text-white transition-colors"
                         >
                           {showingTranslateValue(item.title)}

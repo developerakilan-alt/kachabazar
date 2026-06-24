@@ -16,7 +16,6 @@ import React, { useState, useEffect } from "react";
 import { useCart } from "react-use-cart";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import Image from "next/image";
 
 // Internal imports
 import CartDrawer from "@components/drawer/CartDrawer";
@@ -59,10 +58,9 @@ const NavbarIconsElectronic = () => {
             <button className="flex items-center gap-1.5 px-2 py-1 rounded-full text-primary-foreground hover:bg-primary-foreground/15 transition-colors">
               {hasValidImage && userInfo?.image ? (
                 <div className="relative h-8 w-8 overflow-hidden rounded-full border border-primary-foreground/30">
-                  <Image
+                  <img
                     src={userInfo.image}
-                    fill
-                    className="object-cover"
+                    className="object-cover w-full h-full"
                     alt={userInfo?.name || "User"}
                   />
                 </div>
@@ -89,7 +87,7 @@ const NavbarIconsElectronic = () => {
                 {/* Header */}
                 <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 bg-gray-50">
                   {hasValidImage && userInfo?.image ? (
-                    <Image
+                    <img
                       src={userInfo.image}
                       width={36}
                       height={36}

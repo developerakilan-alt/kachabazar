@@ -20,39 +20,23 @@ const {
   validatePaymentIntent,
 } = require("../middleware/validators");
 
-//add a order
-router.post("/add", validateAddOrder, addOrder);
-
-//add a guest order (no auth required)
-router.post("/add/guest", addGuestOrder);
-
-// create stripe payment intent
-router.post(
-  "/create-payment-intent",
-  validatePaymentIntent,
-  createPaymentIntent,
-);
-
-//add razorpay order
+// Public routes (no auth required)
+const { validateGuestOrder } = require("../middleware/validators");
+router.post("/add/guest", validateGuestOrder, addGuestOrder);
 router.post("/add/razorpay", addRazorpayOrder);
+router.post("/create/razorpay", (req, res, next) => {
+  console.log("HIT create/razorpay PUBLIC ROUTE");
+  createOrderByRazorPay(req, res, next);
+});
 
-//add a order by razorpay
-router.post("/create/razorpay", createOrderByRazorPay);
-
-//get all order by a user
-router.get("/", getOrderCustomer);
-
-//#send email invoice to customer
-router.post(
-  "/customer/invoice",
-  emailVerificationLimit,
-  sendEmailInvoiceToCustomer,
-);
+// Authenticated routes
+router.post("/add", isAuth, validateAddOrder, addOrder);
+router.post("/create-payment-intent", isAuth, validatePaymentIntent, createPaymentIntent);
+router.get("/", isAuth, getOrderCustomer);
+router.post("/customer/invoice", isAuth, emailVerificationLimit, sendEmailInvoiceToCustomer);
+router.get("/:id", isAuth, validateMongoId, getOrderById);
 
 // Razorpay webhook (raw body needed, no express json)
 router.post("/razorpay-webhook", express.raw({ type: "application/json" }), razorpayWebhook);
-
-//get a order by id
-router.get("/:id", validateMongoId, getOrderById);
 
 module.exports = router;

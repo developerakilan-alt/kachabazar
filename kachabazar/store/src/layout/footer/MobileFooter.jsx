@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useCart } from "react-use-cart";
 import { FiHome, FiUser, FiShoppingCart, FiAlignLeft } from "react-icons/fi";
 
@@ -70,15 +69,13 @@ const MobileFooter = ({ globalSetting, categories, categoryError }) => {
           type="button"
           className="text-xl text-primary-foreground indicator justify-center"
         >
-          {userInfo?.image &&
-          (userInfo.image.startsWith("http://") ||
-            userInfo.image.startsWith("https://")) ? (
+          {userInfo?.image ? (
             <Link
               href="/user/dashboard"
               aria-label="user"
               className="relative top-1 w-6 h-6"
             >
-              <Image
+              <img
                 width={29}
                 height={29}
                 src={userInfo.image}
@@ -95,7 +92,7 @@ const MobileFooter = ({ globalSetting, categories, categoryError }) => {
               {userInfo?.name[0]}
             </Link>
           ) : (
-            <Link aria-label="user" href="/auth/login">
+            <Link aria-label="user" href="/auth/login?callbackUrl=%2Fuser%2Fdashboard">
               <FiUser className="w-6 h-6 drop-shadow-xl" />
             </Link>
           )}
