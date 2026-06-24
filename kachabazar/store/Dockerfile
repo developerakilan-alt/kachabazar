@@ -1,7 +1,9 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package*.json package-lock.json ./
-RUN npm install --no-audit --no-fund && npm cache clean --force
+ARG NPM_REGISTRY
+RUN if [ -n "$NPM_REGISTRY" ]; then npm config set registry "$NPM_REGISTRY"; fi && \
+    npm install --no-audit --no-fund && npm cache clean --force
 COPY . .
 COPY .env.docker .env.local
 RUN npm run build

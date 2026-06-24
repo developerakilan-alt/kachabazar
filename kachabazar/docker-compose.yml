@@ -18,6 +18,8 @@ services:
     build:
       context: ./store
       dockerfile: Dockerfile
+      args:
+        NPM_REGISTRY: ""
     container_name: kachabazar_store
     env_file: ./store/.env.docker
     restart: unless-stopped
