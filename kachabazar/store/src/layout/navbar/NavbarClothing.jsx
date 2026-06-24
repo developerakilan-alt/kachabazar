@@ -62,14 +62,18 @@ const NavbarClothing = async ({
       <header className="bg-black">
         <div className={clothingContainer}>
           {/* Mobile layout: [left icons] [logo center] [right icons] */}
-          <div className="flex sm:hidden h-16 items-center gap-2">
-            <MobileNavIconsClothing
-              categories={categories}
-              categoryError={categoryError}
-              storeCustomization={storeCustomization}
-            />
-          </div>
+<div className="flex sm:hidden h-16 items-center gap-2">
+  <MobileNavIconsClothing
+    categories={categories}
+    categoryError={categoryError}
+    storeCustomization={storeCustomization}
+  />
+</div>
 
+{/* Mobile Search Bar */}
+<div className="flex sm:hidden px-4 pb-3">
+  <SearchInput variant="dark" />
+</div>
           {/* Desktop layout: [logo left] [search center] [icons right] */}
           <div className="hidden sm:flex relative h-16 items-center justify-between gap-6">
             <Link href="/" className="flex-shrink-0 flex items-center gap-2">
