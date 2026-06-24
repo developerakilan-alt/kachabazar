@@ -57,7 +57,7 @@ const setting = [
       aws_region: "us-east-1",
 
       // ── Application URLs ──
-      store_url: "http://localhost:3000",
+      store_url: "http://store.hautecouturejewellery.in",
       admin_url: "http://localhost:4100",
     },
     name: "globalSetting",

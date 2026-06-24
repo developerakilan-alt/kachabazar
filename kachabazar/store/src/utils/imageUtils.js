@@ -6,6 +6,7 @@
  */
 export const isValidImageUrl = (url) => {
   if (!url || typeof url !== "string") return false;
+  if (url.startsWith("/")) return true;
   try {
     const parsed = new URL(url);
     return parsed.protocol === "http:" || parsed.protocol === "https:";

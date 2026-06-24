@@ -270,7 +270,7 @@ const FooterModern = async ({
                         item.title && (
                           <li key={i}>
                             <Link
-                              href={userInfo?.email ? item.link || "#" : "#"}
+                              href={userInfo?.email ? item.link || "#" : `/auth/login?callbackUrl=${encodeURIComponent(item.link || "/user/dashboard")}`}
                               className="block text-sm text-gray-500 hover:text-primary hover:ml-2 transition-all duration-300"
                             >
                               {showingTranslateValue(item.title)}

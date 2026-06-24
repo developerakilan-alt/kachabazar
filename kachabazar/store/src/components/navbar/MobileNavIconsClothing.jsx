@@ -69,11 +69,9 @@ const MobileNavIconsClothing = ({ categories, categoryError, storeCustomization 
         </button>
 
         <div className="p-2 rounded-full text-white hover:bg-white/20 transition-colors">
-          {userInfo?.image &&
-          (userInfo.image.startsWith("http://") ||
-            userInfo.image.startsWith("https://")) ? (
+          {userInfo?.image ? (
             <Link href="/user/dashboard" aria-label="user" className="relative block w-6 h-6">
-              <Image
+              <img
                 width={24}
                 height={24}
                 src={userInfo.image}

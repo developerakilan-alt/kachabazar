@@ -1,5 +1,3 @@
-import SelectLayout from "@components/form/SelectLayout";
-
 const TopNavbar = ({ storeLayout = "default" }) => {
   return (
     <div className="hidden lg:block bg-[#D97706]">
@@ -12,7 +10,7 @@ const TopNavbar = ({ storeLayout = "default" }) => {
             SUPPORT: hautecouturejewellery@gmail.com
           </a>
           <div className="flex items-center gap-5 text-neutral-500">
-            <SelectLayout currentLayout={storeLayout} size="text-[10px]" />
+            {/* <SelectLayout currentLayout={storeLayout} size="text-[10px]" /> */}
             <a className="hover:text-white transition-colors text-[11px] tracking-wide" href="/user/my-account">
               Account
             </a>

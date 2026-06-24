@@ -69,10 +69,8 @@ const ProductReviews = ({ reviews }) => {
                 className="flex space-x-4 text-sm text-muted-foreground"
               >
                 <div className="flex-none py-6">
-                  {review.user?.image &&
-                  (review.user.image.startsWith("http://") ||
-                    review.user.image.startsWith("https://")) ? (
-                    <Image
+                  {review.user?.image ? (
+                    <img
                       src={review.user.image}
                       alt={review.user?.name?.[0] || "U"}
                       width={42}

@@ -93,6 +93,7 @@ const SignUp = () => {
                   src={globalSetting?.logo || "/logo/logo-color.png"}
                   alt={globalSetting?.shop_name || "hautecouturejewellery"}
                   fill
+                  unoptimized
                   className="object-contain object-left"
                 />
               </Link>

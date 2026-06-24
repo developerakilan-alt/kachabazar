@@ -8,8 +8,6 @@ import MegaMenuCategory from "@components/mega-menu/MegaMenuCategory";
 import { SidebarContext } from "@context/SidebarContext";
 import useUtilsFunction from "@hooks/useUtilsFunction";
 import SelectLanguage from "@components/form/SelectLanguage";
-import TopNavbarTheme from "./TopNavbarTheme";
-import SelectLayout from "@components/form/SelectLayout";
 import StoreTheme from "@components/common/StoreTheme";
 import {
   AlertCircle,
@@ -287,35 +285,10 @@ const NavbarPromo = ({
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+          <div className="flex items-center gap-4 text-sm font-medium text-foreground">
             <SelectLanguage data={languages} />
-            <TopNavbarTheme
-              themes={themes}
-              defaultTheme={defaultTheme}
-              size="text-xs"
-            />
-            <SelectLayout currentLayout={storeLayout} size="text-xs" />
-
-            {navbar?.privacy_policy_status && (
-              <Link
-                onClick={() => setIsLoading(!isLoading)}
-                href="/privacy-policy"
-                className="py-2 text-sm font-medium text-foreground hover:text-primary"
-              >
-                {showingTranslateValue(navbar?.privacy_policy) ||
-                  "Privacy Policy"}
-              </Link>
-            )}
-            {navbar?.term_and_condition_status && (
-              <Link
-                onClick={() => setIsLoading(!isLoading)}
-                href="/terms-and-conditions"
-                className="py-2 text-sm font-medium text-foreground hover:text-primary"
-              >
-                {showingTranslateValue(navbar?.term_and_condition) ||
-                  "Terms & Conditions"}
-              </Link>
-            )}
+            <Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+            <Link href="/terms-and-conditions" className="hover:text-primary transition-colors">Terms & Conditions</Link>
           </div>
         </div>
       </div>

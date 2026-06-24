@@ -176,7 +176,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
               <ul className="text-sm lg:text-15px flex flex-col space-y-3">
                 <li className="flex items-baseline">
                   <Link
-                    href={`${userInfo?.email ? footer?.block3_sub_link1 : "#"}`}
+                    href={`${userInfo?.email ? footer?.block3_sub_link1 : `/auth/login?callbackUrl=${encodeURIComponent(footer?.block3_sub_link1 || "/user/dashboard")}`}`}
                     className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
@@ -189,7 +189,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 </li>
                 <li className="flex items-baseline">
                   <Link
-                    href={`${userInfo?.email ? footer?.block3_sub_link2 : "#"}`}
+                    href={`${userInfo?.email ? footer?.block3_sub_link2 : `/auth/login?callbackUrl=${encodeURIComponent(footer?.block3_sub_link2 || "/user/my-orders")}`}`}
                     className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
@@ -202,7 +202,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 </li>
                 <li className="flex items-baseline">
                   <Link
-                    href={`${userInfo?.email ? footer?.block3_sub_link3 : "#"}`}
+                    href={`${userInfo?.email ? footer?.block3_sub_link3 : `/auth/login?callbackUrl=${encodeURIComponent(footer?.block3_sub_link3 || "/user/dashboard")}`}`}
                     className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo
@@ -215,7 +215,7 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 </li>
                 <li className="flex items-baseline">
                   <Link
-                    href={`${userInfo?.email ? footer?.block3_sub_link4 : "#"}`}
+                    href={`${userInfo?.email ? footer?.block3_sub_link4 : `/auth/login?callbackUrl=${encodeURIComponent(footer?.block3_sub_link4 || "/user/update-profile")}`}`}
                     className="text-white/80 inline-block w-full hover:text-primary"
                   >
                     <CMSkeletonTwo

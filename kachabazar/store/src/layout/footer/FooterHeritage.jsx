@@ -255,7 +255,7 @@ const FooterHeritage = async ({
                         item.title && (
                           <li key={i}>
                             <Link
-                              href={userInfo?.email ? item.link || "#" : "#"}
+                              href={userInfo?.email ? item.link || "#" : `/auth/login?callbackUrl=${encodeURIComponent(item.link || "/user/dashboard")}`}
                               className="block text-sm text-[rgba(216,163,96,0.6)] hover:text-[#D4AF37] hover:ml-2 transition-all duration-300"
                             >
                               {showingTranslateValue(item.title)}

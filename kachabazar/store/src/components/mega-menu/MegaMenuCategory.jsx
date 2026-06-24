@@ -1,22 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
   ChevronDownIcon,
-  // Grocery / Default icons
   Apple,
   Milk,
   Carrot,
   ShoppingBasket,
-  // Electronic icons
   Monitor,
   Smartphone,
   Cpu,
-  // Clothing icons
   Shirt,
-  // Modern icons
   Sparkles,
   Package,
   Grid3X3,
@@ -123,7 +118,29 @@ const MegaMenuCategory = ({
   storeLayout = "default",
 }) => {
   const [activeCategory, setActiveCategory] = useState(null);
+  const [categoryProducts, setCategoryProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(false);
   const { showingTranslateValue } = useUtilsFunction();
+
+  const fetchCategoryProducts = useCallback(async (categoryId) => {
+    if (!categoryId) return;
+    setProductsLoading(true);
+    try {
+      const res = await fetch(`/api/products/store?category=${categoryId}&limit=4`);
+      const data = await res.json();
+      setCategoryProducts((data.products || []).slice(0, 4));
+    } catch {
+      setCategoryProducts([]);
+    } finally {
+      setProductsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeCategory) {
+      fetchCategoryProducts(activeCategory._id);
+    }
+  }, [activeCategory, fetchCategoryProducts]);
 
   const topCategories = useMemo(() => {
     const categoryTree = Array.isArray(categories) ? categories : [];
@@ -223,19 +240,6 @@ const MegaMenuCategory = ({
                           : `text-foreground ${isClothing ? "hover:bg-white" : "hover:bg-background/80"} font-medium hover:text-primary border-l-4 border-transparent`
                       }`}
                     >
-                      {category.icon ? (
-                        <Image
-                          src={category.icon}
-                          alt={showingTranslateValue(category.name)}
-                          width={22}
-                          height={22}
-                          className="rounded"
-                        />
-                      ) : (
-                        <div className="w-5.5 h-5.5 rounded bg-primary/10 flex items-center justify-center">
-                          <FallbackIcon className="h-3 w-3 text-primary" />
-                        </div>
-                      )}
                       <span className="truncate">
                         {showingTranslateValue(category.name)}
                       </span>
@@ -257,10 +261,6 @@ const MegaMenuCategory = ({
                       <h3 className="text-lg font-bold text-foreground">
                         {showingTranslateValue(activeCategory.name)}
                       </h3>
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        {activeCategory.children?.length || 0} subcategories
-                        available
-                      </p>
                     </div>
                     <Link
                       href={`/search?_id=${activeCategory._id}`}
@@ -270,37 +270,39 @@ const MegaMenuCategory = ({
                     </Link>
                   </div>
 
-                  {activeCategory.children?.length > 0 ? (
-                    <div className="grid grid-cols-3 gap-3">
-                      {activeCategory.children.map((sub) => (
+                  {productsLoading ? (
+                    <div className="flex items-center justify-center h-40 text-muted-foreground">
+                      <p className="text-sm">Loading products...</p>
+                    </div>
+                  ) : categoryProducts.length > 0 ? (
+                    <div className="grid grid-cols-4 gap-4">
+                      {categoryProducts.map((product) => (
                         <Link
-                          key={sub._id}
-                          href={`/search?_id=${sub._id}`}
-                          className="group/item flex items-center gap-3 rounded-lg border border-transparent p-3 hover:border-border hover:bg-muted/50 transition-all"
+                          key={product._id}
+                          href={`/product/${product.slug}`}
+                          className="group/product flex flex-col rounded-lg border border-border overflow-hidden hover:shadow-md transition-all"
                         >
-                          {sub.icon ? (
-                            <Image
-                              src={sub.icon}
-                              alt={showingTranslateValue(sub.name)}
-                              width={36}
-                              height={36}
-                              className="rounded-lg"
+                          <div className="aspect-square bg-muted overflow-hidden">
+                            <img
+                              src={product.image?.[0] || "/placeholder.png"}
+                              alt={showingTranslateValue(product.title) || "Product"}
+                              className="w-full h-full object-cover group-hover/product:scale-105 transition-transform duration-300"
                             />
-                          ) : (
-                            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                              <SubFallbackIcon className="h-4 w-4 text-primary" />
-                            </div>
-                          )}
-                          <div className="min-w-0">
-                            <p className="text-sm font-medium text-foreground group-hover/item:text-primary truncate">
-                              {showingTranslateValue(sub.name)}
+                          </div>
+                          <div className="p-2.5">
+                            <p className="text-xs font-medium text-foreground truncate">
+                              {showingTranslateValue(product.title)}
+                            </p>
+                            <p className="text-xs font-bold text-primary mt-1">
+                              $
+                              {product.prices?.price || "0.00"}
                             </p>
                           </div>
                         </Link>
                       ))}
                     </div>
                   ) : (
-                    <div className="flex items-center justify-center h-32 text-muted-foreground">
+                    <div className="flex items-center justify-center h-40 text-muted-foreground">
                       <p className="text-sm">
                         Browse all {showingTranslateValue(activeCategory.name)}{" "}
                         products
