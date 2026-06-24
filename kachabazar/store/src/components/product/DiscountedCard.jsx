@@ -64,7 +64,7 @@ const DiscountedCard = ({ product, attributes }) => {
         <div className="w-full flex justify-between">
           <Discount product={product} />
         </div>
-        <div className="relative w-full aspect-square">
+        <div className="relative w-full min-h-48 lg:h-48 xl:h-52">
           <Link
             href={`/product/${product?.slug}`}
             className="relative block w-full h-full overflow-hidden bg-muted"

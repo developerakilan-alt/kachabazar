@@ -80,7 +80,7 @@ const HomeClothing = ({
 
       {/* ═══ Featured Categories — Magazine Grid ═══ */}
       {storeCustomizationSetting?.home?.featured_status && (
-        <section className="pt-8 pb-16 lg:py-24 bg-white">
+        <section className="py-16 lg:py-24 bg-white">
           <div className={wideContainer}>
             <div className="text-center mb-14">
               <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 mb-3">
@@ -107,7 +107,7 @@ const HomeClothing = ({
             </div>
 
             {/* 6-per-row category grid */}
-            <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
               {topCategories.map((cat) => {
                 const categoryImage = normalizeStoreImageUrl(cat.icon) || getCategoryProductImage(
                   cat,
