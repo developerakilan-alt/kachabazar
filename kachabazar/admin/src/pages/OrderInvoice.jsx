@@ -17,8 +17,7 @@ import {
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Truck, MapPin, Star, Package } from "lucide-react";
+import { Truck, Send, ExternalLink, Package } from "lucide-react";
 
 //internal import
 import useAsync from "@/hooks/useAsync";
@@ -27,7 +26,7 @@ import Status from "@/components/table/Status";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { AdminContext } from "@/context/AdminContext";
 import OrderServices from "@/services/OrderServices";
-import DeliveryBoyServices from "@/services/DeliveryBoyServices";
+import ShiprocketServices from "@/services/ShiprocketServices";
 import Invoice from "@/components/invoice/Invoice";
 import Loading from "@/components/preloader/Loading";
 import PageTitle from "@/components/Typography/PageTitle";
@@ -52,41 +51,40 @@ const OrderInvoice = () => {
   const { handleErrorNotification } = useError();
   const { handleDisableForDemo } = useDisableForDemo();
 
-  // Delivery boy assignment
-  const queryClient = useQueryClient();
-  const [selectedDeliveryBoy, setSelectedDeliveryBoy] = useState("");
-  const [isAssigning, setIsAssigning] = useState(false);
+  // Push order to Shiprocket
+  const [pushingToShiprocket, setPushingToShiprocket] = useState(false);
+  const [refreshingShiprocket, setRefreshingShiprocket] = useState(false);
 
-  const { data: deliveryBoysData } = useQuery({
-    queryKey: ["available-delivery-boys"],
-    queryFn: () =>
-      DeliveryBoyServices.getAllDeliveryBoys({
-        status: "active",
-        page: 1,
-        limit: 100,
-      }),
-  });
-
-  const availableDeliveryBoys = deliveryBoysData?.deliveryBoys || [];
-
-  const handleAssignDeliveryBoy = async () => {
-    if (!selectedDeliveryBoy) {
-      return notifyError("Please select a delivery boy!");
-    }
+  const handlePushToShiprocket = async () => {
+    if (handleDisableForDemo()) return;
     try {
-      setIsAssigning(true);
-      const res = await DeliveryBoyServices.assignDeliveryBoy({
-        orderId: id,
-        deliveryBoyId: selectedDeliveryBoy,
-      });
-      notifySuccess(res.message);
-      queryClient.invalidateQueries(["available-delivery-boys"]);
-      // Refresh order data
+      setPushingToShiprocket(true);
+      const res = await ShiprocketServices.createOrder(id);
+      notifySuccess(res?.message || "Order pushed to ShipRocket successfully!");
       window.location.reload();
     } catch (err) {
       notifyError(err?.response?.data?.message || err?.message);
     } finally {
-      setIsAssigning(false);
+      setPushingToShiprocket(false);
+    }
+  };
+
+  const handleRefreshShiprocket = async () => {
+    if (handleDisableForDemo()) return;
+    try {
+      setRefreshingShiprocket(true);
+      const res = await ShiprocketServices.refreshStatus(id);
+      const srLabel = (res?.tracking?.status || "updated")
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+      notifySuccess(
+        `ShipRocket: ${srLabel} | Order: ${res?.orderStatus || "—"}`,
+      );
+      window.location.reload();
+    } catch (err) {
+      notifyError(err?.response?.data?.message || err?.message);
+    } finally {
+      setRefreshingShiprocket(false);
     }
   };
 
@@ -283,7 +281,7 @@ const OrderInvoice = () => {
           </div>
         )}
 
-        {/* Tracking & Delivery Boy Section */}
+        {/* Tracking & Shiprocket Section */}
         {!loading && data && (
           <div className="mt-6 border rounded-xl border-border p-6 bg-muted">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -307,84 +305,136 @@ const OrderInvoice = () => {
                 )}
               </div>
 
-              {/* Tracking Status */}
+              {/* Shiprocket Order ID */}
               <div className="bg-card rounded-lg p-3 border">
                 <span className="text-xs text-muted-foreground font-medium block mb-1">
-                  Tracking Status
+                  Shiprocket Order ID
                 </span>
-                <span className="text-sm capitalize font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                  {data.trackingStatus?.replace(/-/g, " ") || "Order Placed"}
-                </span>
-              </div>
-
-              {/* Delivery Boy */}
-              <div className="bg-card rounded-lg p-3 border">
-                <span className="text-xs text-muted-foreground font-medium block mb-1">
-                  Delivery Partner
-                </span>
-                {data.deliveryBoyName ? (
-                  <div>
-                    <span className="text-sm font-medium">
-                      {data.deliveryBoyName}
-                    </span>
-                    <p className="text-xs text-muted-foreground">
-                      {data.deliveryBoyPhone}
-                    </p>
-                  </div>
+                {data.shiprocket?.orderId ? (
+                  <span className="text-sm font-mono font-medium">
+                    {data.shiprocket.orderId}
+                  </span>
                 ) : (
                   <span className="text-sm text-muted-foreground italic">
-                    Not Assigned
+                    Not pushed yet
                   </span>
                 )}
               </div>
 
-              {/* Estimated/Actual Delivery */}
+              {/* AWB / Status */}
               <div className="bg-card rounded-lg p-3 border">
                 <span className="text-xs text-muted-foreground font-medium block mb-1">
-                  {data.deliveredAt ? "Delivered At" : "Est. Delivery"}
+                  AWB / Status
                 </span>
-                <span className="text-sm font-medium">
-                  {data.deliveredAt
-                    ? showDateFormat(data.deliveredAt)
-                    : data.estimatedDeliveryTime
-                      ? showDateFormat(data.estimatedDeliveryTime)
-                      : "N/A"}
+                {data.shiprocket?.awb || data.shiprocket?.orderId ? (
+                  <div>
+                    {data.shiprocket?.awb ? (
+                      <span className="text-sm font-mono font-medium">
+                        {data.shiprocket.awb}
+                      </span>
+                    ) : (
+                      <span className="text-sm text-muted-foreground">
+                        Pushed to SR
+                      </span>
+                    )}
+                    <span className="block text-xs text-muted-foreground">
+                      SR: {(data.shiprocket.status || "created")
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (c) => c.toUpperCase())}
+                    </span>
+                    <span className="block text-xs text-muted-foreground">
+                      Order: <span className="font-medium capitalize">{data.status}</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleRefreshShiprocket}
+                      disabled={refreshingShiprocket}
+                      className="mt-2 inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium cursor-pointer disabled:opacity-50"
+                    >
+                      {refreshingShiprocket ? (
+                        <>
+                          <span className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
+                          Refreshing...
+                        </>
+                      ) : (
+                        <>
+                          <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" className="h-3 w-3">
+                            <polyline points="23 4 23 10 17 10" />
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                          </svg>
+                          Refresh Status
+                        </>
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <span className="text-sm text-muted-foreground italic">
+                    —
+                  </span>
+                )}
+              </div>
+
+              {/* Track Action */}
+              <div className="bg-card rounded-lg p-3 border">
+                <span className="text-xs text-muted-foreground font-medium block mb-1">
+                  Tracking
                 </span>
+                {data.shiprocket?.awb ? (
+                  <a
+                    href={`https://shiprocket.co/tracking/${data.shiprocket.awb}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline font-medium"
+                  >
+                    Track on Shiprocket
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                ) : data.shiprocket?.orderId ? (
+                  <a
+                    href={`https://shiprocket.co/tracking/order/${data.shiprocket.orderId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline font-medium"
+                  >
+                    Track on Shiprocket
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                ) : (
+                  <span className="text-sm text-muted-foreground italic">
+                    —
+                  </span>
+                )}
               </div>
             </div>
 
-            {/* Assign Delivery Boy */}
-            {adminInfo?.role !== "delivery-boy" &&
-              !data.deliveryBoy &&
+            {/* Push to Shiprocket */}
+            {/* {!data.shiprocket?.orderId &&
               data.status !== "delivered" &&
               data.status !== "cancel" && (
                 <div className="bg-card rounded-lg p-4 border">
                   <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                    <Package className="h-4 w-4" /> Assign Delivery Partner
+                    <Send className="h-4 w-4" /> Push to ShipRocket
                   </h4>
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <select
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm sm:max-w-xs"
-                      value={selectedDeliveryBoy}
-                      onChange={(e) => setSelectedDeliveryBoy(e.target.value)}
-                    >
-                      <option value="">Select Delivery Boy</option>
-                      {availableDeliveryBoys.map((db) => (
-                        <option key={db._id} value={db._id}>
-                          {db.name?.en || db.name} - {db.phone} (
-                          {db.availability})
-                        </option>
-                      ))}
-                    </select>
                     <Button
-                      onClick={handleAssignDeliveryBoy}
-                      disabled={isAssigning || !selectedDeliveryBoy}
+                      onClick={handlePushToShiprocket}
+                      disabled={pushingToShiprocket}
                     >
-                      {isAssigning ? "Assigning..." : "Assign"}
+                      {pushingToShiprocket ? (
+                        <>
+                          <span className="animate-spin h-4 w-4 border-2 border-background border-t-transparent rounded-full mr-2" />
+                          Pushing...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="mr-2 h-4 w-4" />
+                          Push to ShipRocket
+                        </>
+                      )}
                     </Button>
                   </div>
                 </div>
-              )}
+              )} */}
 
             {/* Payment & Refund Section */}
             {data.paymentMethod === "RazorPay" && (
@@ -442,34 +492,6 @@ const OrderInvoice = () => {
               </div>
             )}
 
-            {/* Delivery Rating */}
-            {data.deliveryRating?.rating && (
-              <div className="bg-card rounded-lg p-4 border mt-4">
-                <h4 className="text-sm font-semibold mb-2 flex items-center gap-2">
-                  <Star className="h-4 w-4 text-yellow-500" /> Delivery Rating
-                </h4>
-                <div className="flex items-center gap-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${
-                        i < data.deliveryRating.rating
-                          ? "text-yellow-500 fill-yellow-500"
-                          : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                  <span className="text-sm font-medium ml-1">
-                    {data.deliveryRating.rating}/5
-                  </span>
-                </div>
-                {data.deliveryRating.review && (
-                  <p className="text-sm text-muted-foreground mt-2 italic">
-                    "{data.deliveryRating.review}"
-                  </p>
-                )}
-              </div>
-            )}
           </div>
         )}
       </div>

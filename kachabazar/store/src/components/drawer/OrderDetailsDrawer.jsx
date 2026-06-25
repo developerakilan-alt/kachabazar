@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { useReactToPrint } from "react-to-print";
@@ -10,6 +10,7 @@ import {
   MapPin,
   Package,
   Printer,
+  RefreshCw,
   Truck,
   X,
 } from "lucide-react";
@@ -23,6 +24,7 @@ import { useSetting } from "@context/SettingContext";
 import OrderItems from "@components/order/OrderItems";
 import { Button } from "@components/ui/button";
 import InvoicePDF from "@components/invoice/InvoiceForDownload";
+import { refreshShiprocketStatus } from "@lib/actions/order.actions";
 
 const OrderDetailsDrawer = ({ data }) => {
   const printRef = useRef();
@@ -36,6 +38,24 @@ const OrderDetailsDrawer = ({ data }) => {
     contentRef: printRef,
     documentTitle: `Invoice-${data?.invoice}`,
   });
+
+  const [srRefreshing, setSrRefreshing] = useState(false);
+  const [srStatus, setSrStatus] = useState(data?.shiprocket?.status || null);
+  const [srRefreshMsg, setSrRefreshMsg] = useState(null);
+
+  const handleRefreshShiprocket = useCallback(async () => {
+    if (!data?._id) return;
+    setSrRefreshing(true);
+    setSrRefreshMsg(null);
+    const res = await refreshShiprocketStatus(data._id);
+    if (res.success) {
+      setSrStatus(res.data.shiprocket?.status || srStatus);
+      setSrRefreshMsg("Status updated");
+    } else {
+      setSrRefreshMsg(res.error || "Refresh failed");
+    }
+    setSrRefreshing(false);
+  }, [data?._id, srStatus]);
 
   // Flag to only render PDFDownloadLink after client mount
   const [isClient, setIsClient] = useState(false);
@@ -234,6 +254,39 @@ const OrderDetailsDrawer = ({ data }) => {
                   <MapPin className="h-4 w-4" />
                   Track Order
                 </Link>
+              </div>
+            )}
+
+            {/* ShipRocket Shipping Info */}
+            {data?.shiprocket?.awb && (
+              <div className="mt-4 border border-border rounded-md p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Truck className="h-4 w-4 text-primary" />
+                  <span className="font-semibold text-sm">ShipRocket Shipping</span>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">AWB Number</span>
+                    <span className="font-mono font-semibold">{data.shiprocket.awb}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Status</span>
+                    <span className="capitalize font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs">
+                      {(srStatus || "created").replace(/_/g, " ")}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={handleRefreshShiprocket}
+                  disabled={srRefreshing}
+                  className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-pointer"
+                >
+                  <RefreshCw className={`h-4 w-4 ${srRefreshing ? "animate-spin" : ""}`} />
+                  {srRefreshing ? "Refreshing..." : "Refresh Status"}
+                </button>
+                {srRefreshMsg && (
+                  <p className="text-xs text-muted-foreground mt-2 text-center">{srRefreshMsg}</p>
+                )}
               </div>
             )}
           </div>

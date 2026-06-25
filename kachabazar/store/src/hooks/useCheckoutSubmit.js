@@ -48,6 +48,7 @@ const useCheckoutSubmit = ({
   const [isCouponApplied, setIsCouponApplied] = useState(false);
   const [useExistingAddress, setUseExistingAddress] = useState(false);
   const [isCouponAvailable, setIsCouponAvailable] = useState(false);
+  const [gstAmount, setGstAmount] = useState(0);
   const [orderSuccessData, setOrderSuccessData] = useState(null);
   const [showOrderSuccess, setShowOrderSuccess] = useState(false);
 
@@ -121,10 +122,12 @@ const useCheckoutSubmit = ({
         : discountProductTotal * (discountPercentage?.value / 100);
 
     const discountAmountTotal = discountAmount ? discountAmount : 0;
+    const gstValue = parseFloat(cartTotal * 0.03).toFixed(2);
 
-    totalValue = Number(subTotal) - discountAmountTotal;
+    totalValue = Number(subTotal) - discountAmountTotal + Number(gstValue);
 
     setDiscountAmount(discountAmountTotal);
+    setGstAmount(Number(gstValue));
 
     // console.log("total", totalValue);
 
@@ -177,6 +180,7 @@ const useCheckoutSubmit = ({
         subTotal: cartTotal,
         shippingCost: shippingCost,
         discount: discountAmount,
+        gst: gstAmount,
         total: total,
       };
 
@@ -544,6 +548,7 @@ const useCheckoutSubmit = ({
     orderSuccessData,
     setShowOrderSuccess,
     zipCode,
+    gstAmount,
   };
 };
 

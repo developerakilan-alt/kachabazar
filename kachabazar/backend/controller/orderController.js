@@ -84,7 +84,7 @@ const getAllOrders = async (req, res) => {
     const totalDoc = await Order.countDocuments(queryObject);
     const orders = await Order.find(queryObject)
       .select(
-        "_id invoice trackingId paymentMethod subTotal total user_info discount shippingCost status deliveryBoy createdAt updatedAt",
+        "_id invoice trackingId paymentMethod subTotal total user_info discount shippingCost status deliveryBoy shiprocket createdAt updatedAt",
       )
       .sort({ updatedAt: -1 })
       .skip(skip)

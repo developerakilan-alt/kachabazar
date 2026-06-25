@@ -55,6 +55,11 @@ const FooterElectronic = async ({
                   Email: {footer.block4_email}
                 </p>
               )}
+              {globalSetting?.vat_number && (
+                <p className="text-xs text-slate-500 mt-1">
+                  GST: {globalSetting.vat_number}
+                </p>
+              )}
 
               {footer?.social_links_status && (
                 <div className="flex items-center gap-3 mt-5">

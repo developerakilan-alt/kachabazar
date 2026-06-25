@@ -1,17 +1,37 @@
 "use client";
 
 import dayjs from "dayjs";
-import React from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Truck, MapPin, Package } from "lucide-react";
+import { Truck, MapPin, Package, RefreshCw } from "lucide-react";
 
 //internal import
 import OrderTable from "@components/order/OrderTable";
 import useUtilsFunction from "@hooks/useUtilsFunction";
+import { refreshShiprocketStatus } from "@lib/actions/order.actions";
 
 const Invoice = ({ data, printRef, globalSetting }) => {
   const { formatPrice } = useUtilsFunction();
+  const [refreshing, setRefreshing] = useState(false);
+  const [srStatus, setSrStatus] = useState(data?.shiprocket?.status || null);
+  const [srOrderStatus, setSrOrderStatus] = useState(data?.status || null);
+  const [refreshMsg, setRefreshMsg] = useState(null);
+
+  const handleRefresh = useCallback(async () => {
+    if (!data?._id) return;
+    setRefreshing(true);
+    setRefreshMsg(null);
+    const res = await refreshShiprocketStatus(data._id);
+    if (res.success) {
+      setSrStatus(res.data.shiprocket?.status || srStatus);
+      setSrOrderStatus(res.data.orderStatus || srOrderStatus);
+      setRefreshMsg("Status updated");
+    } else {
+      setRefreshMsg(res.error || "Refresh failed");
+    }
+    setRefreshing(false);
+  }, [data?._id, srStatus, srOrderStatus]);
 
   return (
     <div ref={printRef}>
@@ -231,6 +251,52 @@ const Invoice = ({ data, printRef, globalSetting }) => {
               Track Order
             </Link>
           </div>
+        </div>
+      )}
+
+      {/* ShipRocket Shipping Info */}
+      {data?.shiprocket?.awb && (
+        <div className="border-t border-border p-8 bg-muted/50">
+          <div className="flex flex-wrap items-center gap-6">
+            <div className="flex items-center gap-2">
+              <Truck className="h-5 w-5 text-muted-foreground" />
+              <div>
+                <span className="text-xs text-muted-foreground font-medium block">
+                  AWB Number
+                </span>
+                <span className="font-mono font-semibold text-sm">
+                  {data.shiprocket.awb}
+                </span>
+              </div>
+            </div>
+            <div>
+              <span className="text-xs text-muted-foreground font-medium block">
+                ShipRocket Status
+              </span>
+              <span className="text-sm capitalize font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                {(srStatus || "created").replace(/_/g, " ")}
+              </span>
+            </div>
+            <div>
+              <span className="text-xs text-muted-foreground font-medium block">
+                Order Status
+              </span>
+              <span className="text-sm capitalize font-medium bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                {srOrderStatus || data?.status || "pending"}
+              </span>
+            </div>
+            <button
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="print:hidden inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-pointer"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
+              {refreshing ? "Refreshing..." : "Refresh"}
+            </button>
+          </div>
+          {refreshMsg && (
+            <p className="text-xs text-muted-foreground mt-2">{refreshMsg}</p>
+          )}
         </div>
       )}
     </div>

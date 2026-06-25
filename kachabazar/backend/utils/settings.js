@@ -157,12 +157,12 @@ const setting = [
           de: "Neuester aktiver Super-Rabatt-Gutscheincode",
         },
         promotion_title: {
-          en: "100% Natural Quality Organic Product",
-          de: "100 % natürliches Bio-Qualitätsprodukt",
+          en: "Important Order Policy",
+          de: "Wichtige Bestellrichtlinie",
         },
         promotion_description: {
-          en: "See Our latest discounted products from here and get a special discount product",
-          de: "Sehen Sie sich hier unsere neuesten reduzierten Produkte an und sichern Sie sich ein spezielles Rabattprodukt",
+          en: "No Cash on Delivery (COD). If the courier is returned due to call not picked up or incorrect address, re-shipping charges will be applicable.",
+          de: "Keine Nachnahme (COD). Wenn der Kurier aufgrund nicht angenommener Anrufe oder falscher Adresse zurückgeschickt wird, fallen erneute Versandkosten an.",
         },
         promotion_button_name: {
           en: "Shop Now",
@@ -170,12 +170,12 @@ const setting = [
         },
         promotion_button_link: "/search?category=breakfast",
         feature_title: {
-          en: "Featured Categories",
-          de: "Beliebte Kategorien",
+          en: "Naturally Derived",
+          de: "Natürlich gewonnen",
         },
         feature_description: {
-          en: "Choose your necessary products from this feature categories.",
-          de: "Wählen Sie aus diesen Funktionskategorien die gewünschten Produkte aus.",
+          en: "No Refunds Under Any Circumstances. 360° Unboxing Video is Mandatory for replacement requests (only for damaged products).",
+          de: "Keine Rückerstattung unter irgendwelchen Umständen. 360°-Unboxing-Video ist für Ersatzanfragen (nur bei beschädigten Produkten) zwingend erforderlich.",
         },
         feature_product_limit: 18,
         popular_title: {
@@ -192,12 +192,12 @@ const setting = [
           de: "Bio-Produkte und Lebensmittel",
         },
         quick_delivery_title: {
-          en: "Quick Delivery to Your Home",
-          de: "Schnelle Lieferung zu Ihnen nach Hause",
+          en: "Quick Delivery",
+          de: "Schnelle Lieferung",
         },
         quick_delivery_description: {
-          en: "There are many products you will find in our shop, Choose your daily necessary product from our hautecouturejewellery shop and get some special offers. See Our latest discounted products from here and get a special discount.",
-          de: "Es gibt viele Produkte, die Sie in unserem Shop finden. Wählen Sie Ihr täglich benötigtes Produkt aus unserem hautecouturejewellery-Shop und erhalten Sie einige Sonderangebote. Sehen Sie sich hier unsere neuesten reduzierten Produkte an und sichern Sie sich einen Sonderrabatt.",
+          en: "Within Tamil Nadu, 3- to 5-day delivery; other states: 6- to 8-day delivery.",
+          de: "Innerhalb von Tamil Nadu Lieferung in 3-5 Tagen; andere Bundesstaaten: 6-8 Tage.",
         },
         quick_delivery_button: {
           en: "Download App",
