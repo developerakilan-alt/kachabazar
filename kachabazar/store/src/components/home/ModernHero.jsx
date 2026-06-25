@@ -1,99 +1,25 @@
 "use client";
 import React from "react";
-import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import { Autoplay } from "swiper/modules";
-import DiscountedCard from "@components/product/DiscountedCard";
 
 const ModernHero = ({ discountedProducts, attributes, globalSetting, storeCustomizationSetting }) => {
-  const t = (obj) => obj?.en || obj || "";
   const home = storeCustomizationSetting?.home || {};
   const slider = storeCustomizationSetting?.slider || {};
-  const heroImg = home?.quick_delivery_img || slider?.first_img || globalSetting?.logo || "";
+  const heroImg = slider?.first_img || home?.quick_delivery_img || globalSetting?.logo || "";
+
   return (
-    <div className="mx-auto max-w-screen-2xl px-3 sm:px-10 mt-4 md:mt-8 mb-8 relative z-0">
-      <div className="relative w-full overflow-hidden rounded-lg min-h-[450px] sm:min-h-[550px] lg:min-h-[580px] flex items-center justify-center"
-           style={{ background: "linear-gradient(180deg, var(--primary) 0%, var(--muted) 50%, var(--background) 100%)" }}>
-        
-        {/* Large Background Text */}
-        <div className="absolute top-8 sm:top-12 lg:top-16 left-0 w-full flex justify-center text-center pointer-events-none select-none z-0">
-          <h1 
-            className="text-[100px] sm:text-[140px] md:text-[180px] lg:text-[240px] xl:text-[280px] font-serif font-black text-primary/8 leading-[0.6] tracking-tighter relative drop-shadow-sm"
-          >
-            {globalSetting?.shop_name || "Fresh Mart"}
-          </h1>
+    <div className="w-full mt-0 mb-8">
+      {heroImg ? (
+        <img
+          src={heroImg}
+          alt={globalSetting?.shop_name || "Store"}
+          className="w-full"
+          style={{ display: "block", maxHeight: "500px", objectFit: "cover", objectPosition: "center" }}
+        />
+      ) : (
+        <div className="w-full h-64 bg-muted flex items-center justify-center">
+          <p className="text-muted-foreground">No banner image</p>
         </div>
-
-        {/* Small sparks/stars */}
-        <div className="absolute top-[25%] left-[10%] lg:left-[15%] text-primary/30 z-0 animate-pulse">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z"/></svg>
-        </div>
-        <div className="absolute bottom-[20%] lg:bottom-[30%] right-[10%] lg:right-[15%] text-primary/30 z-0 scale-75 animate-pulse delay-700">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z"/></svg>
-        </div>
-
-        {/* Wavy background lines (subtle decoration) */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none z-0">
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
-                <path d="M0 20 Q 25 40 50 20 T 100 20 L 100 0 L 0 0 Z" fill="white" />
-            </svg>
-        </div>
-
-        {/* Content Container */}
-        <div className="relative z-10 w-full h-full min-h-[500px] sm:min-h-[600px] lg:min-h-[640px] flex flex-col lg:flex-row items-center lg:items-end lg:justify-between px-6 sm:px-12 lg:px-20 pb-12 lg:pb-0 pt-16 sm:pt-24 lg:pt-0">
-          
-          {/* Left Text and CTA */}
-          <div className="lg:w-1/3 flex flex-col items-center lg:items-start text-center lg:text-left pt-0 lg:pb-24 order-2 lg:order-1 mt-auto lg:mt-0 z-30">
-            <p className="text-foreground font-medium text-sm sm:text-base lg:text-lg mb-6 max-w-[280px] sm:max-w-xs leading-relaxed drop-shadow-sm">
-              {globalSetting?.site_description || "Discover quality products curated just for you."}
-            </p>
-            <Link href={home?.quick_delivery_link || "/search"}>
-              <button className="bg-primary hover:bg-primary/80 text-primary-foreground rounded-full pl-6 pr-2 py-2 flex items-center justify-between gap-4 font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                <span className="text-sm md:text-base">{t(home?.quick_delivery_button) || "Shop Now"}</span>
-                <span className="bg-background text-primary rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                </span>
-              </button>
-            </Link>
-          </div>
-
-          {/* Center Image */}
-          {heroImg && (
-            <div className="lg:absolute lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 w-[85%] sm:w-[350px] md:w-[400px] lg:w-[480px] xl:w-[550px] flex justify-center items-end order-1 lg:order-2 z-20 pointer-events-none mt-10 lg:mt-0">
-              <img 
-                src={heroImg}
-                alt={globalSetting?.shop_name || "Store"} 
-                className="w-full h-auto object-contain drop-shadow-2xl max-h-[400px] lg:max-h-[600px] object-bottom"
-              />
-            </div>
-          )}
-
-          {/* Right Floating Card Slider */}
-          <div className="hidden lg:flex lg:w-[280px] xl:w-[280px] justify-end items-end pb-6 lg:pb-12 order-3 z-30">
-            {discountedProducts?.length > 0 ? (
-              <div className="w-full">
-                <Swiper
-                  spaceBetween={10}
-                  slidesPerView={1}
-                  autoplay={{
-                    delay: 3500,
-                    disableOnInteraction: false,
-                  }}
-                  modules={[Autoplay]}
-                >
-                  {discountedProducts.slice(0, 5).map((product) => (
-                    <SwiperSlide key={product._id} className="bg-transparent pb-3">
-                      <DiscountedCard product={product} attributes={attributes} />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            ) : null}
-          </div>
-
-        </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -165,12 +165,23 @@ const CheckoutForm = ({
                   <div className="col-span-6 sm:col-span-3">
                     <InputArea
                       register={register}
-                      label={showingTranslateValue(checkout?.last_name)}
-                      name="lastName"
-                      type="text"
-                      placeholder="Doe"
+                      label={showingTranslateValue(checkout?.checkout_phone)}
+                      name="contact"
+                      type="tel"
+                      placeholder="+062-6532956"
                     />
-                    <Error errorMessage={errors.lastName} />
+                    <Error errorMessage={errors.contact} />
+                  </div>
+
+                  <div className="col-span-6 sm:col-span-3">
+                    <InputArea
+                      register={register}
+                      label="Alternate Phone Number"
+                      name="alternateContact"
+                      type="tel"
+                      placeholder="+062-6532956"
+                    />
+                    <Error errorMessage={errors.alternateContact} />
                   </div>
 
                   <div className="col-span-6 sm:col-span-3">
@@ -227,13 +238,50 @@ const CheckoutForm = ({
                   </div>
 
                   <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                    <InputArea
-                      register={register}
-                      label={showingTranslateValue(checkout?.country)}
-                      name="country"
-                      type="text"
-                      placeholder="United States"
-                    />
+                    <label className="block text-sm font-medium text-foreground mb-1">State</label>
+                    <select
+                      {...register("country")}
+                      className="w-full h-10 px-3 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="">Select State</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu">Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Puducherry">Puducherry</option>
+                    </select>
                     <Error errorMessage={errors.country} />
                   </div>
 

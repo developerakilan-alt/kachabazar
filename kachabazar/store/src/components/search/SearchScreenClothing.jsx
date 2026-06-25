@@ -350,7 +350,7 @@ const SearchScreenClothing = ({
               ) : (
                 <>
                   <div
-                    className={`grid gap-3 lg:gap-5 ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-1 sm:grid-cols-2"}`}
+                    className={`grid gap-3 lg:gap-5 ${viewMode === "grid" ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-1 sm:grid-cols-2"}`}
                   >
                     {sortedProducts?.slice(0, visibleProduct).map((product) => (
                       <ProductCard
