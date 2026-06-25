@@ -12,7 +12,7 @@ import { useState, useMemo, useCallback } from "react";
 import { IoCloudDownloadOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import { FiZoomIn, FiTrash2 } from "react-icons/fi";
-import { Truck, History, UserX } from "lucide-react";
+import { Send } from "lucide-react";
 import { Link } from "react-router-dom";
 import exportFromJSON from "export-from-json";
 import {
@@ -24,7 +24,7 @@ import {
 //internal import
 import { notifyError, notifySuccess } from "@/utils/toast";
 import OrderServices from "@/services/OrderServices";
-import DeliveryBoyServices from "@/services/DeliveryBoyServices";
+import ShiprocketServices from "@/services/ShiprocketServices";
 import useUtilsFunction from "@/hooks/useUtilsFunction";
 import AnimatedContent from "@/components/common/AnimatedContent";
 import spinnerLoadingImage from "@/assets/img/spinner.gif";
@@ -37,8 +37,6 @@ import { DynamicTableColumnHeader } from "@/components/table/DynamicTableColumnH
 import { selectColumn } from "@/components/table/selectColumn";
 import { useAction } from "@/context/ActionContext";
 import DeleteModal from "@/components/modal/DeleteModal";
-import AssignDeliveryBoyModal from "@/components/modal/AssignDeliveryBoyModal";
-import OrderTrackingHistoryModal from "@/components/modal/OrderTrackingHistoryModal";
 import useToggleDrawer from "@/hooks/useToggleDrawer";
 import useDisableForDemo from "@/hooks/useDisableForDemo";
 
@@ -47,10 +45,9 @@ const Orders = () => {
   const queryClient = useQueryClient();
   const [loadingExport, setLoadingExport] = useState(false);
   const [loadingBulkUpdate, setLoadingBulkUpdate] = useState(false);
-  const [assignModalOpen, setAssignModalOpen] = useState(false);
-  const [assignOrderIds, setAssignOrderIds] = useState([]);
-  const [trackingHistoryOrderId, setTrackingHistoryOrderId] = useState(null);
-  const [loadingUnassign, setLoadingUnassign] = useState(false);
+  const [pushingShiprocket, setPushingShiprocket] = useState({});
+  const [refreshingShiprocket, setRefreshingShiprocket] = useState({});
+  const [bulkPushing, setBulkPushing] = useState(false);
   const { open, setOpen, selectedId, selectedIds, setSelectedIds } =
     useAction();
   const { title, handleModalOpen, handleDeleteMany } = useToggleDrawer();
@@ -176,30 +173,74 @@ const Orders = () => {
     }
   };
 
-  // Unassign delivery boy from single or multiple orders
-  const handleUnassign = useCallback(
-    async (orderIdOrIds) => {
+  // Refresh Shiprocket status
+  const handleRefreshShiprocket = useCallback(
+    async (orderId) => {
       if (handleDisableForDemo()) return;
-      const ids = Array.isArray(orderIdOrIds) ? orderIdOrIds : [orderIdOrIds];
-      if (!ids.length) return;
       try {
-        setLoadingUnassign(true);
-        const res = await DeliveryBoyServices.unassignDeliveryBoy({
-          orderIds: ids,
-        });
-        notifySuccess(res?.message || "Delivery Boy unassigned successfully!");
+        setRefreshingShiprocket((prev) => ({ ...prev, [orderId]: true }));
+        const res = await ShiprocketServices.refreshStatus(orderId);
+        const srLabel = (res?.tracking?.status || "updated")
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+        notifySuccess(
+          `ShipRocket: ${srLabel} | Order: ${res?.orderStatus || "—"}`,
+        );
         queryClient.invalidateQueries({ queryKey: ["allOrders"] });
-        queryClient.invalidateQueries({ queryKey: ["delivery-boys"] });
-        setSelectedIds([]);
-        setRowSelection({});
       } catch (err) {
         notifyError(err?.response?.data?.message || err?.message);
       } finally {
-        setLoadingUnassign(false);
+        setRefreshingShiprocket((prev) => ({ ...prev, [orderId]: false }));
       }
     },
-    [handleDisableForDemo, queryClient, setSelectedIds],
+    [handleDisableForDemo, queryClient],
   );
+
+  // Push order to Shiprocket
+  const handlePushToShiprocket = useCallback(
+    async (orderId) => {
+      if (handleDisableForDemo()) return;
+      try {
+        setPushingShiprocket((prev) => ({ ...prev, [orderId]: true }));
+        const res = await ShiprocketServices.createOrder(orderId);
+        notifySuccess(res?.message || "Order pushed to ShipRocket successfully!");
+        queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+      } catch (err) {
+        notifyError(err?.response?.data?.message || err?.message);
+      } finally {
+        setPushingShiprocket((prev) => ({ ...prev, [orderId]: false }));
+      }
+    },
+    [handleDisableForDemo, queryClient],
+  );
+
+  // Bulk push to Shiprocket
+  const handleBulkPushToShiprocket = useCallback(async () => {
+    if (handleDisableForDemo() || !selectedIds?.length) return;
+    try {
+      setBulkPushing(true);
+      let success = 0;
+      let failed = 0;
+      for (const id of selectedIds) {
+        try {
+          await ShiprocketServices.createOrder(id);
+          success++;
+        } catch {
+          failed++;
+        }
+      }
+      notifySuccess(
+        `Pushed ${success} order(s) to ShipRocket${failed ? `, ${failed} failed` : ""}`,
+      );
+      queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+      setSelectedIds([]);
+      setRowSelection({});
+    } catch (err) {
+      notifyError(err?.message || "Bulk push failed");
+    } finally {
+      setBulkPushing(false);
+    }
+  }, [handleDisableForDemo, selectedIds, queryClient, setSelectedIds]);
 
   // ─── Table Columns ──────────────────────────────────────────────────
   const columns = useMemo(
@@ -275,52 +316,84 @@ const Orders = () => {
         enableSorting: true,
       },
       {
-        accessorKey: "deliveryBoyName",
+        accessorKey: "shiprocket",
         header: ({ column }) => (
-          <DynamicTableColumnHeader column={column} title="Delivery" />
+          <DynamicTableColumnHeader column={column} title="Shiprocket" />
         ),
         cell: ({ row }) => {
-          const name = row.original?.deliveryBoyName;
-          const trackingId = row.original?.trackingId;
-          const hasActed = row.original?.deliveryBoyHasActed;
+          const sr = row.original?.shiprocket;
           const orderStatus = row.original?.status?.toLowerCase();
           const isTerminal =
             orderStatus === "delivered" || orderStatus === "cancel";
-          return name ? (
-            <div>
-              <span className="text-xs font-medium">{name}</span>
-              {trackingId && (
-                <span className="block text-[10px] font-mono text-muted-foreground">
-                  {trackingId}
-                </span>
-              )}
-              {/* Show unassign only if delivery boy hasn't acted and order is not delivered/cancelled */}
-              {!hasActed && !isTerminal && (
+          const isPushing = pushingShiprocket[row.original._id];
+
+          if (sr?.awb || sr?.orderId) {
+            const isRefreshing = refreshingShiprocket[row.original._id];
+            const srLabel = (sr.status || "created")
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (c) => c.toUpperCase());
+            return (
+              <div className="flex items-center gap-2">
+                <div>
+                  {sr?.awb ? (
+                    <span className="text-xs font-mono font-medium">
+                      AWB: {sr.awb}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">
+                      Pushed to SR
+                    </span>
+                  )}
+                  <span className="block text-[10px] text-muted-foreground">
+                    SR: {srLabel}
+                  </span>
+                  <span className="block text-[10px] text-muted-foreground">
+                    Order: <span className="font-medium capitalize">{row.original?.status}</span>
+                  </span>
+                </div>
                 <button
                   type="button"
-                  onClick={() => handleUnassign(row.original._id)}
-                  disabled={loadingUnassign}
-                  className="mt-1 inline-flex items-center gap-1 text-[10px] text-red-500 hover:text-red-600 font-medium cursor-pointer transition-colors"
-                  title="Unassign delivery boy"
+                  onClick={() => handleRefreshShiprocket(row.original._id)}
+                  disabled={isRefreshing}
+                  className="shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full border border-border hover:bg-muted transition-colors cursor-pointer disabled:opacity-50"
+                  title="Refresh ShipRocket Status"
                 >
-                  <UserX className="h-3 w-3" />
-                  Unassign
+                  {isRefreshing ? (
+                    <span className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
+                  ) : (
+                    <svg
+                      stroke="currentColor"
+                      fill="none"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                      className="h-3 w-3 text-muted-foreground"
+                    >
+                      <polyline points="23 4 23 10 17 10" />
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                    </svg>
+                  )}
                 </button>
-              )}
-            </div>
-          ) : isTerminal ? (
-            <span className="text-xs text-muted-foreground">—</span>
-          ) : (
+              </div>
+            );
+          }
+
+          if (isTerminal) {
+            return <span className="text-xs text-muted-foreground">—</span>;
+          }
+
+          return (
             <button
               type="button"
-              onClick={() => {
-                setAssignOrderIds([row.original._id]);
-                setAssignModalOpen(true);
-              }}
-              className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium cursor-pointer"
+              onClick={() => handlePushToShiprocket(row.original._id)}
+              disabled={isPushing}
+              className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium cursor-pointer disabled:opacity-50"
             >
-              <Truck className="h-3 w-3" />
-              Assign
+              {isPushing ? (
+                <span className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
+              ) : (
+                <Send className="h-3 w-3" />
+              )}
+              {isPushing ? "Pushing..." : "Push"}
             </button>
           );
         },
@@ -342,28 +415,19 @@ const Orders = () => {
         cell: ({ row }) => (
           <div className="flex justify-end items-center gap-1">
             <PrintReceipt orderId={row.original._id} order={row.original} />
-            <Link
+            {/* <Link
               to={`/order/${row.original._id}`}
               className="p-2 cursor-pointer text-muted-foreground hover:text-primary"
             >
               <FiZoomIn className="w-4 h-4" />
-            </Link>
-            {row.original.deliveryBoy && (
-              <button
-                onClick={() => setTrackingHistoryOrderId(row.original._id)}
-                className="p-2 cursor-pointer text-muted-foreground hover:text-primary"
-                title="Delivery History"
-              >
-                <History className="w-4 h-4" />
-              </button>
-            )}
+            </Link> */}
           </div>
         ),
         enableSorting: false,
         enableHiding: false,
       },
     ],
-    [t, currency, showDateTimeFormat, handleUnassign, loadingUnassign],
+    [t, currency, showDateTimeFormat, handlePushToShiprocket, pushingShiprocket],
   );
 
   return (
@@ -400,36 +464,24 @@ const Orders = () => {
             </SelectContent>
           </Select>
 
-          {/* Bulk Assign Delivery Boy */}
-          <Button
+          {/* Bulk Push to Shiprocket */}
+          {/* <Button
             variant="outline"
-            disabled={selectedIds?.length < 1}
-            onClick={() => {
-              setAssignOrderIds(selectedIds);
-              setAssignModalOpen(true);
-            }}
+            disabled={selectedIds?.length < 1 || bulkPushing}
+            onClick={handleBulkPushToShiprocket}
             className="space-x-1"
           >
-            <Truck size={16} />
+            {bulkPushing ? (
+              <span className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
+            ) : (
+              <Send size={16} />
+            )}
             <span>
-              {t("AssignDelivery")} ({selectedIds?.length || 0})
+              {bulkPushing
+                ? "Pushing..."
+                : `Push to ShipRocket (${selectedIds?.length || 0})`}
             </span>
-          </Button>
-
-          {/* Bulk Unassign Delivery Boy */}
-          <Button
-            variant="outline"
-            disabled={selectedIds?.length < 1 || loadingUnassign}
-            onClick={() => handleUnassign(selectedIds)}
-            className="space-x-1 text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600 dark:border-red-800 dark:hover:bg-red-950/30"
-          >
-            <UserX size={16} />
-            <span>
-              {loadingUnassign
-                ? "Unassigning..."
-                : `Unassign (${selectedIds?.length || 0})`}
-            </span>
-          </Button>
+          </Button> */}
 
           {/* Bulk Delete */}
           <Button
@@ -474,26 +526,6 @@ const Orders = () => {
         id={selectedId}
         onOpenChange={() => setOpen(false)}
         ids={selectedIds?.length > 0 ? selectedIds : null}
-      />
-
-      <AssignDeliveryBoyModal
-        open={assignModalOpen}
-        onClose={() => {
-          setAssignModalOpen(false);
-          setAssignOrderIds([]);
-        }}
-        orderIds={assignOrderIds}
-        onSuccess={() => {
-          setSelectedIds([]);
-          setRowSelection({});
-        }}
-      />
-
-      <OrderTrackingHistoryModal
-        open={!!trackingHistoryOrderId}
-        onClose={() => setTrackingHistoryOrderId(null)}
-        orderId={trackingHistoryOrderId}
-        selfService={false}
       />
 
       <AnimatedContent>

@@ -61,6 +61,7 @@ const CheckoutForm = ({
     handleCouponCode,
     discountAmount,
     shippingCost,
+    gstAmount,
     isCheckoutSubmit,
     useExistingAddress,
     isCouponAvailable,
@@ -451,13 +452,19 @@ const CheckoutForm = ({
                 {formatPrice(shippingCost)}
               </span>
             </div>
-            <div className="flex items-center py-2 text-sm w-full font-semibold text-muted-foreground last:border-b-0 last:text-base last:pb-0">
-              {showingTranslateValue(checkout?.discount)}
-              <span className="ml-auto flex-shrink-0 font-bold text-orange-400">
-                {formatPrice(discountAmount)}
-              </span>
-            </div>
-            <div className="border-t mt-4">
+              <div className="flex items-center py-2 text-sm w-full font-semibold text-muted-foreground last:border-b-0 last:text-base last:pb-0">
+                {showingTranslateValue(checkout?.discount)}
+                <span className="ml-auto flex-shrink-0 font-bold text-orange-400">
+                  {formatPrice(discountAmount)}
+                </span>
+              </div>
+              <div className="flex items-center py-2 text-sm w-full font-semibold text-muted-foreground last:border-b-0 last:text-base last:pb-0">
+                GST (3%)
+                <span className="ml-auto flex-shrink-0 text-foreground font-bold">
+                  {formatPrice(gstAmount)}
+                </span>
+              </div>
+              <div className="border-t mt-4">
               <div className="flex items-center font-bold  justify-between pt-5 text-sm uppercase">
                 {showingTranslateValue(checkout?.total_cost)}
                 <span className=" font-extrabold text-lg">

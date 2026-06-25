@@ -45,6 +45,8 @@ const StoreSetting = () => {
     setEnabledFacebookLogin,
     enabledGoogleAnalytics,
     setEnabledGoogleAnalytics,
+    enabledShiprocket,
+    setEnabledShiprocket,
   } = useStoreSettingSubmit();
 
   const handleEnableDisableMethod = (checked, event, id) => {
@@ -575,6 +577,88 @@ const StoreSetting = () => {
                     </div>
                   </div>
                   {/* EnableTawkChat  section end */}
+                </CardContent>
+              </Card>
+
+              {/* ShipRocket Section */}
+              <Card className="border border-border">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    ShipRocket Shipping
+                    <DocLink
+                      section="/backend-configuration"
+                      anchor="#shiprocket-configuration"
+                      label="ShipRocket setup guide"
+                    />
+                  </CardTitle>
+                  <CardDescription>
+                    Configure ShipRocket API for automated shipping, tracking,
+                    and label generation.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                  <div className="grid md:grid-cols-5 items-center sm:grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+                    <Label label="Enable ShipRocket" />
+                    <div className="sm:col-span-4">
+                      <SwitchToggle
+                        id="shiprocket"
+                        processOption={enabledShiprocket}
+                        handleProcess={setEnabledShiprocket}
+                      />
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      height: enabledShiprocket ? "auto" : 0,
+                      transition: "all .6s",
+                      visibility: !enabledShiprocket ? "hidden" : "visible",
+                      opacity: !enabledShiprocket ? "0" : "1",
+                    }}
+                    className={`${enabledShiprocket ? "mb-8" : "mb-2"}`}
+                  >
+                    <div className="grid md:grid-cols-5 items-center sm:grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+                      <Label label="API User Email" />
+                      <div className="sm:col-span-4">
+                        <InputAreaTwo
+                          required={enabledShiprocket}
+                          register={register}
+                          label="API User Email"
+                          name="shiprocket_email"
+                          type="text"
+                          placeholder="ShipRocket API user email"
+                        />
+                        <Error errorName={errors.shiprocket_email} />
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-5 items-center sm:grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+                      <Label label="API User Password" />
+                      <div className="sm:col-span-4">
+                        <InputAreaTwo
+                          required={enabledShiprocket}
+                          register={register}
+                          label="API User Password"
+                          name="shiprocket_password"
+                          type="password"
+                          placeholder="ShipRocket API user password"
+                        />
+                        <Error errorName={errors.shiprocket_password} />
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-5 items-center sm:grid-cols-12 gap-3 md:gap-5 xl:gap-6 lg:gap-6">
+                      <Label label="Pickup Pincode" />
+                      <div className="sm:col-span-4">
+                        <InputAreaTwo
+                          required={enabledShiprocket}
+                          register={register}
+                          label="Pickup Pincode"
+                          name="shiprocket_pickup_pincode"
+                          type="text"
+                          placeholder="e.g. 600001"
+                        />
+                        <Error errorName={errors.shiprocket_pickup_pincode} />
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>

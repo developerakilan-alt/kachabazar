@@ -89,6 +89,35 @@ export async function getOrderById(orderId) {
 }
 
 /**
+ * Refresh ShipRocket status for an order (customer-facing)
+ */
+export async function refreshShiprocketStatus(orderId) {
+  try {
+    const token = await getAuthToken();
+    if (!token) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const response = await resilientFetch(
+      `${baseURL}/shiprocket/order/${orderId}/customer-refresh`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        next: { revalidate: 0 },
+      },
+    );
+
+    const data = await handleResponse(response);
+    return { success: true, data, error: null };
+  } catch (error) {
+    return { success: false, data: null, error: error.message };
+  }
+}
+
+/**
  * Create new order
  */
 export async function createOrder(orderData) {

@@ -21,6 +21,7 @@ const useStoreSettingSubmit = (id) => {
   const [enabledGithubLogin, setEnabledGithubLogin] = useState(false);
   const [enabledFacebookLogin, setEnabledFacebookLogin] = useState(false);
   const [enabledGoogleAnalytics, setEnabledGoogleAnalytics] = useState(false);
+  const [enabledShiprocket, setEnabledShiprocket] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -67,6 +68,10 @@ const useStoreSettingSubmit = (id) => {
           tawk_chat_status: enabledTawkChat,
           tawk_chat_property_id: data.tawk_chat_property_id,
           tawk_chat_widget_id: data.tawk_chat_widget_id,
+          shiprocket_status: enabledShiprocket,
+          shiprocket_email: data.shiprocket_email,
+          shiprocket_password: data.shiprocket_password,
+          shiprocket_pickup_pincode: data.shiprocket_pickup_pincode,
         },
       };
 
@@ -132,6 +137,10 @@ const useStoreSettingSubmit = (id) => {
           setEnabledGithubLogin(res.github_login_status);
           setEnabledFacebookLogin(res.facebook_login_status);
           setEnabledGoogleAnalytics(res.google_analytic_status);
+          setEnabledShiprocket(res.shiprocket_status);
+          setValue("shiprocket_email", res.shiprocket_email);
+          setValue("shiprocket_password", res.shiprocket_password);
+          setValue("shiprocket_pickup_pincode", res.shiprocket_pickup_pincode);
           setValue("stripe_key", res.stripe_key);
           setValue("stripe_secret", res.stripe_secret);
           setValue("razorpay_id", res.razorpay_id);
@@ -184,6 +193,8 @@ const useStoreSettingSubmit = (id) => {
     setEnabledFacebookLogin,
     enabledGoogleAnalytics,
     setEnabledGoogleAnalytics,
+    enabledShiprocket,
+    setEnabledShiprocket,
   };
 };
 
