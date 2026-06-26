@@ -9,7 +9,7 @@ const setting = [
       post_code: "2030",
       contact: "+91 6379156116",
       email: "hautecouturejewellery@gmail.com",
-      website: "https://hautecouturejewellery-admin.vercel.app",
+      website: "https://store.hautecouturejewellery.in/",
       default_language: "en",
       default_currency: "₹",\n      default_currency_name: "INR",
       default_time_zone: "Europe/London",
