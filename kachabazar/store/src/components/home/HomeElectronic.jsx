@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { Truck, ShieldCheck, RotateCcw, Headphones } from "lucide-react";
+import { Truck, ShieldCheck, RotateCcw, Headphones, Star, Heart, Award } from "lucide-react";
 import StickyCart from "@components/cart/StickyCart";
 import ProductCard from "@components/product/ProductCard";
 import MainCarousel from "@components/carousel/MainCarousel";
@@ -197,29 +197,17 @@ const HomeElectronic = ({
         <section className="bg-foreground py-14 lg:py-16">
           <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-              {[
-                {
-                  Icon: Truck,
-                  title: t(home?.quick_delivery_title) || "Free Express Shipping",
-                  desc: t(home?.quick_delivery_description) || "Fast delivery on all orders",
-                },
-                {
-                  Icon: ShieldCheck,
-                  title: t(home?.popular_title) || "Secure Payment",
-                  desc: t(home?.popular_description) || "Protected transactions",
-                },
-                {
-                  Icon: RotateCcw,
-                  title: t(home?.promotion_button_name) || "Easy Returns",
-                  desc: t(home?.promotion_title) || "Hassle-free process",
-                },
-                {
-                  Icon: Headphones,
-                  title: t(home?.feature_title) || "24/7 Support",
-                  desc: t(home?.feature_description) || "Always here to help",
-                },
-              ].map((item, i) => {
-                const IconComp = item.Icon;
+              {(home?.trust_badges?.length > 0
+                ? home.trust_badges
+                : [
+                    { title: home?.quick_delivery_title, description: home?.quick_delivery_description },
+                    { title: home?.popular_title, description: home?.popular_description },
+                    { title: home?.promotion_title, description: home?.promotion_description },
+                    { title: home?.feature_title, description: home?.feature_description },
+                  ]
+              ).map((badge, i) => {
+                const badgeIcons = [Truck, ShieldCheck, RotateCcw, Headphones, Star, Heart, Award];
+                const IconComp = badgeIcons[i % badgeIcons.length];
                 return (
                   <div
                     key={i}
@@ -232,10 +220,10 @@ const HomeElectronic = ({
                       />
                     </div>
                     <h3 className="font-semibold text-primary-foreground mb-1 text-sm">
-                      {item.title}
+                      {t(badge?.title) || "Trust Badge"}
                     </h3>
                     <p className="text-xs text-primary-foreground/50">
-                      {item.desc}
+                      {t(badge?.description) || ""}
                     </p>
                   </div>
                 );

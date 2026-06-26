@@ -206,6 +206,29 @@ const setting = [
         quick_delivery_link: "#",
         quick_delivery_img:
           "https://res.cloudinary.com/ahossain/image/upload/v1697688032/settings/delivery-boy_rluuoq.webp",
+        trust_badges: [
+          {
+            title: { en: "Quick Delivery", de: "Schnelle Lieferung" },
+            description: {
+              en: "Within Tamil Nadu, 3- to 5-day delivery; other states: 6- to 8-day delivery.",
+              de: "Innerhalb von Tamil Nadu Lieferung in 3-5 Tagen; andere Bundesstaaten: 6-8 Tage.",
+            },
+          },
+          {
+            title: { en: "Important Order Policy", de: "Wichtige Bestellrichtlinie" },
+            description: {
+              en: "No Cash on Delivery (COD). If the courier is returned due to call not picked up or incorrect address, re-shipping charges will be applicable.",
+              de: "Keine Nachnahme (COD). Wenn der Kurier aufgrund nicht angenommener Anrufe oder falscher Adresse zurückgeschickt wird, fallen erneute Versandkosten an.",
+            },
+          },
+          {
+            title: { en: "Naturally Derived", de: "Natürlich gewonnen" },
+            description: {
+              en: "No Refunds Under Any Circumstances. 360° Unboxing Video is Mandatory for replacement requests (only for damaged products).",
+              de: "Keine Rückerstattung unter irgendwelchen Umständen. 360°-Unboxing-Video ist für Ersatzanfragen (nur bei beschädigten Produkten) zwingend erforderlich.",
+            },
+          },
+        ],
         latest_discount_title: {
           en: "Latest Discounted Products",
           de: "Neueste reduzierte Produkte",

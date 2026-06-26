@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { FiTruck, FiFileText, FiStar } from "react-icons/fi";
+import { FiTruck, FiFileText, FiStar, FiShield, FiCreditCard, FiHeart, FiAward } from "react-icons/fi";
 import StickyCart from "@components/cart/StickyCart";
 import ProductCard from "@components/product/ProductCard";
 import CMSkeletonTwo from "@components/preloader/CMSkeleton";
@@ -290,39 +290,30 @@ const HomeClothing = ({
         <section className="bg-white border-t border-neutral-100 dark:border-neutral-800 py-14">
           <div className={wideContainer}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-              <div className="text-center">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                  <FiTruck className="w-7 h-7 text-primary" strokeWidth={1.5} />
-                </div>
-                <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
-                  {t(home?.quick_delivery_title) || "Quick Delivery"}
-                </h4>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
-                  {t(home?.quick_delivery_description) || "Fast and reliable delivery to your doorstep."}
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                  <FiFileText className="w-7 h-7 text-primary" strokeWidth={1.5} />
-                </div>
-                <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
-                  {t(home?.promotion_title) || "Order Policy"}
-                </h4>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
-                  {t(home?.promotion_description) || "Clear and transparent ordering process."}
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                  <FiStar className="w-7 h-7 text-primary" strokeWidth={1.5} />
-                </div>
-                <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
-                  {t(home?.feature_title) || "Premium Quality"}
-                </h4>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
-                  {t(home?.feature_description) || "Curated selection of the finest products."}
-                </p>
-              </div>
+              {(home?.trust_badges?.length > 0
+                ? home.trust_badges
+                : [
+                    { title: home?.quick_delivery_title, description: home?.quick_delivery_description },
+                    { title: home?.promotion_title, description: home?.promotion_description },
+                    { title: home?.feature_title, description: home?.feature_description },
+                  ]
+              ).map((badge, i) => {
+                const badgeIcons = [FiTruck, FiFileText, FiStar, FiShield, FiCreditCard, FiHeart, FiAward];
+                const IconComp = badgeIcons[i % badgeIcons.length];
+                return (
+                  <div key={i} className="text-center">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                      <IconComp className="w-7 h-7 text-primary" strokeWidth={1.5} />
+                    </div>
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
+                      {t(badge?.title) || "Trust Badge"}
+                    </h4>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
+                      {t(badge?.description) || ""}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

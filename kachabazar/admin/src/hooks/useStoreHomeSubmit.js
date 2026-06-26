@@ -36,6 +36,7 @@ const useStoreHomeSubmit = () => {
   const [latestDiscounted, setLatestDiscounted] = useState(true);
   const [dailyNeeds, setDailyNeeds] = useState(true);
   const [featurePromo, setFeaturePromo] = useState(true);
+  const [trustBadges, setTrustBadges] = useState([]);
   const [footerBlock1, setFooterBlock1] = useState(true);
   const [footerBlock2, setFooterBlock2] = useState(true);
   const [footerBlock3, setFooterBlock3] = useState(true);
@@ -309,6 +310,16 @@ const useStoreHomeSubmit = () => {
             daily_need_img_right: getYourDailyNeedImageRight,
             button1_img: getButton1image,
             button2_img: getButton2image,
+            trust_badges: (trustBadges || []).map((badge, idx) => ({
+              title: handleRemoveEmptyKey({
+                ...(resData?.home?.trust_badges?.[idx]?.title || {}),
+                [language]: badge?.title || "",
+              }),
+              description: handleRemoveEmptyKey({
+                ...(resData?.home?.trust_badges?.[idx]?.description || {}),
+                [language]: badge?.description || "",
+              }),
+            })),
           },
           about_us: {
             header_status: aboutPageHeader,
@@ -1193,6 +1204,29 @@ const useStoreHomeSubmit = () => {
           setLatestDiscounted(res?.home?.discount_product_status);
           setDailyNeeds(res?.home?.daily_needs_status);
           setFeaturePromo(res?.home?.feature_promo_status);
+          setTrustBadges(
+            res?.home?.trust_badges?.length > 0
+              ? res.home.trust_badges.map((badge) => ({
+                  title: badge?.title?.[language || "en"] || "",
+                  description: badge?.description?.[language || "en"] || "",
+                }))
+              : (res?.home?.quick_delivery_title
+                  ? [
+                      {
+                        title: res?.home?.quick_delivery_title?.[language || "en"] || "",
+                        description: res?.home?.quick_delivery_description?.[language || "en"] || "",
+                      },
+                      {
+                        title: res?.home?.promotion_title?.[language || "en"] || "",
+                        description: res?.home?.promotion_description?.[language || "en"] || "",
+                      },
+                      {
+                        title: res?.home?.feature_title?.[language || "en"] || "",
+                        description: res?.home?.feature_description?.[language || "en"] || "",
+                      },
+                    ]
+                  : []),
+          );
           // setCouponList(res?.home?.discount_coupon_code);
           const discountCouponCode = res?.home?.discount_coupon_code?.map(
             (coupon) => {

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCart } from "react-use-cart";
-import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
 //internal import
@@ -27,6 +26,20 @@ import { getUserSession } from "@lib/auth-client";
 import { useSetting } from "@context/SettingContext";
 import useUtilsFunction from "./useUtilsFunction";
 import { addShippingAddress } from "@services/ServerActionServices";
+
+function loadRazorpayScript() {
+  return new Promise((resolve, reject) => {
+    if (typeof window !== "undefined" && window.Razorpay) {
+      resolve(window.Razorpay);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(window.Razorpay);
+    script.onerror = () => reject(new Error("Failed to load Razorpay SDK"));
+    document.body.appendChild(script);
+  });
+}
 
 const useCheckoutSubmit = ({
   shippingAddress,
@@ -56,8 +69,15 @@ const useCheckoutSubmit = ({
   const stripe = useStripe();
   const elements = useElements();
   const couponRef = useRef("");
-  const { error: razorPayError, isLoading, Razorpay } = useRazorpay();
   const { isEmpty, emptyCart, items, cartTotal } = useCart();
+  const [razorpayReady, setRazorpayReady] = useState(false);
+  const [razorpayLoadError, setRazorpayLoadError] = useState(null);
+
+  useEffect(() => {
+    loadRazorpayScript()
+      .then(() => setRazorpayReady(true))
+      .catch((err) => setRazorpayLoadError(err.message));
+  }, []);
 
   const userInfo = getUserSession();
   const {
@@ -373,6 +393,10 @@ const useCheckoutSubmit = ({
   //handle razorpay payment
   const handlePaymentWithRazorpay = async (orderInfo) => {
     try {
+      if (!razorpayReady) {
+        throw new Error("Razorpay SDK is not loaded yet. Please try again.");
+      }
+
       const {
         amount,
         id,
@@ -425,7 +449,7 @@ const useCheckoutSubmit = ({
         },
       };
 
-      const rzpay = new Razorpay(options);
+      const rzpay = new window.Razorpay(options);
       rzpay.open();
     } catch (err) {
       console.error("Razorpay payment error:", err.message);
