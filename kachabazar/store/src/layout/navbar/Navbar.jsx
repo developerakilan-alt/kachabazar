@@ -29,7 +29,7 @@ const Navbar = async ({
     getDefaultTheme(),
   ]);
 
-  const currency = globalSetting?.default_currency || "$";
+  const currency = globalSetting?.default_currency || "₹";
   const storeLayout = layoutProp || globalSetting?.store_layout || "default";
 
   return (

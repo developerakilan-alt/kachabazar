@@ -34,7 +34,7 @@ const ProductCardNew = ({ product, attributes }) => {
   const { handleIncreaseQuantity } = useAddToCart();
   const { showingTranslateValue } = useUtilsFunction();
 
-  const currency = globalSetting?.default_currency || "$";
+  const currency = globalSetting?.default_currency || "₹";
 
   // Calculate discount percentage
   const originalPrice = product?.isCombination

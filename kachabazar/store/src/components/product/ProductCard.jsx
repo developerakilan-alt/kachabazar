@@ -29,7 +29,7 @@ const ProductCard = ({ product, attributes }) => {
   const { handleIncreaseQuantity } = useAddToCart();
   const { showingTranslateValue } = useUtilsFunction();
 
-  const currency = globalSetting?.default_currency || "$";
+  const currency = globalSetting?.default_currency || "₹";
 
   // console.log('attributes in product cart',attributes)
 

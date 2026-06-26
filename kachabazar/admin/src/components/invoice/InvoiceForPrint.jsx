@@ -16,7 +16,7 @@ import { formatPrice as formatPriceFn } from "@/utils/currencyFormat";
 const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
   const { t } = useTranslation();
 
-  const currency = globalSetting?.default_currency || "$";
+  const currency = globalSetting?.default_currency || "₹";
   const fp = (val) => formatPriceFn(val, currency);
 
   return (
@@ -221,6 +221,12 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                     <h5 className="flex justify-between font-medium text-xs">
                       <span> {t("DiscountLower")} :</span>{" "}
                       <span className="font-semibold">{fp(or?.discount)}</span>
+                    </h5>
+                  )}
+                  {or?.gst > 0 && (
+                    <h5 className="flex justify-between font-medium text-xs">
+                      <span> GST (3%) :</span>{" "}
+                      <span className="font-semibold">{fp(or?.gst)}</span>
                     </h5>
                   )}
                   <h3 className="flex justify-between font-medium text-xs border-t border-black mt-2">
@@ -435,6 +441,12 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                   <h5 className="flex justify-between font-medium text-xs">
                     <span> {t("DiscountLower")} :</span>{" "}
                     <span className="font-semibold">{fp(data?.discount)}</span>
+                  </h5>
+                )}
+                {data?.gst > 0 && (
+                  <h5 className="flex justify-between font-medium text-xs">
+                    <span> GST (3%) :</span>{" "}
+                    <span className="font-semibold">{fp(data?.gst)}</span>
                   </h5>
                 )}
                 <h3 className="flex justify-between font-medium text-xs border-t border-black mt-2">

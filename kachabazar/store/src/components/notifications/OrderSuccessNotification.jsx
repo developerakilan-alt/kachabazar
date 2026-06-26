@@ -18,7 +18,7 @@ const OrderSuccessNotification = ({
   invoice,
   total,
   trackingId,
-  currency = "$",
+  currency = "₹",
 }) => {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);

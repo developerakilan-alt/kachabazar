@@ -202,6 +202,12 @@ const OrderDetailsDrawer = ({ data }) => {
                     {formatPrice(data.discount)}
                   </span>
                 </div>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>GST (3%)</span>
+                  <span className="text-foreground font-semibold">
+                    {formatPrice(data.gst)}
+                  </span>
+                </div>
               </div>
               <div className="flex justify-between text-sm text-muted-foreground bg-muted px-4 py-2">
                 <span>Total Amount</span>

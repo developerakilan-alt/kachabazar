@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 });
 
 const InvoicePDF = ({ data, globalSetting }) => {
-  const currency = globalSetting?.default_currency || "$";
+  const currency = globalSetting?.default_currency || "₹";
   const fp = (val) => formatPriceFn(val, currency);
   const currentDate = dayjs().format("MMMM D, YYYY");
 
@@ -262,9 +262,9 @@ const InvoicePDF = ({ data, globalSetting }) => {
             </Text>
           </View>
 
-          {data?.taxRate > 0 && (
+          {data?.gst > 0 && (
             <Text style={tw("text-xs text-muted-foreground text-right mt-1")}>
-              Includes {data.taxRate}% tax ({fp(data?.taxAmount)})
+              Includes GST 3% ({fp(data?.gst)})
             </Text>
           )}
         </View>

@@ -436,6 +436,7 @@ const customerInvoiceEmailBody = (option) => {
 
                         <th style='padding: 2px 4px;text-transform: uppercase; font-size:13px;'>SubTotal</th>
                         <th style='padding: 2px 4px;text-transform: uppercase; font-size:13px;'>Shipping Cost</th>
+                        <th style='padding: 2px 4px;text-transform: uppercase; font-size:13px;'>GST</th>
                         <th style='padding: 2px 4px;text-transform: uppercase; font-size:13px;'>Discount</th>
                         <th style='padding: 2px 4px;text-transform: uppercase; font-size:13px;'>Total</th>
 
@@ -452,6 +453,9 @@ const customerInvoiceEmailBody = (option) => {
                         <td style='padding: 2px 4px;text-align:justify; font-size:13px;'>
                         ${option.currency}${option.shipping.toFixed(2)}
                       </td>
+                        <td style='padding: 2px 4px;text-align:justify; font-size:13px;'>
+                          ${option.currency}${(option.gst || 0).toFixed(2)}
+                        </td>
                         <td style='padding: 2px 4px;text-align:justify; font-size:13px;'>
                           ${option.currency}${option.discount.toFixed(2)}
                         </td>

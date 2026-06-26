@@ -294,8 +294,7 @@ const MegaMenuCategory = ({
                               {showingTranslateValue(product.title)}
                             </p>
                             <p className="text-xs font-bold text-primary mt-1">
-                              $
-                              {product.prices?.price || "0.00"}
+                              ₹{product.prices?.price || "0.00"}
                             </p>
                           </div>
                         </Link>

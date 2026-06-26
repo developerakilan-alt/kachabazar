@@ -305,12 +305,43 @@ const HomeClothing = ({
                     <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
                       <IconComp className="w-7 h-7 text-primary" strokeWidth={1.5} />
                     </div>
-                    <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
-                      {t(badge?.title) || "Trust Badge"}
-                    </h4>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
-                      {t(badge?.description) || ""}
-                    </p>
+                    {i === 0 ? (
+                      <>
+                        <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
+                          Quick Delivery
+                        </h4>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
+                          Within Tamil Nadu, 3- to 5-day delivery; other states: 6- to 8-day delivery
+                        </p>
+                      </>
+                    ) : i === 1 ? (
+                      <>
+                        <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
+                          Important Order Policy
+                        </h4>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
+                          No Cash on Delivery (COD), If the courier is returned due to call not picked up or incorrect address, re-shipping charges will be applicable
+                        </p>
+                      </>
+                    ) : i === 2 ? (
+                      <>
+                        <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
+                          Naturally Derived
+                        </h4>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
+                          No Refunds Under Any Circumstances, 360° Unboxing Video is Mandatory for replacement requests (only for damaged products)
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
+                          {t(badge?.title) || "Trust Badge"}
+                        </h4>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
+                          {t(badge?.description) || ""}
+                        </p>
+                      </>
+                    )}
                   </div>
                 );
               })}

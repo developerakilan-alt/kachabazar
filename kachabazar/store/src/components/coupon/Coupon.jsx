@@ -12,7 +12,7 @@ import { formatPrice } from "@utils/currencyFormat";
 
 const Coupon = async ({ couponInHome }) => {
   const { globalSetting } = await getGlobalSetting();
-  const currency = globalSetting?.default_currency || "$";
+  const currency = globalSetting?.default_currency || "₹";
   const cookieStore = await cookies();
   const lang = cookieStore.get("_lang")?.value || "en";
 

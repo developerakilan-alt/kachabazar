@@ -103,7 +103,7 @@ const TrackingPageClient = ({ trackingId, data, error, success }) => {
               Total
             </span>
             <span className="font-bold text-lg text-primary">
-              ${order?.total?.toFixed(2)}
+              ₹{order?.total?.toFixed(2)}
             </span>
           </div>
         </div>

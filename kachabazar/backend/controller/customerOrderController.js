@@ -217,6 +217,52 @@ const addRazorpayOrder = async (req, res) => {
       }
     }
 
+    // Handle guest user: auto-create or find existing customer
+    const { user_info } = req.body;
+    let customerId = req.user?._id;
+    let customerEmail = req.user?.email;
+
+    if (!customerId && user_info) {
+      const Customer = require("../models/Customer");
+      const bcrypt = require("bcryptjs");
+      let customer = null;
+
+      if (user_info.email) {
+        customer = await Customer.findOne({ email: user_info.email.toLowerCase() });
+      }
+      if (!customer && user_info.contact) {
+        customer = await Customer.findOne({ phone: user_info.contact });
+      }
+
+      if (!customer) {
+        const randomPassword = Math.random().toString(36).slice(-10);
+        customer = new Customer({
+          name: user_info.name,
+          email: user_info.email
+            ? user_info.email.toLowerCase()
+            : `guest_${Date.now()}@guest.local`,
+          phone: user_info.contact || "",
+          address: user_info.address || "",
+          city: user_info.city || "",
+          country: user_info.country || "",
+          password: bcrypt.hashSync(randomPassword),
+          shippingAddress: {
+            name: user_info.name,
+            contact: user_info.contact,
+            email: user_info.email,
+            address: user_info.address,
+            city: user_info.city,
+            country: user_info.country,
+            zipCode: user_info.zipCode,
+          },
+        });
+        await customer.save();
+      }
+
+      customerId = customer._id;
+      customerEmail = customer.email;
+    }
+
     const counterDoc = await Setting.findOneAndUpdate(
       { name: "invoiceCounter" },
       { $inc: { "setting.counter": 1 } },
@@ -227,7 +273,7 @@ const addRazorpayOrder = async (req, res) => {
 
     const newOrder = new Order({
       ...req.body,
-      user: req.user?._id,
+      user: customerId,
       invoice: nextInvoice,
       trackingId,
       paymentStatus: "captured",
@@ -251,14 +297,16 @@ const addRazorpayOrder = async (req, res) => {
       ],
     });
 
-    await CustomerNotification.create({
-      customerId: req.user._id,
-      orderId: order._id,
-      trackingId,
-      type: "order-placed",
-      title: "Order Placed! 🎉",
-      message: `Your order #${nextInvoice} has been placed successfully. Track your order with ID: ${trackingId}`,
-    });
+    if (customerId) {
+      await CustomerNotification.create({
+        customerId,
+        orderId: order._id,
+        trackingId,
+        type: "order-placed",
+        title: "Order Placed! 🎉",
+        message: `Your order #${nextInvoice} has been placed successfully. Track your order with ID: ${trackingId}`,
+      });
+    }
 
     res.status(201).send(order);
     handleProductQuantity(order.cart);
@@ -271,8 +319,8 @@ const addRazorpayOrder = async (req, res) => {
       razorpaySignature: razorpay?.razorpaySignature,
       orderId: order._id,
       invoice: nextInvoice,
-      customerId: req.user?._id,
-      customerEmail: req.user?.email,
+      customerId,
+      customerEmail,
       amount: req.body.total,
       status: "captured",
       payload: req.body,
@@ -286,7 +334,7 @@ const addRazorpayOrder = async (req, res) => {
       event: "payment.failed",
       razorpayPaymentId: req.body?.razorpay?.razorpayPaymentId,
       razorpayOrderId: req.body?.razorpay?.razorpayOrderId,
-      customerId: req.user?._id,
+      customerId: req.user?._id || req.body?.user_info?.email,
       customerEmail: req.user?.email,
       amount: req.body?.total,
       status: "failed",
@@ -519,6 +567,7 @@ const sendEmailInvoiceToCustomer = async (req, res) => {
       total: req.body.total,
       discount: req.body.discount,
       shipping: req.body.shippingCost,
+      gst: req.body.gst,
       currency: req.body.company_info.currency,
       company_name: req.body.company_info.company,
       company_address: req.body.company_info.address,
