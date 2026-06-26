@@ -80,7 +80,7 @@ const HomeClothing = ({
 
       {/* ═══ Featured Categories — Magazine Grid ═══ */}
       {storeCustomizationSetting?.home?.featured_status && (
-        <section className="py-16 lg:py-24 bg-white">
+        <section className="pt-8 lg:pt-12 pb-16 lg:pb-24 bg-white">
           <div className={wideContainer}>
             <div className="text-center mb-14">
               <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 mb-3">
