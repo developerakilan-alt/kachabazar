@@ -324,12 +324,12 @@ const MegaMenuCategory = ({
                         {showingTranslateValue(activeCategory.name)}
                       </p>
                     </div>
-                    <Link
+                    {/* <Link
                       href={config.bannerLink}
                       className="text-xs font-semibold text-primary-foreground bg-primary px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
                     >
                       {config.bannerCta}
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               ) : (

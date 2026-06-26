@@ -48,7 +48,7 @@ const DownloadPrintButton = ({ data }) => {
 
       <div className="bg-background rounded-lg shadow-sm">
         <div className="bg-background p-8 rounded-b-xl">
-          <div className="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between invoice-btn">
+          <div className="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between gap-3 invoice-btn">
             {isClient && (
               <PDFDownloadLink
                 document={
