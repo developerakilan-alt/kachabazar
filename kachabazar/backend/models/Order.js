@@ -90,6 +90,13 @@ const orderSchema = new mongoose.Schema(
       manifestUrl: { type: String },
     },
 
+    // Other courier tracking (admin pastes tracking URL)
+    courierTracking: {
+      name: { type: String },
+      url: { type: String },
+      trackingNumber: { type: String },
+    },
+
     // Delivery & Tracking Fields
     trackingId: {
       type: String,

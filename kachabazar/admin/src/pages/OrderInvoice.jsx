@@ -415,34 +415,99 @@ const OrderInvoice = () => {
               </div>
             </div>
 
-            {/* Push to Shiprocket */}
-            {/* {!data.shiprocket?.orderId &&
-              data.status !== "delivered" &&
-              data.status !== "cancel" && (
-                <div className="bg-card rounded-lg p-4 border">
-                  <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                    <Send className="h-4 w-4" /> Push to ShipRocket
-                  </h4>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Button
-                      onClick={handlePushToShiprocket}
-                      disabled={pushingToShiprocket}
-                    >
-                      {pushingToShiprocket ? (
-                        <>
-                          <span className="animate-spin h-4 w-4 border-2 border-background border-t-transparent rounded-full mr-2" />
-                          Pushing...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2 h-4 w-4" />
-                          Push to ShipRocket
-                        </>
+            {/* Other Courier Tracking */}
+            {data.status !== "delivered" && data.status !== "cancel" && (
+              <div className="bg-card rounded-lg p-4 border mt-4">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <ExternalLink className="h-4 w-4" /> Other Courier Tracking
+                </h4>
+                {data.courierTracking?.url ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-primary">
+                        {data.courierTracking.name || "Courier"}
+                      </span>
+                      {data.courierTracking.trackingNumber && (
+                        <span className="text-xs font-mono text-muted-foreground">
+                          #{data.courierTracking.trackingNumber}
+                        </span>
                       )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={data.courierTracking.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm text-primary hover:underline font-medium"
+                      >
+                        Track Order
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          await OrderServices.updateCourierTracking(id, {});
+                          window.location.reload();
+                        }}
+                        className="text-xs text-red-500 hover:text-red-600 font-medium cursor-pointer"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    <p className="text-xs text-muted-foreground">
+                      Paste a tracking link from another courier platform.
+                    </p>
+                    <div className="grid gap-3 md:grid-cols-3">
+                      <input
+                        type="text"
+                        id="courier-name"
+                        placeholder="Courier name (e.g., FedEx)"
+                        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
+                        defaultValue={data.courierTracking?.name || ""}
+                      />
+                      <input
+                        type="text"
+                        id="courier-url"
+                        placeholder="Tracking URL"
+                        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm md:col-span-1"
+                        defaultValue={data.courierTracking?.url || ""}
+                      />
+                      <input
+                        type="text"
+                        id="courier-tracking-number"
+                        placeholder="Tracking number"
+                        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
+                        defaultValue={data.courierTracking?.trackingNumber || ""}
+                      />
+                    </div>
+                    <Button
+                      onClick={async () => {
+                        const name = document.getElementById("courier-name")?.value;
+                        const url = document.getElementById("courier-url")?.value;
+                        const trackingNumber = document.getElementById("courier-tracking-number")?.value;
+                        if (!name && !url && !trackingNumber) {
+                          return notifyError("Enter at least one tracking field");
+                        }
+                        try {
+                          await OrderServices.updateCourierTracking(id, { name, url, trackingNumber });
+                          notifySuccess("Courier tracking saved!");
+                          window.location.reload();
+                        } catch (err) {
+                          notifyError(err?.response?.data?.message || err?.message);
+                        }
+                      }}
+                      className="self-start"
+                    >
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      Save Tracking
                     </Button>
                   </div>
-                </div>
-              )} */}
+                )}
+              </div>
+            )}
 
             {/* Payment & Refund Section */}
             {data.paymentMethod === "RazorPay" && (

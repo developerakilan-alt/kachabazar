@@ -71,11 +71,12 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
     borderLeftColor: "#4361ee",
   },
-  col1: { width: "10%" },
-  col2: { width: "45%" },
+  col1: { width: "8%" },
+  col2: { width: "32%" },
   col3: { width: "15%" },
   col4: { width: "15%" },
   col5: { width: "15%" },
+  col6: { width: "15%" },
 });
 
 const InvoicePDF = ({ data, globalSetting }) => {
@@ -178,7 +179,7 @@ const InvoicePDF = ({ data, globalSetting }) => {
           </View>
         </View>
 
-        {/* Fixed Table with proper column widths */}
+        {/* Table */}
         <View style={tw("mb-6")}>
           {/* Table Header */}
           <View style={[tw("flex flex-row py-3 px-4"), styles.tableHeader]}>
@@ -189,12 +190,15 @@ const InvoicePDF = ({ data, globalSetting }) => {
               <Text style={tw("text-sm font-bold text-dark")}>DESCRIPTION</Text>
             </View>
             <View style={[styles.col3, tw("text-center")]}>
+              <Text style={tw("text-sm font-bold text-dark")}>TYPE</Text>
+            </View>
+            <View style={[styles.col4, tw("text-center")]}>
               <Text style={tw("text-sm font-bold text-dark")}>QTY</Text>
             </View>
-            <View style={[styles.col4, tw("text-right")]}>
+            <View style={[styles.col5, tw("text-right")]}>
               <Text style={tw("text-sm font-bold text-dark")}>PRICE</Text>
             </View>
-            <View style={[styles.col5, tw("text-right")]}>
+            <View style={[styles.col6, tw("text-right")]}>
               <Text style={tw("text-sm font-bold text-dark")}>AMOUNT</Text>
             </View>
           </View>
@@ -216,12 +220,17 @@ const InvoicePDF = ({ data, globalSetting }) => {
                 <Text style={tw("text-sm")}>{item.title}</Text>
               </View>
               <View style={[styles.col3, tw("text-center")]}>
+                <Text style={tw("text-sm")}>
+                  {item?.variant || item?.attributes?.Type || "-"}
+                </Text>
+              </View>
+              <View style={[styles.col4, tw("text-center")]}>
                 <Text style={tw("text-sm")}>{item.quantity}</Text>
               </View>
-              <View style={[styles.col4, tw("text-right")]}>
+              <View style={[styles.col5, tw("text-right")]}>
                 <Text style={tw("text-sm")}>{fp(item.price)}</Text>
               </View>
-              <View style={[styles.col5, tw("text-right")]}>
+              <View style={[styles.col6, tw("text-right")]}>
                 <Text style={tw("text-sm")}>
                   {fp(item.price * item.quantity)}
                 </Text>

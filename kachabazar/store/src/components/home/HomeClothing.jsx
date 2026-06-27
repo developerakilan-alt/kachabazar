@@ -7,6 +7,7 @@ import CMSkeletonTwo from "@components/preloader/CMSkeleton";
 import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
 import CategorySlideshow from "@components/home/CategorySlideshow";
+import CustomerReviews from "@components/home/CustomerReviews";
 import { getCategoryProductImage } from "@utils/categoryProductImages";
 import { normalizeStoreImageUrl } from "@utils/imageUtils";
 
@@ -284,6 +285,24 @@ const HomeClothing = ({
             </div>
           </section>
         )} */}
+
+      {/* ═══ Customer Reviews ═══ */}
+      {storeCustomizationSetting?.customer_reviews?.enabled !== false && (
+        <CustomerReviews
+          images={[
+            storeCustomizationSetting?.customer_reviews?.image1,
+            storeCustomizationSetting?.customer_reviews?.image2,
+            storeCustomizationSetting?.customer_reviews?.image3,
+            storeCustomizationSetting?.customer_reviews?.image4,
+            storeCustomizationSetting?.customer_reviews?.image5,
+            storeCustomizationSetting?.customer_reviews?.image6,
+            storeCustomizationSetting?.customer_reviews?.image7,
+            storeCustomizationSetting?.customer_reviews?.image8,
+            storeCustomizationSetting?.customer_reviews?.image9,
+            storeCustomizationSetting?.customer_reviews?.image10,
+          ].filter(Boolean)}
+        />
+      )}
 
       {/* ═══ Trust Badges ═══ */}
       {home?.delivery_status && (

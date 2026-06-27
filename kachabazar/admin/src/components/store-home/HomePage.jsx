@@ -67,6 +67,28 @@ const HomePage = ({
   dailyNeeds,
   setFeaturePromo,
   featurePromo,
+  customerReviewsEnabled,
+  setCustomerReviewsEnabled,
+  reviewImage1,
+  setReviewImage1,
+  reviewImage2,
+  setReviewImage2,
+  reviewImage3,
+  setReviewImage3,
+  reviewImage4,
+  setReviewImage4,
+  reviewImage5,
+  setReviewImage5,
+  reviewImage6,
+  setReviewImage6,
+  reviewImage7,
+  setReviewImage7,
+  reviewImage8,
+  setReviewImage8,
+  reviewImage9,
+  setReviewImage9,
+  reviewImage10,
+  setReviewImage10,
   setFooterBlock1,
   footerBlock1,
   setFooterBlock2,
@@ -133,6 +155,7 @@ const HomePage = ({
     },
     { id: "section-daily-needs", label: t("GetYourDailyNeedsTitle") },
     { id: "section-trust-badges", label: "Trust Badges" },
+    { id: "section-customer-reviews", label: "Customer Reviews" },
     { id: "section-feature-promo", label: t("FeaturePromoSectionTitle") },
     { id: "section-footer", label: t("FooterTitle") },
   ];
@@ -1847,6 +1870,88 @@ const HomePage = ({
                 >
                   + Add Trust Badge
                 </button>
+              </div>
+            </div>
+          </div>
+
+          {/*  ====================================================== Customer Reviews Section ====================================================== */}
+          <div
+            id="section-customer-reviews"
+            className={
+              activeSection === "section-customer-reviews"
+                ? "block w-full"
+                : "hidden"
+            }
+          >
+            <div className="flex-1 py-6 px-8 bg-card rounded-lg border border-border mb-8">
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold text-foreground">
+                  Customer Reviews
+                </h3>
+              </div>
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-3">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-muted-foreground mb-1">
+                  {t("EnableThisBlock")}
+                </label>
+                <div className="sm:col-span-4">
+                  <SwitchToggle
+                    title=""
+                    handleProcess={setCustomerReviewsEnabled}
+                    processOption={customerReviewsEnabled}
+                    name={customerReviewsEnabled}
+                  />
+                </div>
+              </div>
+
+              <div
+                style={{
+                  height: customerReviewsEnabled ? "auto" : 0,
+                  transition: "all 0.5s",
+                  visibility: !customerReviewsEnabled ? "hidden" : "visible",
+                  opacity: !customerReviewsEnabled ? "0" : "1",
+                }}
+              >
+                <p className="text-sm text-muted-foreground mb-6">
+                  Upload up to 10 customer review images (screenshots of reviews, testimonials, etc.)
+                </p>
+                <TabsComponent>
+                  <Tabs>
+                    <TabList>
+                      {[1,2,3,4,5,6,7,8,9,10].map(n => (
+                        <Tab key={n}>Review {n}</Tab>
+                      ))}
+                    </TabList>
+
+                    {[
+                      { image: reviewImage1, setter: setReviewImage1 },
+                      { image: reviewImage2, setter: setReviewImage2 },
+                      { image: reviewImage3, setter: setReviewImage3 },
+                      { image: reviewImage4, setter: setReviewImage4 },
+                      { image: reviewImage5, setter: setReviewImage5 },
+                      { image: reviewImage6, setter: setReviewImage6 },
+                      { image: reviewImage7, setter: setReviewImage7 },
+                      { image: reviewImage8, setter: setReviewImage8 },
+                      { image: reviewImage9, setter: setReviewImage9 },
+                      { image: reviewImage10, setter: setReviewImage10 },
+                    ].map((slide, i) => (
+                      <TabPanel key={i} className="md:mt-10 mt-3">
+                        <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-3 relative">
+                          <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-muted-foreground mb-1">
+                            Review Image {i + 1}
+                          </label>
+                          <div className="sm:col-span-4">
+                            <Uploader
+                              imageUrl={slide.image}
+                              setImageUrl={slide.setter}
+                              targetWidth={600}
+                              targetHeight={800}
+                            />
+                          </div>
+                        </div>
+                      </TabPanel>
+                    ))}
+                  </Tabs>
+                </TabsComponent>
               </div>
             </div>
           </div>
