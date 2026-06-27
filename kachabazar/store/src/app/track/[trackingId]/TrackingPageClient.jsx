@@ -1,22 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import dayjs from "dayjs";
 import Link from "next/link";
 import {
   Package,
   Truck,
   MapPin,
-  Phone,
-  User,
   Calendar,
   Hash,
   ArrowLeft,
+  ExternalLink,
 } from "lucide-react";
 
 import TrackingTimeline from "@components/tracking/TrackingTimeline";
-import RateDelivery from "@components/tracking/RateDelivery";
 
 const TrackingPageClient = ({ trackingId, data, error, success }) => {
+  const [iframeError, setIframeError] = useState(false);
+
   if (!success || error) {
     return (
       <div className="text-center py-20">
@@ -36,7 +37,8 @@ const TrackingPageClient = ({ trackingId, data, error, success }) => {
     );
   }
 
-  const { order, tracking, deliveryBoy } = data;
+  const { order, tracking, shiprocketTracking } = data;
+  const courierTracking = order?.courierTracking;
 
   const statusColors = {
     pending: "bg-yellow-100 text-yellow-800",
@@ -126,94 +128,139 @@ const TrackingPageClient = ({ trackingId, data, error, success }) => {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {/* Tracking Timeline - Left/Main */}
+        {/* Tracking - Left/Main */}
         <div className="md:col-span-2">
-          <div className="bg-background border border-border rounded-xl p-6">
-            <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
-              <Package className="h-5 w-5" />
-              Tracking History
-            </h2>
-            {tracking?.history && tracking.history.length > 0 ? (
-              <TrackingTimeline history={tracking.history} />
-            ) : (
-              <p className="text-muted-foreground text-sm py-8 text-center">
-                No tracking updates yet. We'll update this as your order
-                progresses.
+          {/* Courier Tracking Iframe */}
+          {courierTracking?.url && !iframeError ? (
+            <div className="bg-background border border-border rounded-xl p-6 mb-6">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Truck className="h-5 w-5" />
+                {courierTracking.name || "Courier"} Tracking
+              </h2>
+              <iframe
+                src={courierTracking.url}
+                title="Courier Tracking"
+                className="w-full h-[500px] rounded-lg border border-border"
+                onError={() => setIframeError(true)}
+                sandbox="allow-scripts allow-same-origin"
+              />
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                <a
+                  href={courierTracking.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-primary hover:underline"
+                >
+                  Open in new tab
+                  <ExternalLink className="h-3 w-3" />
+                </a>
               </p>
-            )}
-          </div>
-
-          {/* Rate Delivery - Show only for delivered orders */}
-          {order?.status?.toLowerCase() === "delivered" &&
-            order?.deliveryBoy && (
-              <div className="mt-6">
-                <RateDelivery
-                  orderId={order._id}
-                  existingRating={order.deliveryRating}
-                />
-              </div>
-            )}
-        </div>
-
-        {/* Right Sidebar */}
-        <div className="space-y-6">
-          {/* Delivery Partner Info */}
-          {deliveryBoy && (
-            <div className="bg-background border border-border rounded-xl p-5">
-              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Truck className="h-4 w-4" />
-                Delivery Partner
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                    {deliveryBoy.name?.en?.charAt(0) ||
-                      deliveryBoy.name?.charAt?.(0) ||
-                      "D"}
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm">
-                      {deliveryBoy.name?.en || deliveryBoy.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Phone className="h-3 w-3" />
-                      {deliveryBoy.phone}
-                    </p>
-                  </div>
+            </div>
+          ) : courierTracking?.url && iframeError ? (
+            <div className="bg-background border border-border rounded-xl p-6 mb-6 text-center">
+              <h2 className="text-lg font-semibold mb-2 flex items-center gap-2 justify-center">
+                <Truck className="h-5 w-5" />
+                {courierTracking.name || "Courier"} Tracking
+              </h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                Unable to load tracking preview. Click below to track directly
+                on {courierTracking.name || "the courier site"}.
+              </p>
+              <a
+                href={courierTracking.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+              >
+                Track on {courierTracking.name || "Courier"}
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+          ) : shiprocketTracking?.tracking_data ? (
+            <div className="bg-background border border-border rounded-xl p-6 mb-6">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Truck className="h-5 w-5" />
+                ShipRocket Tracking
+              </h2>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between border-b border-border pb-2">
+                  <span className="text-muted-foreground">AWB</span>
+                  <span className="font-mono font-medium text-right">
+                    {order?.shiprocket?.awb || "—"}
+                  </span>
                 </div>
-
-                {/* Vehicle Info */}
-                {deliveryBoy.vehicleType && (
-                  <div className="text-xs text-muted-foreground bg-muted rounded-md p-2">
-                    <span className="capitalize">
-                      {deliveryBoy.vehicleType}
-                    </span>
-                    {deliveryBoy.vehicleNumber && (
-                      <span className="ml-2 font-mono">
-                        {deliveryBoy.vehicleNumber}
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                {/* Rating */}
-                {deliveryBoy.averageRating > 0 && (
-                  <div className="flex items-center gap-1 text-sm">
-                    <span className="text-yellow-500">★</span>
-                    <span className="font-medium">
-                      {deliveryBoy.averageRating?.toFixed(1)}
-                    </span>
-                    <span className="text-muted-foreground">
-                      ({deliveryBoy.totalRatings} ratings)
-                    </span>
+                <div className="flex justify-between border-b border-border pb-2">
+                  <span className="text-muted-foreground">Courier</span>
+                  <span className="font-medium text-right">
+                    {shiprocketTracking.tracking_data?.courier_name || "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between border-b border-border pb-2">
+                  <span className="text-muted-foreground">Status</span>
+                  <span className="font-medium capitalize text-right">
+                    {shiprocketTracking.tracking_data?.shipment_status?.toLowerCase().replace(/_/g, " ") || "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between border-b border-border pb-2">
+                  <span className="text-muted-foreground">Current Location</span>
+                  <span className="font-medium text-right">
+                    {shiprocketTracking.tracking_data?.current_status?.location || "—"}
+                  </span>
+                </div>
+                {shiprocketTracking.tracking_data?.tracking_data?.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="text-sm font-semibold mb-2">Tracking History</h4>
+                    <div className="space-y-2">
+                      {shiprocketTracking.tracking_data.tracking_data.map((entry, idx) => (
+                        <div key={idx} className="text-xs text-muted-foreground border-l-2 border-primary pl-3 py-1">
+                          <p className="font-medium text-foreground">{entry.status}</p>
+                          <p>{entry.location || ""}</p>
+                          <p>{entry.date ? dayjs(entry.date).format("MMM D, YYYY h:mm A") : ""}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
             </div>
+          ) : (
+            <div className="bg-background border border-border rounded-xl p-6 mb-6">
+              <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
+                <Package className="h-5 w-5" />
+                Tracking History
+              </h2>
+              {tracking?.history && tracking.history.length > 0 ? (
+                <TrackingTimeline history={tracking.history} />
+              ) : (
+                <p className="text-muted-foreground text-sm py-8 text-center">
+                  No tracking updates yet. We'll update this as your order
+                  progresses.
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Right Sidebar */}
+        <div className="space-y-6">
+          {/* Tracking Info Summary */}
+          {courierTracking?.url && (
+            <div className="bg-background border border-border rounded-xl p-5">
+              <h3 className="text-sm font-semibold mb-2 flex items-center gap-2">
+                <Truck className="h-4 w-4" />
+                Courier Details
+              </h3>
+              <p className="text-sm font-medium">{courierTracking.name || "Courier"}</p>
+              {courierTracking.trackingNumber && (
+                <p className="text-xs font-mono text-muted-foreground mt-1">
+                  #{courierTracking.trackingNumber}
+                </p>
+              )}
+            </div>
           )}
 
           {/* ShipRocket Tracking Info */}
-          {data?.shiprocketTracking?.tracking_data && (
+          {!courierTracking?.url && shiprocketTracking?.tracking_data && (
             <div className="bg-background border border-border rounded-xl p-5">
               <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
                 <Truck className="h-4 w-4" />
@@ -229,19 +276,13 @@ const TrackingPageClient = ({ trackingId, data, error, success }) => {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Courier</span>
                   <span className="font-medium">
-                    {data.shiprocketTracking.tracking_data?.courier_name || "—"}
+                    {shiprocketTracking.tracking_data?.courier_name || "—"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Status</span>
                   <span className="font-medium capitalize">
-                    {data.shiprocketTracking.tracking_data?.shipment_status?.toLowerCase().replace(/_/g, " ") || "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Current Location</span>
-                  <span className="font-medium">
-                    {data.shiprocketTracking.tracking_data?.current_status?.location || "—"}
+                    {shiprocketTracking.tracking_data?.shipment_status?.toLowerCase().replace(/_/g, " ") || "—"}
                   </span>
                 </div>
               </div>

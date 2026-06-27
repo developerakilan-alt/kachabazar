@@ -12,7 +12,7 @@ import { useState, useMemo, useCallback } from "react";
 import { IoCloudDownloadOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import { FiZoomIn, FiTrash2 } from "react-icons/fi";
-import { Send } from "lucide-react";
+import { Send, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import exportFromJSON from "export-from-json";
 import {
@@ -318,15 +318,42 @@ const Orders = () => {
       {
         accessorKey: "shiprocket",
         header: ({ column }) => (
-          <DynamicTableColumnHeader column={column} title="Shiprocket" />
+          <DynamicTableColumnHeader column={column} title="Shipping" />
         ),
         cell: ({ row }) => {
           const sr = row.original?.shiprocket;
+          const ct = row.original?.courierTracking;
           const orderStatus = row.original?.status?.toLowerCase();
           const isTerminal =
             orderStatus === "delivered" || orderStatus === "cancel";
           const isPushing = pushingShiprocket[row.original._id];
 
+          // Show courier tracking info if set
+          if (ct?.url) {
+            return (
+              <div>
+                <span className="block text-xs font-medium">
+                  {ct.name || "Courier"}
+                </span>
+                {ct.trackingNumber && (
+                  <span className="block text-[10px] font-mono text-muted-foreground">
+                    #{ct.trackingNumber}
+                  </span>
+                )}
+                <a
+                  href={ct.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-0.5 text-[10px] text-primary hover:underline font-medium"
+                >
+                  Track
+                  <ExternalLink className="h-2.5 w-2.5" />
+                </a>
+              </div>
+            );
+          }
+
+          // Show Shiprocket tracking info
           if (sr?.awb || sr?.orderId) {
             const isRefreshing = refreshingShiprocket[row.original._id];
             const srLabel = (sr.status || "created")
