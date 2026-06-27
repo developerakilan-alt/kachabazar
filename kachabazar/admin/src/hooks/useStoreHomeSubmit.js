@@ -36,6 +36,17 @@ const useStoreHomeSubmit = () => {
   const [latestDiscounted, setLatestDiscounted] = useState(true);
   const [dailyNeeds, setDailyNeeds] = useState(true);
   const [featurePromo, setFeaturePromo] = useState(true);
+  const [customerReviewsEnabled, setCustomerReviewsEnabled] = useState(true);
+  const [reviewImage1, setReviewImage1] = useState("");
+  const [reviewImage2, setReviewImage2] = useState("");
+  const [reviewImage3, setReviewImage3] = useState("");
+  const [reviewImage4, setReviewImage4] = useState("");
+  const [reviewImage5, setReviewImage5] = useState("");
+  const [reviewImage6, setReviewImage6] = useState("");
+  const [reviewImage7, setReviewImage7] = useState("");
+  const [reviewImage8, setReviewImage8] = useState("");
+  const [reviewImage9, setReviewImage9] = useState("");
+  const [reviewImage10, setReviewImage10] = useState("");
   const [trustBadges, setTrustBadges] = useState([]);
   const [footerBlock1, setFooterBlock1] = useState(true);
   const [footerBlock2, setFooterBlock2] = useState(true);
@@ -1074,6 +1085,19 @@ const useStoreHomeSubmit = () => {
             google_verification: data.google_verification,
             robots: data.robots,
           },
+          customer_reviews: {
+            enabled: customerReviewsEnabled,
+            image1: reviewImage1,
+            image2: reviewImage2,
+            image3: reviewImage3,
+            image4: reviewImage4,
+            image5: reviewImage5,
+            image6: reviewImage6,
+            image7: reviewImage7,
+            image8: reviewImage8,
+            image9: reviewImage9,
+            image10: reviewImage10,
+          },
         },
       };
 
@@ -1204,6 +1228,17 @@ const useStoreHomeSubmit = () => {
           setLatestDiscounted(res?.home?.discount_product_status);
           setDailyNeeds(res?.home?.daily_needs_status);
           setFeaturePromo(res?.home?.feature_promo_status);
+          setCustomerReviewsEnabled(res?.customer_reviews?.enabled ?? true);
+          setReviewImage1(res?.customer_reviews?.image1 || "");
+          setReviewImage2(res?.customer_reviews?.image2 || "");
+          setReviewImage3(res?.customer_reviews?.image3 || "");
+          setReviewImage4(res?.customer_reviews?.image4 || "");
+          setReviewImage5(res?.customer_reviews?.image5 || "");
+          setReviewImage6(res?.customer_reviews?.image6 || "");
+          setReviewImage7(res?.customer_reviews?.image7 || "");
+          setReviewImage8(res?.customer_reviews?.image8 || "");
+          setReviewImage9(res?.customer_reviews?.image9 || "");
+          setReviewImage10(res?.customer_reviews?.image10 || "");
           setTrustBadges(
             res?.home?.trust_badges?.length > 0
               ? res.home.trust_badges.map((badge) => ({
@@ -2099,6 +2134,28 @@ const useStoreHomeSubmit = () => {
     dailyNeeds,
     setFeaturePromo,
     featurePromo,
+    customerReviewsEnabled,
+    setCustomerReviewsEnabled,
+    reviewImage1,
+    setReviewImage1,
+    reviewImage2,
+    setReviewImage2,
+    reviewImage3,
+    setReviewImage3,
+    reviewImage4,
+    setReviewImage4,
+    reviewImage5,
+    setReviewImage5,
+    reviewImage6,
+    setReviewImage6,
+    reviewImage7,
+    setReviewImage7,
+    reviewImage8,
+    setReviewImage8,
+    reviewImage9,
+    setReviewImage9,
+    reviewImage10,
+    setReviewImage10,
     setFooterBlock1,
     footerBlock1,
     setFooterBlock2,
