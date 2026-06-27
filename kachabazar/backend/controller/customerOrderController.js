@@ -31,6 +31,92 @@ const getRazorpayCredentials = async () => {
   return { keyId, keySecret };
 };
 
+/**
+ * Send order confirmation email to customer (fire-and-forget)
+ */
+const sendOrderConfirmationEmail = async (order) => {
+  try {
+    const globalSetting = await Setting.findOne({ name: "globalSetting" });
+    const cfg = globalSetting?.setting || {};
+
+    const user = order.user_info;
+    if (!user?.email) return;
+
+    const pdf = await handleCreateInvoice(
+      {
+        ...order.toObject(),
+        company_info: {
+          currency: cfg.currency || "$",
+          logo: cfg.invoice_logo || cfg.logo || "",
+          vat_number: cfg.vat_number || "",
+          company: cfg.company_name || "",
+          address: cfg.address || "",
+          phone: cfg.contact || "",
+          email: cfg.email || "",
+          website: cfg.website || "",
+          from_email: cfg.from_email || cfg.email || "",
+        },
+      },
+      `${order.invoice}.pdf`,
+    );
+
+    const option = {
+      date: new Date(order.createdAt).toLocaleDateString("en-US", {
+        year: "numeric", month: "long", day: "numeric",
+      }),
+      invoice: order.invoice,
+      status: order.status,
+      method: order.paymentMethod,
+      subTotal: order.subTotal,
+      total: order.total,
+      discount: order.discount || 0,
+      shipping: order.shippingCost || 0,
+      currency: cfg.currency || "$",
+      company_name: cfg.company_name || "",
+      company_address: cfg.address || "",
+      company_phone: cfg.contact || "",
+      company_email: cfg.email || "",
+      company_website: cfg.website || "",
+      vat_number: cfg.vat_number || "",
+      name: user.name || "",
+      email: user.email || "",
+      phone: user.contact || "",
+      address: user.address || "",
+      cart: order.cart || [],
+    };
+
+    const body = {
+      from: cfg.from_email || cfg.email || "noreply@hautecouturejewellery.com",
+      to: user.email,
+      subject: `Order Confirmation - #${order.invoice} - ${cfg.company_name || "hautecouturejewellery"}`,
+      html: customerInvoiceEmailBody(option),
+      attachments: [
+        {
+          filename: `${order.invoice}.pdf`,
+          content: pdf,
+        },
+      ],
+    };
+
+    const nodemailer = require("nodemailer");
+    const { getSettings } = require("../lib/settings-cache");
+    const emailCfg = await getSettings();
+    const transporter = nodemailer.createTransport({
+      host: emailCfg.email_host,
+      port: Number(emailCfg.email_port) || 465,
+      secure: Number(emailCfg.email_port) === 465,
+      auth: {
+        user: emailCfg.email_user,
+        pass: emailCfg.email_pass,
+      },
+    });
+    if (!body.from) body.from = emailCfg.email_user;
+    await transporter.sendMail(body);
+  } catch (err) {
+    console.error("Failed to send order confirmation email:", err.message);
+  }
+};
+
 const addOrder = async (req, res) => {
   try {
     // 1️⃣ Atomically increment invoice counter to prevent race conditions
@@ -84,6 +170,7 @@ const addOrder = async (req, res) => {
 
     res.status(201).send(order);
     handleProductQuantity(order.cart);
+    sendOrderConfirmationEmail(order);
   } catch (err) {
     // console.log("error", err);
 
@@ -262,6 +349,7 @@ const addRazorpayOrder = async (req, res) => {
 
     res.status(201).send(order);
     handleProductQuantity(order.cart);
+    sendOrderConfirmationEmail(order);
 
     PaymentLog.create({
       gateway: "razorpay",
@@ -674,6 +762,7 @@ const addGuestOrder = async (req, res) => {
 
     res.status(201).send(order);
     handleProductQuantity(order.cart);
+    sendOrderConfirmationEmail(order);
   } catch (err) {
     res.status(500).send({
       message: err.message,

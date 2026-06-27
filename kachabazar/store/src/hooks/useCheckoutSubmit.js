@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCart } from "react-use-cart";
-import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
 //internal import
@@ -28,6 +27,20 @@ import { useSetting } from "@context/SettingContext";
 import useUtilsFunction from "./useUtilsFunction";
 import { addShippingAddress } from "@services/ServerActionServices";
 
+function loadRazorpayScript() {
+  return new Promise((resolve, reject) => {
+    if (typeof window !== "undefined" && window.Razorpay) {
+      resolve(window.Razorpay);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(window.Razorpay);
+    script.onerror = () => reject(new Error("Failed to load Razorpay SDK"));
+    document.body.appendChild(script);
+  });
+}
+
 const useCheckoutSubmit = ({
   shippingAddress,
   isGuest = false,
@@ -48,6 +61,7 @@ const useCheckoutSubmit = ({
   const [isCouponApplied, setIsCouponApplied] = useState(false);
   const [useExistingAddress, setUseExistingAddress] = useState(false);
   const [isCouponAvailable, setIsCouponAvailable] = useState(false);
+  const [gstAmount, setGstAmount] = useState(0);
   const [orderSuccessData, setOrderSuccessData] = useState(null);
   const [showOrderSuccess, setShowOrderSuccess] = useState(false);
 
@@ -55,8 +69,15 @@ const useCheckoutSubmit = ({
   const stripe = useStripe();
   const elements = useElements();
   const couponRef = useRef("");
-  const { error: razorPayError, isLoading, Razorpay } = useRazorpay();
   const { isEmpty, emptyCart, items, cartTotal } = useCart();
+  const [razorpayReady, setRazorpayReady] = useState(false);
+  const [razorpayLoadError, setRazorpayLoadError] = useState(null);
+
+  useEffect(() => {
+    loadRazorpayScript()
+      .then(() => setRazorpayReady(true))
+      .catch((err) => setRazorpayLoadError(err.message));
+  }, []);
 
   const userInfo = getUserSession();
   const {
@@ -113,10 +134,15 @@ const useCheckoutSubmit = ({
         : discountProductTotal * (discountPercentage?.value / 100);
 
     const discountAmountTotal = discountAmount ? discountAmount : 0;
+    const gstValue = parseFloat(cartTotal * 0.03).toFixed(2);
 
-    totalValue = Number(subTotal) - discountAmountTotal;
+    totalValue = Number(subTotal) - discountAmountTotal + Number(gstValue);
 
     setDiscountAmount(discountAmountTotal);
+    setGstAmount(Number(gstValue));
+
+    // console.log("total", totalValue);
+
     setTotal(totalValue);
   }, [cartTotal, shippingCost, discountPercentage]);
 
@@ -161,6 +187,7 @@ const useCheckoutSubmit = ({
         subTotal: cartTotal,
         shippingCost: shippingCost,
         discount: discountAmount,
+        gst: gstAmount,
         total: total,
       };
 
@@ -276,6 +303,93 @@ const useCheckoutSubmit = ({
         throw new Error("Razorpay test key is not configured");
       }
 
+  //     if (error) {
+  //       setIsCheckoutSubmit(false);
+  //       return notifyError(error);
+  //     }
+
+  //     if (!orderResponse) {
+  //       setIsCheckoutSubmit(false);
+  //       return notifyError("Order response is empty!");
+  //     }
+
+  //     await handleOrderSuccess(orderResponse, orderInfo);
+  //   } catch (err) {
+  //     // console.error("Cash payment error:", err.message);
+  //     setIsCheckoutSubmit(false);
+  //     notifyError(err.message);
+  //   }
+  // };
+
+  //handle stripe payment
+  // const handlePaymentWithStripe = async (orderInfo) => {
+  //   try {
+  //     if (!stripe || !elements) {
+  //       throw new Error("Stripe is not initialized");
+  //     }
+
+  //     const { error, paymentMethod } = await stripe.createPaymentMethod({
+  //       type: "card",
+  //       card: elements.getElement(CardElement),
+  //     });
+
+  //     if (error || !paymentMethod) {
+  //       throw new Error(error?.message || "Stripe payment failed");
+  //     }
+
+  //     const order = {
+  //       ...orderInfo,
+  //       cardInfo: paymentMethod,
+  //     };
+
+  //     const { stripeInfo } = await createPaymentIntent(order);
+  //     // console.log("res", stripeInfo, "order", order);
+  //     stripe.confirmCardPayment(stripeInfo?.client_secret, {
+  //       payment_method: {
+  //         card: elements.getElement(CardElement),
+  //       },
+  //     });
+
+  //     // console.log("stripeInfo", stripeInfo);
+
+  //     const orderData = { ...orderInfo, cardInfo: stripeInfo };
+  //     const { orderResponse, error: orderError } = await addOrder(orderData);
+  //     if (orderError) {
+  //       setIsCheckoutSubmit(false);
+  //       return notifyError(orderError);
+  //     }
+  //     await handleOrderSuccess(orderResponse, orderInfo);
+  //   } catch (err) {
+  //     // Instead of just throwing the error, rethrow it so that it can be caught by the main submit handler
+  //     throw new Error(err.message); // Ensure the error is propagated properly
+  //   }
+  // };
+
+  //handle razorpay payment
+  const handlePaymentWithRazorpay = async (orderInfo) => {
+    try {
+      if (!razorpayReady) {
+        throw new Error("Razorpay SDK is not loaded yet. Please try again.");
+      }
+
+      const {
+        amount,
+        id,
+        currency,
+        keyId,
+        error: razorpayOrderError,
+      } = await createOrderByRazorPay({
+        amount: Math.round(total).toString(),
+      });
+      if (razorpayOrderError) {
+        throw new Error(razorpayOrderError);
+      }
+
+      const razorpayKey = keyId || storeSetting?.razorpay_id;
+      if (!razorpayKey) {
+        throw new Error("Razorpay test key is not configured");
+      }
+
       const options = {
         key: razorpayKey,
         amount,
@@ -310,7 +424,7 @@ const useCheckoutSubmit = ({
         },
       };
 
-      const rzpay = new Razorpay(options);
+      const rzpay = new window.Razorpay(options);
       rzpay.open();
     } catch (err) {
       console.error("Razorpay payment error:", err.message);
@@ -428,6 +542,7 @@ const useCheckoutSubmit = ({
     orderSuccessData,
     setShowOrderSuccess,
     zipCode,
+    gstAmount,
   };
 };
 

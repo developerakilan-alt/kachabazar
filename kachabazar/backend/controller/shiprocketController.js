@@ -25,6 +25,7 @@ const createShiprocketOrder = async (req, res) => {
 
     res.status(201).send({ success: true, shiprocket: order.shiprocket, raw: result });
   } catch (err) {
+    console.error("ShipRocket create order error:", err.message);
     res.status(500).send({ message: err.message });
   }
 };
@@ -89,9 +90,94 @@ const getOrderShippingStatus = async (req, res) => {
   }
 };
 
+const refreshShiprocketStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    if (!orderId) return res.status(400).send({ message: "orderId is required" });
+
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).send({ message: "Order not found" });
+    if (!order.shiprocket?.awb && !order.shiprocket?.orderId) {
+      return res.status(400).send({ message: "Order has not been pushed to ShipRocket yet" });
+    }
+
+    const srStatus = await shiprocket.refreshOrderStatus(order);
+
+    if (srStatus.updated) {
+      order.shiprocket.status = srStatus.status || order.shiprocket.status;
+      const mappedOrderStatus = shiprocket.mapShiprocketToOrderStatus(srStatus.status || order.shiprocket.status);
+      if (mappedOrderStatus && order.status !== mappedOrderStatus) {
+        order.status = mappedOrderStatus;
+      }
+      await order.save();
+    }
+
+    const mappedOrderStatus = shiprocket.mapShiprocketToOrderStatus(
+      order.shiprocket.status
+    );
+
+    res.send({
+      shiprocket: order.shiprocket,
+      orderStatus: order.status,
+      tracking: {
+        status: order.shiprocket.status,
+        currentStatus: srStatus.currentStatus,
+        courierName: srStatus.courierName,
+      },
+      mappedOrderStatus,
+    });
+  } catch (err) {
+    console.error("ShipRocket refresh status error:", err.message);
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const customerRefreshStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    if (!orderId) return res.status(400).send({ message: "orderId is required" });
+
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).send({ message: "Order not found" });
+
+    if (order.user?.toString() !== req.user._id?.toString()) {
+      return res.status(403).send({ message: "Unauthorized" });
+    }
+    if (!order.shiprocket?.awb && !order.shiprocket?.orderId) {
+      return res.status(400).send({ message: "Order not pushed to ShipRocket yet" });
+    }
+
+    const srStatus = await shiprocket.refreshOrderStatus(order);
+
+    if (srStatus.updated) {
+      order.shiprocket.status = srStatus.status || order.shiprocket.status;
+      const mapped = shiprocket.mapShiprocketToOrderStatus(srStatus.status || order.shiprocket.status);
+      if (mapped && order.status !== mapped) {
+        order.status = mapped;
+      }
+      await order.save();
+    }
+
+    res.send({
+      shiprocket: order.shiprocket,
+      orderStatus: order.status,
+      tracking: {
+        status: order.shiprocket.status,
+        currentStatus: srStatus.currentStatus,
+        courierName: srStatus.courierName,
+      },
+    });
+  } catch (err) {
+    console.error("Customer refresh error:", err.message);
+    res.status(500).send({ message: err.message });
+  }
+};
+
 module.exports = {
   createShiprocketOrder,
   getShippingRates,
   trackShipmentByAWB,
   getOrderShippingStatus,
+  refreshShiprocketStatus,
+  customerRefreshStatus,
 };

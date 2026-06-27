@@ -1128,7 +1128,7 @@ const trackOrder = async (req, res) => {
     const { trackingId } = req.params;
 
     const order = await Order.findOne({ trackingId }).select(
-      "_id invoice trackingId status user_info cart total deliveryBoy deliveryRating createdAt updatedAt shiprocket",
+      "_id invoice trackingId status user_info cart total deliveryBoy deliveryRating createdAt updatedAt shiprocket courierTracking",
     );
 
     if (!order) {
@@ -1147,12 +1147,21 @@ const trackOrder = async (req, res) => {
       );
     }
 
-    // Fetch ShipRocket tracking if AWB is available
+    // Fetch ShipRocket tracking if AWB is available and write back status
     let shiprocketTracking = null;
     if (order.shiprocket?.awb) {
       try {
         const shiprocket = require("../lib/shiprocket");
         shiprocketTracking = await shiprocket.trackShipment(order.shiprocket.awb);
+
+        // Write back latest status to order for admin visibility
+        if (shiprocketTracking?.tracking_data?.shipment_status) {
+          const latestStatus = shiprocketTracking.tracking_data.shipment_status;
+          if (order.shiprocket.status !== latestStatus) {
+            order.shiprocket.status = latestStatus;
+            await order.save();
+          }
+        }
       } catch {
         // ShipRocket tracking may fail silently
       }

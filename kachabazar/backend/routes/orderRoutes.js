@@ -15,6 +15,7 @@ const {
   getDashboardCount,
   getDashboardAmount,
   processRefund,
+  updateCourierTracking,
 } = require("../controller/orderController");
 const {
   validateMongoId,
@@ -54,6 +55,9 @@ router.post("/refund/:id", validateMongoId, processRefund);
 
 //get a order by id
 router.get("/:id", validateMongoId, getOrderById);
+
+// Update courier tracking (admin only)
+router.put("/:id/courier-tracking", isAuth, isAdmin, validateMongoId, updateCourierTracking);
 
 //update a order
 router.put("/:id", validateUpdateOrder, updateOrder);

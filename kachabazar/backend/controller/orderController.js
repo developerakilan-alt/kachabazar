@@ -84,7 +84,7 @@ const getAllOrders = async (req, res) => {
     const totalDoc = await Order.countDocuments(queryObject);
     const orders = await Order.find(queryObject)
       .select(
-        "_id invoice trackingId paymentMethod subTotal total user_info discount shippingCost status deliveryBoy createdAt updatedAt",
+        "_id invoice trackingId paymentMethod subTotal total user_info discount shippingCost status deliveryBoy shiprocket courierTracking createdAt updatedAt",
       )
       .sort({ updatedAt: -1 })
       .skip(skip)
@@ -1038,6 +1038,29 @@ const processRefund = async (req, res) => {
   }
 };
 
+const updateCourierTracking = async (req, res) => {
+  try {
+    const { name, url, trackingNumber } = req.body;
+    if (!name && !url && !trackingNumber) {
+      return res.status(400).send({ message: "At least one tracking field is required" });
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { courierTracking: { name, url, trackingNumber } },
+      { new: true },
+    ).select("courierTracking");
+
+    if (!order) {
+      return res.status(404).send({ message: "Order not found" });
+    }
+
+    res.send({ success: true, courierTracking: order.courierTracking });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
 module.exports = {
   getAllOrders,
   getOrderById,
@@ -1052,4 +1075,5 @@ module.exports = {
   getDashboardCount,
   getDashboardAmount,
   processRefund,
+  updateCourierTracking,
 };

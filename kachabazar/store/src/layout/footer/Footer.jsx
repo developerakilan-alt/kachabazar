@@ -255,6 +255,10 @@ const Footer = async ({ error, storeCustomizationSetting, globalSetting }) => {
                 <span> Tel : {footer?.block4_phone}</span>
                 <br />
                 <span> Email : {footer?.block4_email}</span>
+                <br />
+                {globalSetting?.vat_number && (
+                  <span> GST : {globalSetting.vat_number}</span>
+                )}
               </p>
             </div>
           )}

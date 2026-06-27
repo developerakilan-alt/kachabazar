@@ -106,6 +106,10 @@ const OrderServices = {
   processRefund: async (id, body) => {
     return requests.post(`/orders/refund/${id}`, body);
   },
+
+  updateCourierTracking: async (id, body) => {
+    return requests.put(`/orders/${id}/courier-tracking`, body);
+  },
 };
 
 export default OrderServices;
