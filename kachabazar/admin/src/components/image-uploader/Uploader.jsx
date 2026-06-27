@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { useDropzone } from "react-dropzone";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -33,6 +33,7 @@ const Uploader = ({
   targetWidth = null,
   targetHeight = null,
 }) => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [err, setError] = useState("");
