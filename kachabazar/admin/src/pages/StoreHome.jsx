@@ -87,6 +87,8 @@ const StoreHome = () => {
     featurePromo,
     trustBadges,
     setTrustBadges,
+    customerReviewsEnabled,
+    setCustomerReviewsEnabled,
     setFooterBlock1,
     footerBlock1,
     setFooterBlock2,
@@ -433,6 +435,8 @@ const StoreHome = () => {
                   featurePromo={featurePromo}
                   trustBadges={trustBadges}
                   setTrustBadges={setTrustBadges}
+                  customerReviewsEnabled={customerReviewsEnabled}
+                  setCustomerReviewsEnabled={setCustomerReviewsEnabled}
                   setFooterBlock1={setFooterBlock1}
                   footerBlock1={footerBlock1}
                   setFooterBlock2={setFooterBlock2}
