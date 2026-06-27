@@ -194,18 +194,7 @@ const CheckoutForm = ({
                       placeholder="youremail@gmail.com"
                     />
                     <Error errorMessage={errors.email} />
-                  </div>
-
-                  <div className="col-span-6 sm:col-span-3">
-                    <InputArea
-                      register={register}
-                      label={showingTranslateValue(checkout?.checkout_phone)}
-                      name="contact"
-                      type="tel"
-                      placeholder="+062-6532956"
-                    />
-
-                    <Error errorMessage={errors.contact} />
+                  
                   </div>
                 </div>
               </div>

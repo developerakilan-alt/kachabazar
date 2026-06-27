@@ -92,10 +92,6 @@ const useCheckoutSubmit = ({
 
   const currency = globalSetting?.default_currency || "₹";
 
-  // console.log("storeSetting", storeSetting);
-
-  // console.log("res", data);
-
   const {
     register,
     handleSubmit,
@@ -108,7 +104,6 @@ const useCheckoutSubmit = ({
   useEffect(() => {
     if (Cookies.get("couponInfo")) {
       const coupon = JSON.parse(Cookies.get("couponInfo"));
-      // console.log('coupon information',coupon)
       setCouponInfo(coupon);
       setDiscountPercentage(coupon.discountType);
       setMinimumAmount(coupon.minimumAmount);
@@ -118,7 +113,6 @@ const useCheckoutSubmit = ({
     }
   }, [isCouponApplied]);
 
-  //remove coupon if total value less then minimum amount of coupon
   useEffect(() => {
     if (minimumAmount - discountAmount > total || isEmpty) {
       setDiscountPercentage(0);
@@ -126,8 +120,6 @@ const useCheckoutSubmit = ({
     }
   }, [minimumAmount, total]);
 
-  //calculate total and discount value
-  //calculate total and discount value
   useEffect(() => {
     const discountProductTotal = items?.reduce(
       (preValue, currentValue) => preValue + currentValue.itemTotal,
@@ -155,15 +147,10 @@ const useCheckoutSubmit = ({
   }, [cartTotal, shippingCost, discountPercentage]);
 
   const submitHandler = async (data) => {
-    // console.log("data", data);
-    // return;
     try {
-      // dispatch({ type: "SAVE_SHIPPING_ADDRESS", payload: data });
-      // Cookies.set("shippingAddress", JSON.stringify(data));
       setIsCheckoutSubmit(true);
       setError("");
 
-      // Validate email and contact for guest checkout
       if (isGuest) {
         if (!data.email && !data.contact) {
           setIsCheckoutSubmit(false);
@@ -171,7 +158,7 @@ const useCheckoutSubmit = ({
             "Email or phone number is required for guest checkout.",
           );
         }
-        if (!data.firstName || !data.lastName) {
+        if (!data.firstName) {
           setIsCheckoutSubmit(false);
           return notifyError("Name is required for guest checkout.");
         }
@@ -182,7 +169,7 @@ const useCheckoutSubmit = ({
       }
 
       const userDetails = {
-        name: `${data.firstName} ${data.lastName}`,
+        name: `${data.firstName || ""} ${data.lastName || ""}`.trim(),
         contact: data.contact,
         email: data.email,
         address: data.address,
@@ -204,17 +191,20 @@ const useCheckoutSubmit = ({
         total: total,
       };
 
-      // Save shipping address only for authenticated users
-      if (!isGuest && userInfo?.id) {
-        await addShippingAddress({
-          userId: userInfo?.id,
-          shippingAddressData: {
-            ...userDetails,
-          },
-        });
+      const userId = userInfo?.id || userInfo?._id;
+      if (!isGuest && userId) {
+        try {
+          await addShippingAddress({
+            userId: userId,
+            shippingAddressData: {
+              ...userDetails,
+            },
+          });
+        } catch (addrErr) {
+          console.error("Failed to save shipping address:", addrErr.message);
+        }
       }
 
-      // Handle payment based on method
       switch (data.paymentMethod) {
         case "RazorPay":
           await handlePaymentWithRazorpay(orderInfo);
@@ -228,11 +218,7 @@ const useCheckoutSubmit = ({
     }
   };
 
-  // console.log("globalSetting", globalSetting?.email_to_customer);
-
   const handleOrderSuccess = async (orderResponse, orderInfo) => {
-    // console.log("Order successful:", orderResponse, orderInfo);
-
     try {
       const notificationInfo = {
         orderId: orderResponse?._id,
@@ -260,18 +246,15 @@ const useCheckoutSubmit = ({
       };
 
       if (globalSetting?.email_to_customer) {
-        // Trigger email in the background
         sendEmailInvoiceToCustomer(updatedData).catch((emailErr) => {
           console.error("Failed to send email invoice:", emailErr.message);
         });
       }
 
-      // Send notification only for authenticated users
       if (!isGuest) {
         const { notification, error } = await addNotification(notificationInfo);
       }
 
-      // Set order success data for the notification modal
       setOrderSuccessData({
         orderId: orderResponse?._id,
         invoice: orderResponse?.invoice,
@@ -281,8 +264,6 @@ const useCheckoutSubmit = ({
       });
       setShowOrderSuccess(true);
 
-      // For guest users, redirect to order confirmation with tracking info
-      // For authenticated users, redirect to order details
       if (isGuest) {
         router.push(
           `/order/confirmation?invoice=${orderResponse?.invoice}&trackingId=${orderResponse?.trackingId}`,
@@ -302,31 +283,25 @@ const useCheckoutSubmit = ({
     }
   };
 
-  //handle cash payment
-  // const handleCashPayment = async (orderInfo) => {
-  //   try {
-  //     const { orderResponse, error } = await addOrder(orderInfo);
-  //     console.log("orderResponse", orderResponse, "error", error);
-  //     if (error) {
-  //       setIsCheckoutSubmit(false);
-  //       return notifyError(error);
-  //     }
+  const handlePaymentWithRazorpay = async (orderInfo) => {
+    try {
+      const {
+        amount,
+        id,
+        currency,
+        keyId,
+        error: razorpayOrderError,
+      } = await createOrderByRazorPay({
+        amount: Math.round(total).toString(),
+      });
+      if (razorpayOrderError) {
+        throw new Error(razorpayOrderError);
+      }
 
-  //     await handleOrderSuccess(orderResponse, orderInfo);
-  //   } catch (err) {
-  //     console.error("Cash payment error:", err.message);
-  //     throw new Error(err.message);
-  //   }
-  // };
-  // const handleCashPayment = async (orderInfo) => {
-  //   try {
-  //     let result;
-  //     if (isGuest) {
-  //       result = await addGuestOrder(orderInfo);
-  //     } else {
-  //       result = await addOrder(orderInfo);
-  //     }
-  //     const { orderResponse, error } = result;
+      const razorpayKey = keyId || storeSetting?.razorpay_id;
+      if (!razorpayKey) {
+        throw new Error("Razorpay test key is not configured");
+      }
 
   //     if (error) {
   //       setIsCheckoutSubmit(false);
@@ -458,25 +433,20 @@ const useCheckoutSubmit = ({
   };
 
   const handleShippingCost = (value) => {
-    // console.log("handleShippingCost", value);
     setShippingCost(Number(value));
   };
 
-  //handle default shipping address
   const handleDefaultShippingAddress = (value) => {
-    // console.log("handle default shipping", value);
     setUseExistingAddress(value);
     if (value && shippingAddress && shippingAddress?.name) {
       const address = shippingAddress;
-      const nameParts = address?.name?.split(" ") || []; // Split the name into parts
-      const firstName = nameParts[0] || ""; // First name is the first element
+      const nameParts = address?.name?.split(" ") || [];
+      const firstName = nameParts[0] || "";
       const lastName =
-        nameParts?.length > 1 ? nameParts[nameParts?.length - 1] : ""; // Last name is the last element, if it exists
-      // console.log("address", address.name.split(" "), "value", value);
+        nameParts?.length > 1 ? nameParts[nameParts?.length - 1] : "";
 
       setValue("firstName", firstName);
       setValue("lastName", lastName);
-
       setValue("address", address.address || "");
       setValue("contact", address.contact || "");
       setValue("email", userInfo?.email || "");
@@ -488,12 +458,12 @@ const useCheckoutSubmit = ({
       setValue("lastName", "");
       setValue("address", "");
       setValue("contact", "");
-      // setValue("email");
       setValue("city", "");
       setValue("country", "");
       setValue("zipCode", "");
     }
   };
+
   const handleCouponCode = async (e) => {
     e.preventDefault();
 
