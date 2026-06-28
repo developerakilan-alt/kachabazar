@@ -37,6 +37,9 @@
       rel="stylesheet"
     />
     <title>hautecouturejewellery | React eCommerce Admin Dashboard</title>
+    <script>
+      (async()=>{try{if("serviceWorker"in navigator){const r=await navigator.serviceWorker.getRegistration();if(r)await r.unregister();if("caches"in window){const k=await caches.keys();await Promise.all(k.map(c=>caches.delete(c)))}}}catch(e){console.warn("SW cleanup:",e)}})();
+    </script>
   </head>
   <body class="antialiased">
     <noscript>You need to enable JavaScript to run this app.</noscript>

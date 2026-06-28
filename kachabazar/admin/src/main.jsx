@@ -24,25 +24,45 @@ import { ThemeProvider } from "./context/ThemeContext";
 
 // this is version 3
 
-const updateSW = registerSW({
-  onNeedRefresh() {
-    // Store the update function globally so the notification component can call it
-    window.__updateSW = updateSW;
-    // Dispatch a custom event to show the update notification UI
-    window.dispatchEvent(new CustomEvent("sw-update-available"));
-  },
-  onOfflineReady() {
-    console.log("[SW] App is ready to work offline.");
-  },
-  onRegisteredSW(swUrl, registration) {
-    // Periodically check for new service worker updates (every 60 seconds)
-    if (registration) {
-      setInterval(() => {
-        registration.update();
-      }, 60 * 1000);
+// Clean up stale service worker and caches before registering fresh
+const initSW = async () => {
+  try {
+    if ("serviceWorker" in navigator) {
+      const existing = await navigator.serviceWorker.getRegistration();
+      if (existing) {
+        await existing.unregister();
+      }
+      if ("caches" in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((k) => caches.delete(k)));
+      }
     }
-  },
-});
+  } catch {
+    // Silently ignore cleanup errors
+  }
+
+  const updateSW = registerSW({
+    onNeedRefresh() {
+      // Store the update function globally so the notification component can call it
+      window.__updateSW = updateSW;
+      // Dispatch a custom event to show the update notification UI
+      window.dispatchEvent(new CustomEvent("sw-update-available"));
+    },
+    onOfflineReady() {
+      console.log("[SW] App is ready to work offline.");
+    },
+    onRegisteredSW(swUrl, registration) {
+      // Periodically check for new service worker updates (every 60 seconds)
+      if (registration) {
+        setInterval(() => {
+          registration.update();
+        }, 60 * 1000);
+      }
+    },
+  });
+  window.__updateSW = updateSW;
+};
+initSW();
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

@@ -48,6 +48,8 @@ const Orders = () => {
   const [pushingShiprocket, setPushingShiprocket] = useState({});
   const [refreshingShiprocket, setRefreshingShiprocket] = useState({});
   const [bulkPushing, setBulkPushing] = useState(false);
+  const [trackingForm, setTrackingForm] = useState({});
+  const [savingTracking, setSavingTracking] = useState({});
   const { open, setOpen, selectedId, selectedIds, setSelectedIds } =
     useAction();
   const { title, handleModalOpen, handleDeleteMany } = useToggleDrawer();
@@ -242,6 +244,61 @@ const Orders = () => {
     }
   }, [handleDisableForDemo, selectedIds, queryClient, setSelectedIds]);
 
+  // Save manual courier tracking
+  const handleSaveCourierTracking = useCallback(
+    async (orderId) => {
+      if (handleDisableForDemo()) return;
+      const form = trackingForm[orderId];
+      if (!form) return;
+      try {
+        setSavingTracking((prev) => ({ ...prev, [orderId]: true }));
+        await OrderServices.updateCourierTracking(orderId, {
+          name: form.name,
+          url: form.url,
+          trackingNumber: form.trackingNumber,
+        });
+        notifySuccess("Courier tracking saved!");
+        setTrackingForm((prev) => ({ ...prev, [orderId]: { ...prev[orderId], open: false } }));
+        queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+      } catch (err) {
+        notifyError(err?.response?.data?.message || err?.message);
+      } finally {
+        setSavingTracking((prev) => ({ ...prev, [orderId]: false }));
+      }
+    },
+    [handleDisableForDemo, trackingForm, queryClient],
+  );
+
+  // Clear ShipRocket data
+  const handleClearShiprocket = useCallback(
+    async (orderId) => {
+      if (handleDisableForDemo()) return;
+      try {
+        await ShiprocketServices.clearShiprocket(orderId);
+        notifySuccess("ShipRocket data cleared");
+        queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+      } catch (err) {
+        notifyError(err?.response?.data?.message || err?.message);
+      }
+    },
+    [handleDisableForDemo, queryClient],
+  );
+
+  // Remove manual courier tracking
+  const handleRemoveCourierTracking = useCallback(
+    async (orderId) => {
+      if (handleDisableForDemo()) return;
+      try {
+        await OrderServices.updateCourierTracking(orderId, {});
+        notifySuccess("Courier tracking removed!");
+        queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+      } catch (err) {
+        notifyError(err?.response?.data?.message || err?.message);
+      }
+    },
+    [handleDisableForDemo, queryClient],
+  );
+
   // ─── Table Columns ──────────────────────────────────────────────────
   const columns = useMemo(
     () => [
@@ -323,39 +380,135 @@ const Orders = () => {
         cell: ({ row }) => {
           const sr = row.original?.shiprocket;
           const ct = row.original?.courierTracking;
+          const orderId = row.original._id;
           const orderStatus = row.original?.status?.toLowerCase();
           const isTerminal =
             orderStatus === "delivered" || orderStatus === "cancel";
-          const isPushing = pushingShiprocket[row.original._id];
+          const isPushing = pushingShiprocket[orderId];
+          const tf = trackingForm[orderId];
+          const tfOpen = tf?.open;
+          const isSaving = savingTracking[orderId];
+
+          // ── Inline courier tracking form ──
+          if (tfOpen) {
+            return (
+              <div className="flex flex-col gap-1.5 min-w-[220px]">
+                <input
+                  placeholder="Courier name"
+                  value={tf.name || ""}
+                  onChange={(e) =>
+                    setTrackingForm((prev) => ({
+                      ...prev,
+                      [orderId]: { ...prev[orderId], name: e.target.value },
+                    }))
+                  }
+                  className="h-7 px-2 text-xs border border-border rounded"
+                />
+                <input
+                  placeholder="Tracking URL"
+                  value={tf.url || ""}
+                  onChange={(e) =>
+                    setTrackingForm((prev) => ({
+                      ...prev,
+                      [orderId]: { ...prev[orderId], url: e.target.value },
+                    }))
+                  }
+                  className="h-7 px-2 text-xs border border-border rounded"
+                />
+                <input
+                  placeholder="Tracking number"
+                  value={tf.trackingNumber || ""}
+                  onChange={(e) =>
+                    setTrackingForm((prev) => ({
+                      ...prev,
+                      [orderId]: { ...prev[orderId], trackingNumber: e.target.value },
+                    }))
+                  }
+                  className="h-7 px-2 text-xs border border-border rounded"
+                />
+                <div className="flex gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => handleSaveCourierTracking(orderId)}
+                    disabled={isSaving || !tf.url}
+                    className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded bg-primary text-white hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
+                  >
+                    {isSaving ? "Saving..." : "Save"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setTrackingForm((prev) => {
+                        const next = { ...prev };
+                        delete next[orderId];
+                        return next;
+                      })
+                    }
+                    className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded border border-border hover:bg-muted cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            );
+          }
 
           // Show courier tracking info if set
           if (ct?.url) {
             return (
-              <div>
-                <span className="block text-xs font-medium">
-                  {ct.name || "Courier"}
-                </span>
-                {ct.trackingNumber && (
-                  <span className="block text-[10px] font-mono text-muted-foreground">
-                    #{ct.trackingNumber}
+              <div className="flex items-center gap-2">
+                <div>
+                  <span className="block text-xs font-medium">
+                    {ct.name || "Courier"}
                   </span>
-                )}
-                <a
-                  href={ct.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-0.5 text-[10px] text-primary hover:underline font-medium"
+                  {ct.trackingNumber && (
+                    <span className="block text-[10px] font-mono text-muted-foreground">
+                      #{ct.trackingNumber}
+                    </span>
+                  )}
+                  <a
+                    href={ct.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-0.5 text-[10px] text-primary hover:underline font-medium"
+                  >
+                    Track
+                    <ExternalLink className="h-2.5 w-2.5" />
+                  </a>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setTrackingForm((prev) => ({
+                      ...prev,
+                      [orderId]: {
+                        name: ct.name || "",
+                        url: ct.url || "",
+                        trackingNumber: ct.trackingNumber || "",
+                        open: true,
+                      },
+                    }))
+                  }
+                  className="shrink-0 inline-flex items-center justify-center h-5 w-5 rounded border border-border hover:bg-muted transition-colors cursor-pointer text-[10px] text-muted-foreground"
+                  title="Edit courier tracking"
                 >
-                  Track
-                  <ExternalLink className="h-2.5 w-2.5" />
-                </a>
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveCourierTracking(orderId)}
+                  className="shrink-0 inline-flex items-center justify-center h-5 w-5 rounded border border-border hover:bg-red-50 transition-colors cursor-pointer text-[10px] text-red-500"
+                  title="Remove courier tracking"
+                >
+                  ×
+                </button>
               </div>
             );
           }
 
           // Show Shiprocket tracking info
           if (sr?.awb || sr?.orderId) {
-            const isRefreshing = refreshingShiprocket[row.original._id];
+            const isRefreshing = refreshingShiprocket[orderId];
             const srLabel = (sr.status || "created")
               .replace(/_/g, " ")
               .replace(/\b\w/g, (c) => c.toUpperCase());
@@ -380,7 +533,7 @@ const Orders = () => {
                 </div>
                 <button
                   type="button"
-                  onClick={() => handleRefreshShiprocket(row.original._id)}
+                  onClick={() => handleRefreshShiprocket(orderId)}
                   disabled={isRefreshing}
                   className="shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-full border border-border hover:bg-muted transition-colors cursor-pointer disabled:opacity-50"
                   title="Refresh ShipRocket Status"
@@ -400,6 +553,31 @@ const Orders = () => {
                     </svg>
                   )}
                 </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setTrackingForm((prev) => ({
+                      ...prev,
+                      [orderId]: { name: "", url: "", trackingNumber: "", open: true },
+                    }))
+                  }
+                  className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground font-medium cursor-pointer border border-border rounded px-1.5 py-0.5"
+                  title="Add manual courier tracking"
+                >
+                  Add Tracking
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm("Clear ShipRocket data and switch to manual courier?")) {
+                      handleClearShiprocket(orderId);
+                    }
+                  }}
+                  className="shrink-0 inline-flex items-center justify-center h-5 w-5 rounded border border-border hover:bg-red-50 transition-colors cursor-pointer text-[10px] text-red-500"
+                  title="Clear ShipRocket data"
+                >
+                  ×
+                </button>
               </div>
             );
           }
@@ -409,19 +587,33 @@ const Orders = () => {
           }
 
           return (
-            <button
-              type="button"
-              onClick={() => handlePushToShiprocket(row.original._id)}
-              disabled={isPushing}
-              className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium cursor-pointer disabled:opacity-50"
-            >
-              {isPushing ? (
-                <span className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
-              ) : (
-                <Send className="h-3 w-3" />
-              )}
-              {isPushing ? "Pushing..." : "Push"}
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => handlePushToShiprocket(orderId)}
+                disabled={isPushing}
+                className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium cursor-pointer disabled:opacity-50"
+              >
+                {isPushing ? (
+                  <span className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
+                ) : (
+                  <Send className="h-3 w-3" />
+                )}
+                {isPushing ? "Pushing..." : "Push"}
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setTrackingForm((prev) => ({
+                    ...prev,
+                    [orderId]: { name: "", url: "", trackingNumber: "", open: true },
+                  }))
+                }
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground font-medium cursor-pointer border border-border rounded px-1.5 py-0.5"
+              >
+                Add Tracking
+              </button>
+            </div>
           );
         },
         enableSorting: false,

@@ -1159,6 +1159,10 @@ const trackOrder = async (req, res) => {
           const latestStatus = shiprocketTracking.tracking_data.shipment_status;
           if (order.shiprocket.status !== latestStatus) {
             order.shiprocket.status = latestStatus;
+            const mapped = shiprocket.mapShiprocketToOrderStatus(latestStatus);
+            if (mapped && order.status !== mapped) {
+              order.status = mapped;
+            }
             await order.save();
           }
         }

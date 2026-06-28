@@ -19,7 +19,7 @@ const useCouponSubmit = (id) => {
   const [language, setLanguage] = useState("en");
   const [resData, setResData] = useState({});
   const [published, setPublished] = useState(false);
-  const [discountType, setDiscountType] = useState(false);
+  const [discountType, setDiscountType] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { currency } = useUtilsFunction();

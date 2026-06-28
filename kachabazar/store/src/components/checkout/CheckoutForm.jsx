@@ -241,7 +241,7 @@ const CheckoutForm = ({
                   <div className="col-span-6 sm:col-span-3 lg:col-span-2">
                     <label className="block text-sm font-medium text-foreground mb-1">State</label>
                     <select
-                      {...register("country")}
+                      {...register("state")}
                       className="w-full h-10 px-3 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                     >
                       <option value="">Select State</option>
@@ -283,7 +283,8 @@ const CheckoutForm = ({
                       <option value="Lakshadweep">Lakshadweep</option>
                       <option value="Puducherry">Puducherry</option>
                     </select>
-                    <Error errorMessage={errors.country} />
+                    <Error errorMessage={errors.state} />
+                    <input type="hidden" {...register("country")} value="India" />
                   </div>
 
                   <div className="col-span-6 sm:col-span-3 lg:col-span-2">

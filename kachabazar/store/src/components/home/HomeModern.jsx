@@ -9,6 +9,7 @@ import DiscountedCard from "@components/product/DiscountedCard";
 import CardTwo from "@components/cta-card/CardTwo";
 import CampaignSection from "@components/campaign/CampaignSection";
 import ModernBanner from "@components/banner/ModernBanner";
+import CouponBannerStrip from "@components/coupon/CouponBannerStrip";
 
 const HomeModern = ({
   popularProducts,
@@ -24,6 +25,10 @@ const HomeModern = ({
   return (
     <div className="min-h-screen">
       <StickyCart />
+
+      <Suspense fallback={null}>
+        <CouponBannerStrip />
+      </Suspense>
 
       {/* Full-width hero section */}
       <ModernHero

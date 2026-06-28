@@ -80,7 +80,7 @@ const createOrder = async (order) => {
     billing_city: order.user_info?.city || "City",
     billing_pincode: pincode || "600001",
     billing_state: order.user_info?.state || "Tamil Nadu",
-    billing_country: order.user_info?.country || "India",
+    billing_country: "India",
     billing_email: order.user_info?.email || "customer@example.com",
     billing_phone: phone || "9999999999",
     shipping_is_billing: true,

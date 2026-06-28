@@ -16,6 +16,10 @@ const ShiprocketServices = {
   refreshStatus: async (orderId) => {
     return requests.post(`/shiprocket/order/${orderId}/refresh`);
   },
+
+  clearShiprocket: async (orderId) => {
+    return requests.delete(`/shiprocket/order/${orderId}/clear`);
+  },
 };
 
 export default ShiprocketServices;

@@ -10,6 +10,7 @@ import CMSkeletonTwo from "@components/preloader/CMSkeleton";
 import FeatureCategory from "@components/category/FeatureCategory";
 import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
+import CouponBannerStrip from "@components/coupon/CouponBannerStrip";
 import { getCategoryProductImage } from "@utils/categoryProductImages";
 import {
   FiTruck,
@@ -71,6 +72,11 @@ const HomeDefault = ({
     <div className="min-h-screen bg-background">
       {/* sticky cart section */}
       <StickyCart />
+
+      {/* Coupon Banner Strip */}
+      <Suspense fallback={null}>
+        <CouponBannerStrip />
+      </Suspense>
 
       {/* Hero Section - Full width banner */}
       <div className="w-full bg-background">

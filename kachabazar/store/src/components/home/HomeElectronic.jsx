@@ -7,6 +7,7 @@ import MainCarousel from "@components/carousel/MainCarousel";
 import CMSkeletonTwo from "@components/preloader/CMSkeleton";
 import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
+import CouponBannerStrip from "@components/coupon/CouponBannerStrip";
 import { getCategoryProductImage } from "@utils/categoryProductImages";
 
 const HomeElectronic = ({
@@ -27,6 +28,10 @@ const HomeElectronic = ({
   return (
     <div className="min-h-screen bg-background">
       <StickyCart />
+
+      <Suspense fallback={null}>
+        <CouponBannerStrip />
+      </Suspense>
 
       {/* Hero — Split Layout */}
       <div className="relative w-full bg-foreground overflow-hidden">

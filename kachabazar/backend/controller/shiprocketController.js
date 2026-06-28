@@ -1,5 +1,13 @@
 const Order = require("../models/Order");
+const OrderTracking = require("../models/OrderTracking");
+const CustomerNotification = require("../models/CustomerNotification");
 const shiprocket = require("../lib/shiprocket");
+const {
+  getTrackingStatusMessage,
+  getNotificationType,
+  getNotificationTitle,
+} = require("../utils/tracking");
+const { generateTrackingId } = require("../utils/tracking");
 
 const createShiprocketOrder = async (req, res) => {
   try {
@@ -15,13 +23,52 @@ const createShiprocketOrder = async (req, res) => {
 
     const result = await shiprocket.createOrder(order);
 
+    if (!order.trackingId) {
+      order.trackingId = generateTrackingId();
+    }
+
     order.shiprocket = {
       orderId: result.order_id,
       shipmentId: result.shipment_id,
       awb: result.awb || "",
-      status: result.status || "created",
+      status: result.status || "NEW",
     };
+    order.status = "processing";
     await order.save();
+
+    const trackingStatus = "confirmed";
+    const trackingMessage = getTrackingStatusMessage(trackingStatus);
+
+    await OrderTracking.findOneAndUpdate(
+      { orderId: order._id },
+      {
+        $set: {
+          trackingId: order.trackingId,
+          status: trackingStatus,
+          customerName: order.user_info?.name,
+          customerPhone: order.user_info?.contact,
+          deliveryAddress: order.user_info?.address,
+        },
+        $push: {
+          history: {
+            status: trackingStatus,
+            message: trackingMessage,
+            updatedBy: "admin",
+            timestamp: new Date(),
+          },
+        },
+      },
+      { upsert: true, new: true },
+    );
+
+    await CustomerNotification.create({
+      customerId: order.user,
+      orderId: order._id,
+      trackingId: order.trackingId,
+      type: getNotificationType(trackingStatus),
+      title: getNotificationTitle(trackingStatus),
+      message: `Your order #${order.invoice} ${trackingMessage.toLowerCase()}. Track with ID: ${order.trackingId}`,
+    });
 
     res.status(201).send({ success: true, shiprocket: order.shiprocket, raw: result });
   } catch (err) {
@@ -173,6 +220,23 @@ const customerRefreshStatus = async (req, res) => {
   }
 };
 
+const clearShiprocketData = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    if (!orderId) return res.status(400).send({ message: "orderId is required" });
+
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).send({ message: "Order not found" });
+
+    order.shiprocket = undefined;
+    await order.save();
+
+    res.send({ success: true, message: "ShipRocket data cleared" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
 module.exports = {
   createShiprocketOrder,
   getShippingRates,
@@ -180,4 +244,5 @@ module.exports = {
   getOrderShippingStatus,
   refreshShiprocketStatus,
   customerRefreshStatus,
+  clearShiprocketData,
 };

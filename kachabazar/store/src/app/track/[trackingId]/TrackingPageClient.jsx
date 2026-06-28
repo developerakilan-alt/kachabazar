@@ -16,7 +16,6 @@ import {
 import TrackingTimeline from "@components/tracking/TrackingTimeline";
 
 const TrackingPageClient = ({ trackingId, data, error, success }) => {
-  const [iframeError, setIframeError] = useState(false);
 
   if (!success || error) {
     return (
@@ -119,9 +118,9 @@ const TrackingPageClient = ({ trackingId, data, error, success }) => {
             </span>
             <p className="text-sm">
               {order.user_info.address}
-              {order.city && `, ${order.city}`}
-              {order.country && `, ${order.country}`}
-              {order.zipCode && ` - ${order.zipCode}`}
+              {order.user_info.city && `, ${order.user_info.city}`}
+              {(order.user_info.state || order.user_info.country) && `, ${order.user_info.state || order.user_info.country}`}
+              {order.user_info.zipCode && ` - ${order.user_info.zipCode}`}
             </p>
           </div>
         )}
@@ -130,42 +129,18 @@ const TrackingPageClient = ({ trackingId, data, error, success }) => {
       <div className="grid md:grid-cols-3 gap-6">
         {/* Tracking - Left/Main */}
         <div className="md:col-span-2">
-          {/* Courier Tracking Iframe */}
-          {courierTracking?.url && !iframeError ? (
+          {/* Courier Tracking */}
+          {courierTracking?.url ? (
             <div className="bg-background border border-border rounded-xl p-6 mb-6">
-              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
                 <Truck className="h-5 w-5" />
                 {courierTracking.name || "Courier"} Tracking
               </h2>
-              <iframe
-                src={courierTracking.url}
-                title="Courier Tracking"
-                className="w-full h-[500px] rounded-lg border border-border"
-                onError={() => setIframeError(true)}
-                sandbox="allow-scripts allow-same-origin"
-              />
-              <p className="text-xs text-muted-foreground mt-2 text-center">
-                <a
-                  href={courierTracking.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-primary hover:underline"
-                >
-                  Open in new tab
-                  <ExternalLink className="h-3 w-3" />
-                </a>
-              </p>
-            </div>
-          ) : courierTracking?.url && iframeError ? (
-            <div className="bg-background border border-border rounded-xl p-6 mb-6 text-center">
-              <h2 className="text-lg font-semibold mb-2 flex items-center gap-2 justify-center">
-                <Truck className="h-5 w-5" />
-                {courierTracking.name || "Courier"} Tracking
-              </h2>
-              <p className="text-sm text-muted-foreground mb-4">
-                Unable to load tracking preview. Click below to track directly
-                on {courierTracking.name || "the courier site"}.
-              </p>
+              {courierTracking.trackingNumber && (
+                <p className="text-sm text-muted-foreground mb-4">
+                  Tracking #: <span className="font-mono font-medium text-foreground">{courierTracking.trackingNumber}</span>
+                </p>
+              )}
               <a
                 href={courierTracking.url}
                 target="_blank"

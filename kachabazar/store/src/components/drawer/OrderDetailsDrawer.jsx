@@ -168,7 +168,7 @@ const OrderDetailsDrawer = ({ data }) => {
                 <span>{data?.user_info?.name}</span>
                 <span>{data?.user_info?.email} </span>
                 <span>
-                  {data?.user_info?.address} {data?.city} {data?.country}
+                  {data?.user_info?.address} {data?.user_info?.city} {data?.user_info?.state || data?.user_info?.country}
                   {data?.zipCode}
                 </span>
                 <span className="font-medium">{data?.user_info?.contact}</span>

@@ -147,7 +147,7 @@ const InvoicePDF = ({ data, globalSetting }) => {
               {data?.user_info?.address || "No address provided"}
             </Text>
             <Text style={tw("text-sm text-muted-foreground")}>
-              {data?.city} {data?.country} {data?.zipCode}
+              {data?.user_info?.city} {data?.user_info?.state || data?.user_info?.country} {data?.user_info?.zipCode}
             </Text>
           </View>
 

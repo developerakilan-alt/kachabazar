@@ -8,6 +8,7 @@ import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
 import CategorySlideshow from "@components/home/CategorySlideshow";
 import CustomerReviews from "@components/home/CustomerReviews";
+import CouponBannerStrip from "@components/coupon/CouponBannerStrip";
 import { getCategoryProductImage } from "@utils/categoryProductImages";
 import { normalizeStoreImageUrl } from "@utils/imageUtils";
 
@@ -31,6 +32,10 @@ const HomeClothing = ({
   return (
     <div className="min-h-screen bg-white">
       <StickyCart />
+
+      <Suspense fallback={null}>
+        <CouponBannerStrip />
+      </Suspense>
 
       {/* ═══ Fashion Hero — Split Layout ═══ */}
       <section className="relative overflow-hidden">

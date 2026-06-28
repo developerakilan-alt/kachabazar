@@ -11,7 +11,7 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 //internal import
 
 import { UserContext } from "@context/UserContext";
-import { getAllCoupons } from "@services/CouponServices";
+import { getShowingCoupons } from "@services/CouponServices";
 import { notifyError, notifySuccess } from "@utils/toast";
 import { addNotification } from "@services/NotificationServices";
 import {
@@ -173,7 +173,8 @@ const useCheckoutSubmit = ({
         contact: data.contact,
         email: data.email,
         address: data.address,
-        country: data.country,
+        state: data.state,
+        country: "India",
         city: data.city,
         zipCode: data.zipCode,
       };
@@ -282,88 +283,6 @@ const useCheckoutSubmit = ({
       throw new Error(err.message);
     }
   };
-
-  const handlePaymentWithRazorpay = async (orderInfo) => {
-    try {
-      const {
-        amount,
-        id,
-        currency,
-        keyId,
-        error: razorpayOrderError,
-      } = await createOrderByRazorPay({
-        amount: Math.round(total).toString(),
-      });
-      if (razorpayOrderError) {
-        throw new Error(razorpayOrderError);
-      }
-
-      const razorpayKey = keyId || storeSetting?.razorpay_id;
-      if (!razorpayKey) {
-        throw new Error("Razorpay test key is not configured");
-      }
-
-  //     if (error) {
-  //       setIsCheckoutSubmit(false);
-  //       return notifyError(error);
-  //     }
-
-  //     if (!orderResponse) {
-  //       setIsCheckoutSubmit(false);
-  //       return notifyError("Order response is empty!");
-  //     }
-
-  //     await handleOrderSuccess(orderResponse, orderInfo);
-  //   } catch (err) {
-  //     // console.error("Cash payment error:", err.message);
-  //     setIsCheckoutSubmit(false);
-  //     notifyError(err.message);
-  //   }
-  // };
-
-  //handle stripe payment
-  // const handlePaymentWithStripe = async (orderInfo) => {
-  //   try {
-  //     if (!stripe || !elements) {
-  //       throw new Error("Stripe is not initialized");
-  //     }
-
-  //     const { error, paymentMethod } = await stripe.createPaymentMethod({
-  //       type: "card",
-  //       card: elements.getElement(CardElement),
-  //     });
-
-  //     if (error || !paymentMethod) {
-  //       throw new Error(error?.message || "Stripe payment failed");
-  //     }
-
-  //     const order = {
-  //       ...orderInfo,
-  //       cardInfo: paymentMethod,
-  //     };
-
-  //     const { stripeInfo } = await createPaymentIntent(order);
-  //     // console.log("res", stripeInfo, "order", order);
-  //     stripe.confirmCardPayment(stripeInfo?.client_secret, {
-  //       payment_method: {
-  //         card: elements.getElement(CardElement),
-  //       },
-  //     });
-
-  //     // console.log("stripeInfo", stripeInfo);
-
-  //     const orderData = { ...orderInfo, cardInfo: stripeInfo };
-  //     const { orderResponse, error: orderError } = await addOrder(orderData);
-  //     if (orderError) {
-  //       setIsCheckoutSubmit(false);
-  //       return notifyError(orderError);
-  //     }
-  //     await handleOrderSuccess(orderResponse, orderInfo);
-  //   } catch (err) {
-  //     // Instead of just throwing the error, rethrow it so that it can be caught by the main submit handler
-  //     throw new Error(err.message); // Ensure the error is propagated properly
-  //   }
-  // };
 
   //handle razorpay payment
   const handlePaymentWithRazorpay = async (orderInfo) => {
@@ -474,7 +393,7 @@ const useCheckoutSubmit = ({
     setIsCouponAvailable(true);
 
     try {
-      const { coupons, error } = await getAllCoupons();
+      const { coupons, error } = await getShowingCoupons();
       const result = coupons.filter(
         (coupon) => coupon.couponCode === couponRef.current.value,
       );

@@ -163,6 +163,10 @@ const checkoutFormSchema = (shippingOptions) => {
       .string()
       .min(2, { message: "City must be at least 2 characters long." })
       .trim(),
+    state: z
+      .string()
+      .min(2, { message: "State must be at least 2 characters long." })
+      .trim(),
     country: z
       .string()
       .min(2, { message: "Country must be at least 2 characters long." })

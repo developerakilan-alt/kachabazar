@@ -89,6 +89,26 @@ const StoreHome = () => {
     setTrustBadges,
     customerReviewsEnabled,
     setCustomerReviewsEnabled,
+    reviewImage1,
+    setReviewImage1,
+    reviewImage2,
+    setReviewImage2,
+    reviewImage3,
+    setReviewImage3,
+    reviewImage4,
+    setReviewImage4,
+    reviewImage5,
+    setReviewImage5,
+    reviewImage6,
+    setReviewImage6,
+    reviewImage7,
+    setReviewImage7,
+    reviewImage8,
+    setReviewImage8,
+    reviewImage9,
+    setReviewImage9,
+    reviewImage10,
+    setReviewImage10,
     setFooterBlock1,
     footerBlock1,
     setFooterBlock2,
@@ -437,6 +457,26 @@ const StoreHome = () => {
                   setTrustBadges={setTrustBadges}
                   customerReviewsEnabled={customerReviewsEnabled}
                   setCustomerReviewsEnabled={setCustomerReviewsEnabled}
+                  reviewImage1={reviewImage1}
+                  setReviewImage1={setReviewImage1}
+                  reviewImage2={reviewImage2}
+                  setReviewImage2={setReviewImage2}
+                  reviewImage3={reviewImage3}
+                  setReviewImage3={setReviewImage3}
+                  reviewImage4={reviewImage4}
+                  setReviewImage4={setReviewImage4}
+                  reviewImage5={reviewImage5}
+                  setReviewImage5={setReviewImage5}
+                  reviewImage6={reviewImage6}
+                  setReviewImage6={setReviewImage6}
+                  reviewImage7={reviewImage7}
+                  setReviewImage7={setReviewImage7}
+                  reviewImage8={reviewImage8}
+                  setReviewImage8={setReviewImage8}
+                  reviewImage9={reviewImage9}
+                  setReviewImage9={setReviewImage9}
+                  reviewImage10={reviewImage10}
+                  setReviewImage10={setReviewImage10}
                   setFooterBlock1={setFooterBlock1}
                   footerBlock1={footerBlock1}
                   setFooterBlock2={setFooterBlock2}

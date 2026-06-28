@@ -86,6 +86,7 @@ const config = {
         "bounce-slow": "bounce 2s infinite",
         "pulse-slow": "pulse 3s infinite",
         shimmer: "shimmer 2s infinite linear",
+        marquee: "marquee 30s linear infinite",
       },
       keyframes: {
         fadeIn: {
@@ -107,6 +108,10 @@ const config = {
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
+        },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
       },
       transitionTimingFunction: {

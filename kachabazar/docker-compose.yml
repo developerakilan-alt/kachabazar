@@ -40,6 +40,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: kachabazar_backend
+    environment:
+      - PUBLIC_API_URL=https://admin.hautecouturejewellery.in
     env_file: ./backend/.env
     volumes:
       - uploads_data:/app/public/uploads

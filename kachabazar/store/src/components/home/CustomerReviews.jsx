@@ -11,7 +11,7 @@ const CustomerReviews = ({ images }) => {
   if (!images || images.length === 0) return null;
 
   return (
-    <section className="py-16 lg:py-24 bg-neutral-50">
+    <section className="py-10 lg:py-16 bg-neutral-50">
       <div className="mx-auto w-full max-w-[1920px] px-4 sm:px-6 lg:px-8 2xl:px-10">
         <div className="text-center mb-12">
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 mb-3">

@@ -13,6 +13,7 @@ import logoDark from "@/assets/img/logo/logo-color.png";
 import logoLight from "@/assets/img/logo/logo-dark.png";
 import { AdminContext } from "@/context/AdminContext";
 import SidebarSubMenu from "@/components/sidebar/SidebarSubMenu";
+import { normalizeImageUrl } from "@/utils/imageUtils";
 import useGetCData from "@/hooks/useGetCData";
 import useUtilsFunction from "@/hooks/useUtilsFunction";
 
@@ -57,11 +58,11 @@ const SidebarContent = () => {
     <div className="py-4 text-muted-foreground">
       <a className=" text-foreground" href="/dashboard">
         <img
-          src={
-            theme === "dark"
-              ? globalSetting?.logo_light || logoLight
-              : globalSetting?.logo || logoDark
-          }
+              src={normalizeImageUrl(
+                theme === "dark"
+                  ? globalSetting?.logo_light || logoLight
+                  : globalSetting?.logo || logoDark
+              )}
           alt="hautecouturejewellery"
           className="pl-6 h-10 w-auto object-contain"
         />
