@@ -383,6 +383,18 @@ const useCheckoutSubmit = ({
     }
   };
 
+  const handleRemoveCoupon = () => {
+    setIsCouponApplied(false);
+    setCouponInfo({});
+    setDiscountPercentage(0);
+    setMinimumAmount(0);
+    setDiscountAmount(0);
+    dispatch({ type: "SAVE_COUPON", payload: {} });
+    Cookies.remove("couponInfo");
+    if (couponRef.current) couponRef.current.value = "";
+    notifySuccess("Coupon removed!");
+  };
+
   const handleCouponCode = async (e) => {
     e.preventDefault();
 
@@ -411,7 +423,7 @@ const useCheckoutSubmit = ({
 
       if (total < result[0]?.minimumAmount) {
         notifyError(
-          `Minimum ${result[0].minimumAmount} USD required for Apply this coupon!`,
+          `Minimum ${currency}${result[0].minimumAmount} required for Apply this coupon!`,
         );
         return;
       } else {
@@ -445,6 +457,7 @@ const useCheckoutSubmit = ({
     submitHandler,
     handleShippingCost,
     handleCouponCode,
+    handleRemoveCoupon,
     discountPercentage,
     discountAmount,
     shippingCost,

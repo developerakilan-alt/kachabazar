@@ -31,6 +31,7 @@ const CheckoutCartScreen = () => {
     couponInfo,
     couponRef,
     handleCouponCode,
+    handleRemoveCoupon,
     discountAmount,
     isCouponAvailable,
   } = useCheckoutSubmit({});
@@ -118,12 +119,21 @@ const CheckoutCartScreen = () => {
                 <form className="w-full mt-8">
                   {couponInfo.couponCode ? (
                     <span className="bg-primary/10 px-4 py-3 leading-tight w-full rounded-lg flex justify-between items-center">
-                      {" "}
                       <p className="text-primary font-medium">
-                        Coupon Applied{" "}
-                      </p>{" "}
-                      <span className="text-primary text-right font-bold">
-                        {couponInfo.couponCode}
+                        Coupon Applied
+                      </p>
+                      <span className="flex items-center gap-2">
+                        <span className="text-primary font-bold">
+                          {couponInfo.couponCode}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleRemoveCoupon}
+                          className="text-red-500 hover:text-red-700 font-bold text-lg leading-none"
+                          title="Remove coupon"
+                        >
+                          ×
+                        </button>
                       </span>
                     </span>
                   ) : (

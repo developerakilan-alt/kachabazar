@@ -8,7 +8,7 @@ import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
 import CategorySlideshow from "@components/home/CategorySlideshow";
 import CustomerReviews from "@components/home/CustomerReviews";
-import CouponBannerStrip from "@components/coupon/CouponBannerStrip";
+import OfferCard from "@components/offer/OfferCard";
 import { getCategoryProductImage } from "@utils/categoryProductImages";
 import { normalizeStoreImageUrl } from "@utils/imageUtils";
 
@@ -33,10 +33,6 @@ const HomeClothing = ({
     <div className="min-h-screen bg-white">
       <StickyCart />
 
-      <Suspense fallback={null}>
-        <CouponBannerStrip />
-      </Suspense>
-
       {/* ═══ Fashion Hero — Split Layout ═══ */}
       <section className="relative overflow-hidden">
         <div className="mx-auto w-full max-w-[1920px]">
@@ -50,6 +46,13 @@ const HomeClothing = ({
           </div>
         </div>
       </section>
+
+      {/* Coupon Offer Section */}
+      <div className="mx-auto max-w-screen-2xl px-3 sm:px-10 py-2 sm:py-4">
+        <Suspense fallback={null}>
+          <OfferCard />
+        </Suspense>
+      </div>
 
       {/* ═══ Marquee Trust Bar ═══ */}
       {/*

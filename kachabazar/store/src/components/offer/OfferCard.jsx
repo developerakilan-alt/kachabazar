@@ -18,8 +18,8 @@ const OfferCard = async () => {
   return (
     <div className="w-full group">
       <div className="bg-card h-full border border-primary/30 transition duration-150 ease-linear transform group-hover:border-primary rounded-xl shadow-sm overflow-hidden">
-        <div className="bg-primary/10 dark:bg-primary/20 text-foreground px-6 py-2 border-b border-primary/20 flex items-center justify-center">
-          <h3 className="text-base font-medium">
+        <div className="bg-primary/10 dark:bg-primary/20 text-foreground px-3 py-1.5 sm:px-6 sm:py-2 border-b border-primary/20 flex items-center justify-center">
+          <h3 className="text-[11px] sm:text-base font-medium">
             {showingTranslateValue(
               storeCustomizationSetting?.home?.discount_title,
             )}

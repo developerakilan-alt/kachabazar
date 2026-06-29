@@ -9,7 +9,7 @@ import DiscountedCard from "@components/product/DiscountedCard";
 import CardTwo from "@components/cta-card/CardTwo";
 import CampaignSection from "@components/campaign/CampaignSection";
 import ModernBanner from "@components/banner/ModernBanner";
-import CouponBannerStrip from "@components/coupon/CouponBannerStrip";
+import OfferCard from "@components/offer/OfferCard";
 
 const HomeModern = ({
   popularProducts,
@@ -26,10 +26,6 @@ const HomeModern = ({
     <div className="min-h-screen">
       <StickyCart />
 
-      <Suspense fallback={null}>
-        <CouponBannerStrip />
-      </Suspense>
-
       {/* Full-width hero section */}
       <ModernHero
         discountedProducts={discountedProducts}
@@ -37,6 +33,13 @@ const HomeModern = ({
         globalSetting={globalSetting}
         storeCustomizationSetting={storeCustomizationSetting}
       />
+
+      {/* Coupon Offer Section */}
+      <div className="mx-auto max-w-screen-2xl px-3 sm:px-10 py-2 sm:py-4">
+        <Suspense fallback={null}>
+          <OfferCard />
+        </Suspense>
+      </div>
 
       {/* Feature categories — horizontal scroll */}
       {storeCustomizationSetting?.home?.featured_status && (

@@ -63,6 +63,8 @@ const useCouponSubmit = (id) => {
           value: data.discountPercentage,
         },
         productType: data.productType,
+        textColor: data.textColor || "#FFFFFF",
+        fontFamily: data.fontFamily || "",
       };
 
       // return console.log("couponData", data.title, "resData", resData?.title);
@@ -107,6 +109,8 @@ const useCouponSubmit = (id) => {
       setValue("endTime");
       setValue("discountPercentage");
       setValue("minimumAmount");
+      setValue("textColor");
+      setValue("fontFamily");
       setImageUrl("");
       clearErrors("title");
       clearErrors("productType");
@@ -114,6 +118,8 @@ const useCouponSubmit = (id) => {
       clearErrors("endTime");
       clearErrors("discountPercentage");
       clearErrors("minimumAmount");
+      clearErrors("textColor");
+      clearErrors("fontFamily");
       setLanguage(lang);
       setValue("language", language);
       return;
@@ -135,6 +141,8 @@ const useCouponSubmit = (id) => {
             setValue("endTime", dayjs(res.endTime).format("YYYY-MM-DD HH:mm"));
             setValue("discountPercentage", res.discountType?.value);
             setValue("minimumAmount", res.minimumAmount);
+            setValue("textColor", res.textColor || "#FFFFFF");
+            setValue("fontFamily", res.fontFamily || "");
             setPublished(res.status === "show" ? true : false);
             setDiscountType(
               res.discountType?.type === "percentage" ? true : false,

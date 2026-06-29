@@ -171,6 +171,32 @@ const CouponDrawer = ({ id }) => {
             </div>
 
             <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+              <LabelArea label="Text Color" />
+              <div className="col-span-8 sm:col-span-4">
+                <input
+                  type="color"
+                  {...register("textColor")}
+                  className="w-12 h-10 p-1 rounded border border-border cursor-pointer"
+                />
+                <Error errorName={errors.textColor} />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+              <LabelArea label="Font Family" />
+              <div className="col-span-8 sm:col-span-4">
+                <InputArea
+                  register={register}
+                  label="Font Family"
+                  name="fontFamily"
+                  type="text"
+                  placeholder="e.g. Arial, serif, cursive"
+                />
+                <Error errorName={errors.fontFamily} />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
               <LabelArea label={t("Published")} />
               <div className="col-span-8 sm:col-span-4">
                 <SwitchToggle

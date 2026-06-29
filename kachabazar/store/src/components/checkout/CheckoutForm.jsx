@@ -59,6 +59,7 @@ const CheckoutForm = ({
     submitHandler,
     handleShippingCost,
     handleCouponCode,
+    handleRemoveCoupon,
     discountAmount,
     shippingCost,
     gstAmount,
@@ -461,11 +462,20 @@ const CheckoutForm = ({
             <div className="flex items-center mt-4 py-4 lg:py-4 text-sm w-full font-semibold text-foreground last:border-b-0 last:text-base last:pb-0">
               <form className="w-full">
                 {couponInfo.couponCode ? (
-                  <span className="bg-accent px-4 py-3 leading-tight w-full rounded-md flex justify-between">
-                    {" "}
-                    <p className="text-primary">Coupon Applied </p>{" "}
-                    <span className="text-primary font-bold text-right">
-                      {couponInfo.couponCode}
+                  <span className="bg-accent px-4 py-3 leading-tight w-full rounded-md flex justify-between items-center">
+                    <p className="text-primary">Coupon Applied</p>
+                    <span className="flex items-center gap-2">
+                      <span className="text-primary font-bold">
+                        {couponInfo.couponCode}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleRemoveCoupon}
+                        className="text-red-500 hover:text-red-700 font-bold text-lg leading-none"
+                        title="Remove coupon"
+                      >
+                        ×
+                      </button>
                     </span>
                   </span>
                 ) : (

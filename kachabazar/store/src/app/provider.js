@@ -3,7 +3,7 @@
 import { CartProvider } from "react-use-cart";
 import { ToastContainer } from "react-toastify";
 import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import getStripe from "@lib/stripe";
 import { SessionProvider } from "next-auth/react";
 
 //internal imports
@@ -13,10 +13,8 @@ import { LanguageProvider } from "@context/LanguageContext";
 import QueryProvider from "@lib/providers/QueryProvider";
 import FacebookPixel from "@components/common/FacebookPixel";
 
-let stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
-
 const Providers = ({ children, storeSetting }) => {
-  stripePromise = loadStripe(
+  const stripePromise = getStripe(
     storeSetting?.stripe_key || process.env.NEXT_PUBLIC_STRIPE_KEY,
   );
 

@@ -69,10 +69,11 @@ const useAttributeSubmit = (id) => {
     resolver: isChildAttribute ? zodResolver(childAttributeSchema) : undefined,
     defaultValues: {
       option: "dropdown", // Default value for option field (lowercase for Mongoose)
+      type: "attribute", // Default value for type field
     },
   });
 
-  const onSubmit = async ({ title, name, option }) => {
+  const onSubmit = async ({ title, name, option, type }) => {
     try {
       if (!id) {
         if (variants.length === 0) {
@@ -100,7 +101,7 @@ const useAttributeSubmit = (id) => {
         },
         variants: variantArrayOfObject,
         option: option,
-        type: "attribute",
+        type: type || "attribute",
         lang: language,
       };
 
@@ -217,6 +218,7 @@ const useAttributeSubmit = (id) => {
       setValue("title", "");
       setValue("name", "");
       setValue("option", "dropdown"); // Set default option value (lowercase for Mongoose)
+      setValue("type", "attribute");
       clearErrors("title");
       clearErrors("name");
       clearErrors("option");
@@ -237,6 +239,7 @@ const useAttributeSubmit = (id) => {
             setValue("title", res.title[language ? language : "en"]);
             setValue("name", res.name[language ? language : "en"]);
             setValue("option", res.option);
+            setValue("type", res.type);
           }
         } catch (err) {
           notifyError(err?.response?.data?.message || err?.message);

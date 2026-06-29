@@ -40,6 +40,14 @@ const couponSchema = new mongoose.Schema(
       enum: ["show", "hide"],
       default: "show",
     },
+    textColor: {
+      type: String,
+      default: "#FFFFFF",
+    },
+    fontFamily: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

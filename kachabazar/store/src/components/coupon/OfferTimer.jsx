@@ -14,7 +14,7 @@ const OfferTimer = ({ expiryTimestamp, darkGreen }) => {
           darkGreen
             ? "bg-primary text-primary-foreground"
             : "bg-accent dark:text-foreground"
-        } text-sm font-semibold px-2 py-1 rounded mx-1`}
+        } text-[10px] sm:text-sm font-semibold px-1 py-0.5 sm:px-2 sm:py-1 rounded mx-0.5 sm:mx-1`}
       >
         {days < 10 ? `0${days}` : days}
       </span>
@@ -24,7 +24,7 @@ const OfferTimer = ({ expiryTimestamp, darkGreen }) => {
           darkGreen
             ? "bg-primary text-primary-foreground"
             : "bg-accent dark:text-foreground"
-        } text-sm font-semibold px-2 py-1 rounded mx-1`}
+        } text-[10px] sm:text-sm font-semibold px-1 py-0.5 sm:px-2 sm:py-1 rounded mx-0.5 sm:mx-1`}
       >
         {hours < 10 ? `0${hours}` : hours}
       </span>
@@ -34,7 +34,7 @@ const OfferTimer = ({ expiryTimestamp, darkGreen }) => {
           darkGreen
             ? "bg-primary text-primary-foreground"
             : "bg-accent dark:text-foreground"
-        } text-sm font-semibold px-2 py-1 rounded mx-1`}
+        } text-[10px] sm:text-sm font-semibold px-1 py-0.5 sm:px-2 sm:py-1 rounded mx-0.5 sm:mx-1`}
       >
         {minutes < 10 ? `0${minutes}` : minutes}
       </span>
@@ -44,7 +44,7 @@ const OfferTimer = ({ expiryTimestamp, darkGreen }) => {
           darkGreen
             ? "bg-primary text-primary-foreground"
             : "bg-accent dark:text-foreground"
-        } text-sm font-semibold px-2 py-1 rounded mx-1`}
+        } text-[10px] sm:text-sm font-semibold px-1 py-0.5 sm:px-2 sm:py-1 rounded mx-0.5 sm:mx-1`}
       >
         {seconds < 10 ? `0${seconds}` : seconds}
       </span>

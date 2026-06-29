@@ -38,22 +38,22 @@ const Coupon = async ({ couponInHome }) => {
         coupons?.slice(0, 2).map((coupon) => (
           <div
             key={coupon._id}
-            className="coupon coupon-home mx-4 my-5 block md:flex lg:flex md:justify-between lg:justify-between items-center bg-background dark:bg-muted rounded-md shadow"
+            className="coupon coupon-home mx-2 my-2 sm:mx-4 sm:my-5 block md:flex lg:flex md:justify-between lg:justify-between items-center bg-background dark:bg-muted rounded-md shadow"
           >
-            <div className="tengah py-2 px-3 flex items-center justify-items-start">
+            <div className="tengah py-1.5 px-2 sm:py-2 sm:px-3 flex items-center justify-items-start">
               <figure>
                 <Image
                   src={coupon.logo || ""}
                   width={100}
                   height={100}
-                  className="rounded-lg"
+                  className="rounded-lg w-12 h-12 sm:w-[100px] sm:h-[100px]"
                   alt={showingTranslateValue(coupon.title)}
                 />
               </figure>
-              <div className="ml-3">
-                <div className="flex items-center">
-                  <h6 className="pl-1 text-base font-medium text-muted-foreground dark:text-muted-foreground">
-                    <span className="text-lg md:text-xl lg:text-xl text-red-500 font-bold">
+              <div className="ml-2 sm:ml-3">
+                <div className="flex items-center flex-wrap gap-1">
+                  <h6 className="pl-1 text-xs sm:text-base font-medium text-muted-foreground dark:text-muted-foreground">
+                    <span className="text-sm sm:text-lg md:text-xl lg:text-xl text-red-500 font-bold">
                       {coupon?.discountType?.type === "fixed" ? (
                         <span>${coupon?.discountType?.value}</span>
                       ) : (
@@ -62,43 +62,43 @@ const Coupon = async ({ couponInHome }) => {
                     </span>{" "}
                     Off
                   </h6>
-                  <div className="ml-2">
+                  <div>
                     {dayjs().isAfter(dayjs(coupon.endTime)) ? (
-                      <span className="text-red-600 inline-block px-4 py-1 rounded-full font-medium text-xs bg-red-100 dark:bg-red-200">
+                      <span className="text-red-600 inline-block px-2 py-0.5 sm:px-4 sm:py-1 rounded-full font-medium text-[10px] sm:text-xs bg-red-100 dark:bg-red-200">
                         Inactive
                       </span>
                     ) : (
-                      <span className="text-primary inline-block px-4 py-1 rounded-full font-medium text-xs bg-accent">
+                      <span className="text-primary inline-block px-2 py-0.5 sm:px-4 sm:py-1 rounded-full font-medium text-[10px] sm:text-xs bg-accent">
                         Active
                       </span>
                     )}
                   </div>
                 </div>
-                <h2 className="pl-1 text-base text-muted-foreground dark:text-muted-foreground leading-6 font-semibold mb-2">
+                <h2 className="pl-1 text-xs sm:text-base text-muted-foreground dark:text-muted-foreground leading-5 sm:leading-6 font-semibold mb-1 sm:mb-2">
                   {showingTranslateValue(coupon?.title)}
                 </h2>
                 {dayjs().isAfter(dayjs(coupon.endTime)) ? (
-                  <span className="inline-block mb-2">
+                  <span className="inline-block mb-1 sm:mb-2">
                     <div className="flex items-center font-semibold">
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm  font-semibold mx-1 px-2 py-1 rounded">
+                      <span className="flex items-center justify-center bg-red-500 text-white text-[10px] sm:text-sm font-semibold mx-0.5 sm:mx-1 px-1 py-0.5 sm:px-2 sm:py-1 rounded">
                         00
                       </span>
                       :
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm  font-semibold mx-1 px-2 py-1 rounded">
+                      <span className="flex items-center justify-center bg-red-500 text-white text-[10px] sm:text-sm font-semibold mx-0.5 sm:mx-1 px-1 py-0.5 sm:px-2 sm:py-1 rounded">
                         00
                       </span>
                       :
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm  font-semibold mx-1 px-2 py-1 rounded">
+                      <span className="flex items-center justify-center bg-red-500 text-white text-[10px] sm:text-sm font-semibold mx-0.5 sm:mx-1 px-1 py-0.5 sm:px-2 sm:py-1 rounded">
                         00
                       </span>
                       :
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm  font-semibold mx-1 px-2 py-1 rounded">
+                      <span className="flex items-center justify-center bg-red-500 text-white text-[10px] sm:text-sm font-semibold mx-0.5 sm:mx-1 px-1 py-0.5 sm:px-2 sm:py-1 rounded">
                         00
                       </span>
                     </div>
                   </span>
                 ) : (
-                  <span className="inline-block mb-2">
+                  <span className="inline-block mb-1 sm:mb-2">
                     <div className="flex items-center font-semibold">
                       <OfferTimer
                         expiryTimestamp={new Date(coupon.endTime)}
@@ -109,15 +109,15 @@ const Coupon = async ({ couponInHome }) => {
                 )}
               </div>
             </div>
-            <div className="md:border-l-2 lg:border-l-2 border-dashed lg:w-1/3 md:w-1/3 relative px-4">
+            <div className="md:border-l-2 lg:border-l-2 border-dashed lg:w-1/3 md:w-1/3 relative px-3 sm:px-4 pb-2 sm:pb-0">
               <div className="info flex items-center">
                 <div className="w-full">
                   <div className="block">
-                    <div className=" border border-dashed bg-accent py-1 border-primary rounded-lg text-center block">
+                    <div className=" border border-dashed bg-accent py-0.5 sm:py-1 border-primary rounded-lg text-center block">
                       <CouponCodeButton coupon={coupon} />
                     </div>
                   </div>
-                  <p className="text-xs leading-4 text-muted-foreground dark:text-muted-foreground mt-2">
+                  <p className="text-[10px] sm:text-xs leading-3 sm:leading-4 text-muted-foreground dark:text-muted-foreground mt-1 sm:mt-2">
                     * This coupon apply when shopping more then{" "}
                     <span className="font-bold">
                       {formatPrice(coupon.minimumAmount, currency, lang)}

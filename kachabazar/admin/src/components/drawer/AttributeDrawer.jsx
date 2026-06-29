@@ -133,6 +133,34 @@ const AttributeDrawer = ({ id }) => {
                 <Error errorName={errors.option} />
               </div>
             </div>
+
+            <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-6 relative">
+              <LabelArea label="Type" />
+              <div className="col-span-8 sm:col-span-4">
+                <Controller
+                  name="type"
+                  control={control}
+                  defaultValue="attribute"
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue="attribute"
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="attribute">Attribute</SelectItem>
+                        <SelectItem value="extra">Extra</SelectItem>
+                        <SelectItem value="rope">Rope</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <Error errorName={errors.type} />
+              </div>
+            </div>
           </div>
 
           {!id && (

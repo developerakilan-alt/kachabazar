@@ -6,6 +6,7 @@ import CMSkeletonTwo from "@components/preloader/CMSkeleton";
 import FeatureCategory from "@components/category/FeatureCategory";
 import DiscountedCard from "@components/product/DiscountedCard";
 import CampaignSection from "@components/campaign/CampaignSection";
+import OfferCard from "@components/offer/OfferCard";
 
 const HomeHeritage = ({
   popularProducts,
@@ -50,6 +51,13 @@ const HomeHeritage = ({
           </Link>
         </div>
         <div className="kolam-divider mt-6" />
+      </div>
+
+      {/* Coupon Offer Section */}
+      <div className="mx-auto max-w-screen-xl px-4 sm:px-10 py-3 sm:py-6">
+        <Suspense fallback={null}>
+          <OfferCard />
+        </Suspense>
       </div>
 
       {/* Category pills */}

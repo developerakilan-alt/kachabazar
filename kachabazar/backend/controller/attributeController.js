@@ -164,6 +164,7 @@ const getShowingAttributes = async (req, res) => {
           title: 1,
           name: 1,
           option: 1,
+          type: 1,
           createdAt: 1,
           updateAt: 1,
           variants: {

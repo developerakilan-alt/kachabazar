@@ -33,7 +33,7 @@ const attributeSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       default: "attribute",
-      enum: ["attribute", "extra"],
+      enum: ["attribute", "extra", "rope"],
     },
     status: {
       type: String,

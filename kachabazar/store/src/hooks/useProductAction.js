@@ -124,7 +124,14 @@ export default function useProductAction({
       const result = product?.variants?.filter((variant) =>
         Object.keys(selectVa).every((k) => selectVa[k] === variant[k]),
       );
+      const ropeAttr = attributes?.find((a) => a.type === "rope");
+      const ropeVariantId = ropeAttr?.variants?.find((v) => {
+        const name = v.name?.en || Object.values(v.name || {})[0] || "";
+        return name.toLowerCase() === "rope";
+      })?._id;
       const firstVariant =
+        (ropeVariantId &&
+          product.variants.find((v) => v[ropeAttr._id] === ropeVariantId)) ||
         product.variants.find((variant) => getNumber(variant?.quantity) > 0) ||
         product.variants[0] ||
         {};
