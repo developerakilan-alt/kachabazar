@@ -276,7 +276,8 @@ const MegaMenuCategory = ({
                     </div>
                   ) : categoryProducts.length > 0 ? (
                     <div className="grid grid-cols-4 gap-4">
-                      {categoryProducts.map((product) => (
+                      {categoryProducts.map((product)
+                       => (
                         <Link
                           key={product._id}
                           href={`/product/${product.slug}`}

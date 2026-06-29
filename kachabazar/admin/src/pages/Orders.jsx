@@ -121,17 +121,16 @@ const Orders = () => {
         customerName: searchText || "",
       });
       const exportData = res?.orders?.map((order) => ({
-        _id: order._id,
         invoice: order.invoice,
         subTotal: getNumberTwo(order.subTotal),
         shippingCost: getNumberTwo(order.shippingCost),
         discount: getNumberTwo(order?.discount),
         total: getNumberTwo(order.total),
         paymentMethod: order.paymentMethod,
+        address: `${order?.user_info?.address || ""}, ${order?.user_info?.city || ""}, ${order?.user_info?.country || ""} - ${order?.user_info?.zipCode || ""}`,
         status: order.status,
         user_info: order?.user_info?.name,
         createdAt: order.createdAt,
-        updatedAt: order.updatedAt,
       }));
       exportFromJSON({
         data: exportData,

@@ -43,11 +43,9 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
 
               <Card className="flex flex-col justify-center text-center">
                 <span className="flex-row">{globalSetting?.address}</span>
-
                 <span className="flex justify-center">
                   {globalSetting?.contact}
                 </span>
-
                 {globalSetting?.web_site}
                 <br />
                 {globalSetting?.email}
@@ -73,23 +71,19 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                 </TableHeader>
                 <TableBody className="bg-card divide-y divide-border text-serif text-sm">
                   {or?.cart?.map((item, i) => (
-                    <TableRow key={i} className="  bill">
+                    <TableRow key={i} className="bill">
                       <TableCell className="py-1">
                         <span className="font-normal text-muted-foreground bill">
-                          {" "}
                           {item.title?.substring(0, 15)}
                         </span>
                       </TableCell>
                       <TableCell className="text-center py-1">
                         <span className="font-bold text-center bill">
-                          {" "}
-                          {item.quantity}{" "}
+                          {item.quantity}
                         </span>
                       </TableCell>
-
                       <TableCell className="text-right py-1">
                         <span className="text-right font-bold text-foreground bill">
-                          {" "}
                           {fp(item.price * item.quantity)}
                         </span>
                       </TableCell>
@@ -115,7 +109,6 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                         <span className="text-xs bill">
                           {or?.paymentDetails?.selectPaymentOption_Card}:{" "}
                           <span className="font-semibold text-foreground">
-                            {" "}
                             {fp(or?.paymentDetails?.paymentAmount_Card)}
                           </span>
                         </span>
@@ -168,26 +161,59 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                       {t("NoofItems")} :{" "}
                       <span className="font-semibold text-foreground">
                         {or?.cart?.length}
-                      </span>{" "}
-                    </span>{" "}
+                      </span>
+                    </span>
                     <br />
                     <span className="text-muted-foreground">
                       {t("BillNo")} :{" "}
                       <span className="font-semibold text-foreground">
-                        {" "}
                         {or?.invoice}
-                      </span>{" "}
-                    </span>{" "}
+                      </span>
+                    </span>
                     <br />
                     <br />
+
+                    {/* FROM Address */}
+                    <span className="font-semibold text-foreground block">
+                      From :
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {globalSetting?.company_name}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {globalSetting?.address}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {globalSetting?.contact}
+                    </span>
+                    <br />
+
+                    {/* TO Address */}
+                    <span className="font-semibold text-foreground block">
+                      To :
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {or?.user_info?.name}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {or?.user_info?.address}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {or?.user_info?.city}, {or?.user_info?.country}{" "}
+                      {or?.user_info?.zipCode}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {or?.user_info?.contact}
+                    </span>
+                    <br />
+
                     {globalSetting?.vat_number && (
                       <>
                         <span className="text-muted-foreground">
                           {t("VATNumber")}:{" "}
                           <span className="font-semibold text-foreground">
-                            {" "}
                             {globalSetting?.vat_number}
-                          </span>{" "}
+                          </span>
                         </span>
                         <br />
                       </>
@@ -195,31 +221,28 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                     <span className="text-muted-foreground">
                       {t("Date")} :{" "}
                       <span className="font-semibold text-foreground">
-                        {" "}
-                        {/* {dayjs(new Date()).format('MMMM D, YYYY h:mm A')} */}
                         {dayjs(new Date()).format("MM/D/YYYY")}
-                      </span>{" "}
+                      </span>
                     </span>
                   </div>
                 </div>
 
                 <div className="mt-2">
-                  <h5 className="flex justify-between font-medium text-xs ">
+                  <h5 className="flex justify-between font-medium text-xs">
                     <span>{t("GrossTotal")} :</span>{" "}
-                    <span className="font-semibold ">{fp(or?.subTotal)}</span>
+                    <span className="font-semibold">{fp(or?.subTotal)}</span>
                   </h5>
-
                   {or?.shippingCost > 0 && (
                     <h5 className="flex justify-between font-medium text-xs">
-                      <span> {t("ShippingCostLower")} :</span>{" "}
-                      <span className="font-semibold ">
+                      <span>{t("ShippingCostLower")} :</span>{" "}
+                      <span className="font-semibold">
                         {fp(or?.shippingCost)}
                       </span>
                     </h5>
                   )}
                   {or?.discount > 0 && (
                     <h5 className="flex justify-between font-medium text-xs">
-                      <span> {t("DiscountLower")} :</span>{" "}
+                      <span>{t("DiscountLower")} :</span>{" "}
                       <span className="font-semibold">{fp(or?.discount)}</span>
                     </h5>
                   )}
@@ -230,8 +253,8 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                     </h5>
                   )}
                   <h3 className="flex justify-between font-medium text-xs border-t border-black mt-2">
-                    <span> {t("Total")} : </span>
-                    <span className="font-semibold ">{fp(or?.total)}</span>
+                    <span>{t("Total")} : </span>
+                    <span className="font-semibold">{fp(or?.total)}</span>
                   </h3>
                 </div>
               </div>
@@ -263,11 +286,9 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
 
             <Card className="flex flex-col justify-center text-center">
               <span className="flex-row">{globalSetting?.address}</span>
-
               <span className="flex justify-center">
                 {globalSetting?.contact}
               </span>
-
               {globalSetting?.web_site}
               <br />
               {globalSetting?.email}
@@ -293,23 +314,19 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
               </TableHeader>
               <TableBody className="bg-card divide-y divide-border text-serif text-sm">
                 {data?.cart?.map((item, i) => (
-                  <TableRow key={i} className="  bill">
+                  <TableRow key={i} className="bill">
                     <TableCell className="py-1">
                       <span className="font-normal text-muted-foreground bill">
-                        {" "}
                         {item.title?.substring(0, 15)}
                       </span>
                     </TableCell>
                     <TableCell className="text-center py-1">
                       <span className="font-bold text-center bill">
-                        {" "}
-                        {item.quantity}{" "}
+                        {item.quantity}
                       </span>
                     </TableCell>
-
                     <TableCell className="text-right py-1">
                       <span className="text-right font-bold text-foreground bill">
-                        {" "}
                         {fp(item.price * item.quantity)}
                       </span>
                     </TableCell>
@@ -335,7 +352,6 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                       <span className="text-xs bill">
                         {data?.paymentDetails?.selectPaymentOption_Card}:{" "}
                         <span className="font-semibold text-foreground">
-                          {" "}
                           {fp(data?.paymentDetails?.paymentAmount_Card)}
                         </span>
                       </span>
@@ -388,26 +404,59 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                     {t("NoofItems")} :{" "}
                     <span className="font-semibold text-foreground">
                       {data?.cart?.length}
-                    </span>{" "}
-                  </span>{" "}
+                    </span>
+                  </span>
                   <br />
                   <span className="text-muted-foreground">
                     {t("BillNo")} :{" "}
                     <span className="font-semibold text-foreground">
-                      {" "}
                       {data?.invoice}
-                    </span>{" "}
-                  </span>{" "}
+                    </span>
+                  </span>
                   <br />
                   <br />
+
+                  {/* FROM Address */}
+                  <span className="font-semibold text-foreground block">
+                    From :
+                  </span>
+                  <span className="text-muted-foreground block">
+                    {globalSetting?.company_name}
+                  </span>
+                  <span className="text-muted-foreground block">
+                    {globalSetting?.address}
+                  </span>
+                  <span className="text-muted-foreground block">
+                    {globalSetting?.contact}
+                  </span>
+                  <br />
+
+                  {/* TO Address */}
+                  <span className="font-semibold text-foreground block">
+                    To :
+                  </span>
+                  <span className="text-muted-foreground block">
+                    {data?.user_info?.name}
+                  </span>
+                  <span className="text-muted-foreground block">
+                    {data?.user_info?.address}
+                  </span>
+                  <span className="text-muted-foreground block">
+                    {data?.user_info?.city}, {data?.user_info?.country}{" "}
+                    {data?.user_info?.zipCode}
+                  </span>
+                  <span className="text-muted-foreground block">
+                    {data?.user_info?.contact}
+                  </span>
+                  <br />
+
                   {globalSetting?.vat_number && (
                     <>
                       <span className="text-muted-foreground">
                         {t("VATNumber")}:{" "}
                         <span className="font-semibold text-foreground">
-                          {" "}
                           {globalSetting?.vat_number}
-                        </span>{" "}
+                        </span>
                       </span>
                       <br />
                     </>
@@ -415,31 +464,28 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                   <span className="text-muted-foreground">
                     {t("Date")} :{" "}
                     <span className="font-semibold text-foreground">
-                      {" "}
-                      {/* {dayjs(new Date()).format('MMMM D, YYYY h:mm A')} */}
                       {dayjs(new Date()).format("MM/D/YYYY")}
-                    </span>{" "}
+                    </span>
                   </span>
                 </div>
               </div>
 
               <div className="mt-2">
-                <h5 className="flex justify-between font-medium text-xs ">
+                <h5 className="flex justify-between font-medium text-xs">
                   <span>{t("GrossTotal")} :</span>{" "}
-                  <span className="font-semibold ">{fp(data?.subTotal)}</span>
+                  <span className="font-semibold">{fp(data?.subTotal)}</span>
                 </h5>
-
                 {data?.shippingCost > 0 && (
                   <h5 className="flex justify-between font-medium text-xs">
-                    <span> {t("ShippingCostLower")} :</span>{" "}
-                    <span className="font-semibold ">
+                    <span>{t("ShippingCostLower")} :</span>{" "}
+                    <span className="font-semibold">
                       {fp(data?.shippingCost)}
                     </span>
                   </h5>
                 )}
                 {data?.discount > 0 && (
                   <h5 className="flex justify-between font-medium text-xs">
-                    <span> {t("DiscountLower")} :</span>{" "}
+                    <span>{t("DiscountLower")} :</span>{" "}
                     <span className="font-semibold">{fp(data?.discount)}</span>
                   </h5>
                 )}
@@ -450,8 +496,8 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                   </h5>
                 )}
                 <h3 className="flex justify-between font-medium text-xs border-t border-black mt-2">
-                  <span> {t("Total")} : </span>
-                  <span className="font-semibold ">{fp(data?.total)}</span>
+                  <span>{t("Total")} : </span>
+                  <span className="font-semibold">{fp(data?.total)}</span>
                 </h3>
               </div>
             </div>
