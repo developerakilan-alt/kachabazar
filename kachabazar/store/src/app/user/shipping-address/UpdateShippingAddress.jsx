@@ -7,15 +7,12 @@ import {
   FiMapPin,
   FiUser,
   FiPhone,
-  FiGlobe,
   FiHome,
-  FiMap,
   FiCheck,
   FiAlertCircle,
 } from "react-icons/fi";
 
 //internal imports
-import { countries } from "@utils/countries";
 import useCustomToast from "@hooks/useCustomToast";
 import { addShippingAddressAction } from "@lib/actions/customer.actions";
 
@@ -27,36 +24,7 @@ const UpdateShippingAddress = ({ shippingAddress, error: fetchError }) => {
     undefined,
   );
 
-  const [cities, setCities] = useState([]);
-  const [areas, setAreas] = useState([]);
-  const [selectedValue, setSelectedValue] = useState({
-    country: shippingAddress?.country || "",
-    city: shippingAddress?.city || "",
-    area: shippingAddress?.area || "",
-  });
-
-  const handleInputChange = (name, value) => {
-    setSelectedValue((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    if (name === "country") {
-      const result =
-        countries?.find((country) => country?.name === value)?.cities || [];
-      setCities(result);
-      setAreas([]);
-      setSelectedValue((prev) => ({ ...prev, city: "", area: "" }));
-    }
-    if (name === "city") {
-      const result = cities?.find((city) => city?.name === value)?.areas || [];
-      setAreas(result);
-      setSelectedValue((prev) => ({ ...prev, area: "" }));
-    }
-  };
-
   const { formRef } = useCustomToast(state);
-
-  // console.log({ state });
 
   // Refresh page data after successful update
   useEffect(() => {
@@ -73,23 +41,6 @@ const UpdateShippingAddress = ({ shippingAddress, error: fetchError }) => {
       router.refresh();
     }
   }, [state?.success]);
-
-  useEffect(() => {
-    if (shippingAddress?.country) {
-      const countryData = countries?.find(
-        (country) => country?.name === shippingAddress?.country,
-      );
-      const citiesList = countryData?.cities || [];
-      setCities(citiesList);
-
-      if (shippingAddress?.city) {
-        const cityData = citiesList?.find(
-          (city) => city?.name === shippingAddress?.city,
-        );
-        setAreas(cityData?.areas || []);
-      }
-    }
-  }, [shippingAddress]);
 
   const isUpdate = !!shippingAddress?._id;
 
@@ -183,66 +134,82 @@ const UpdateShippingAddress = ({ shippingAddress, error: fetchError }) => {
               )}
             </div>
 
-            {/* Contact */}
-            <div className="form-group">
-              <label className="block text-muted-foreground font-medium text-sm mb-2">
-                Contact Number <span className="text-red-500">*</span>
-              </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <FiPhone className="w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                </div>
-                <input
-                  type="tel"
-                  name="contact"
-                  defaultValue={shippingAddress?.contact || ""}
-                  placeholder="+1 (555) 000-0000"
-                  className="h-12 text-sm pl-11 pr-4 w-full rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 outline-none"
-                />
-              </div>
-              {state?.errors?.contact && (
-                <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1">
-                  <FiAlertCircle className="w-4 h-4" />
-                  {state.errors.contact.join(" ")}
-                </p>
-              )}
-            </div>
-
-            {/* Country & City Row */}
+            {/* Contact & Alternate Phone Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Country */}
+              {/* Contact */}
               <div className="form-group">
                 <label className="block text-muted-foreground font-medium text-sm mb-2">
-                  Country <span className="text-red-500">*</span>
+                  Contact Number <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <FiGlobe className="w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <FiPhone className="w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                   </div>
-                  <select
-                    value={selectedValue.country}
-                    onChange={(e) =>
-                      handleInputChange("country", e.target.value)
-                    }
-                    className="h-12 text-sm pl-11 pr-4 w-full rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 outline-none appearance-none cursor-pointer"
-                  >
-                    <option value="">Select Country</option>
-                    {countries?.map((country) => (
-                      <option key={country.name} value={country.name}>
-                        {country.name}
-                      </option>
-                    ))}
-                  </select>
                   <input
-                    type="hidden"
-                    name="country"
-                    value={selectedValue.country}
+                    type="tel"
+                    name="contact"
+                    defaultValue={shippingAddress?.contact || ""}
+                    placeholder="Phone/Mobile number"
+                    className="h-12 text-sm pl-11 pr-4 w-full rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 outline-none"
                   />
                 </div>
-                {state?.errors?.country && (
+                {state?.errors?.contact && (
                   <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1">
                     <FiAlertCircle className="w-4 h-4" />
-                    {state.errors.country.join(" ")}
+                    {state.errors.contact.join(" ")}
+                  </p>
+                )}
+              </div>
+
+              {/* Alternate Phone */}
+              <div className="form-group">
+                <label className="block text-muted-foreground font-medium text-sm mb-2">
+                  Alternate Phone Number
+                </label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <FiPhone className="w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  </div>
+                  <input
+                    type="tel"
+                    name="alternateContact"
+                    defaultValue={shippingAddress?.alternateContact || ""}
+                    placeholder="Alternate phone number"
+                    className="h-12 text-sm pl-11 pr-4 w-full rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 outline-none"
+                  />
+                </div>
+                {state?.errors?.alternateContact && (
+                  <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1">
+                    <FiAlertCircle className="w-4 h-4" />
+                    {state.errors.alternateContact.join(" ")}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* State & City Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* State */}
+              <div className="form-group">
+                <label className="block text-muted-foreground font-medium text-sm mb-2">
+                  State <span className="text-red-500">*</span>
+                </label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <FiMapPin className="w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  </div>
+                  <input
+                    type="text"
+                    name="state"
+                    defaultValue={shippingAddress?.state || ""}
+                    placeholder="Enter state"
+                    className="h-12 text-sm pl-11 pr-4 w-full rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 outline-none"
+                  />
+                </div>
+                {state?.errors?.state && (
+                  <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1">
+                    <FiAlertCircle className="w-4 h-4" />
+                    {state.errors.state.join(" ")}
                   </p>
                 )}
               </div>
@@ -254,22 +221,15 @@ const UpdateShippingAddress = ({ shippingAddress, error: fetchError }) => {
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <FiMap className="w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <FiMapPin className="w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                   </div>
-                  <select
-                    value={selectedValue.city}
-                    onChange={(e) => handleInputChange("city", e.target.value)}
-                    disabled={!selectedValue.country}
-                    className="h-12 text-sm pl-11 pr-4 w-full rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 outline-none appearance-none cursor-pointer disabled:bg-muted disabled:cursor-not-allowed"
-                  >
-                    <option value="">Select City</option>
-                    {cities?.map((city) => (
-                      <option key={city.name} value={city.name}>
-                        {city.name}
-                      </option>
-                    ))}
-                  </select>
-                  <input type="hidden" name="city" value={selectedValue.city} />
+                  <input
+                    type="text"
+                    name="city"
+                    defaultValue={shippingAddress?.city || ""}
+                    placeholder="Enter city"
+                    className="h-12 text-sm pl-11 pr-4 w-full rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 outline-none"
+                  />
                 </div>
                 {state?.errors?.city && (
                   <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1">
@@ -280,30 +240,29 @@ const UpdateShippingAddress = ({ shippingAddress, error: fetchError }) => {
               </div>
             </div>
 
-            {/* Area */}
+            {/* Pincode */}
             <div className="form-group">
               <label className="block text-muted-foreground font-medium text-sm mb-2">
-                Area (Optional)
+                Pincode <span className="text-red-500">*</span>
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <FiMapPin className="w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                 </div>
-                <select
-                  value={selectedValue.area}
-                  onChange={(e) => handleInputChange("area", e.target.value)}
-                  disabled={!selectedValue.city || areas?.length === 0}
-                  className="h-12 text-sm pl-11 pr-4 w-full rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 outline-none appearance-none cursor-pointer disabled:bg-muted disabled:cursor-not-allowed"
-                >
-                  <option value="">Select Area</option>
-                  {areas?.map((area) => (
-                    <option key={area} value={area}>
-                      {area}
-                    </option>
-                  ))}
-                </select>
-                <input type="hidden" name="area" value={selectedValue.area} />
+                <input
+                  type="text"
+                  name="zipCode"
+                  defaultValue={shippingAddress?.zipCode || ""}
+                  placeholder="Enter pincode"
+                  className="h-12 text-sm pl-11 pr-4 w-full rounded-xl border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 outline-none"
+                />
               </div>
+              {state?.errors?.zipCode && (
+                <p className="mt-1.5 text-sm text-red-500 flex items-center gap-1">
+                  <FiAlertCircle className="w-4 h-4" />
+                  {state.errors.zipCode.join(" ")}
+                </p>
+              )}
             </div>
 
             {/* Hidden fields */}

@@ -15,9 +15,10 @@ const shippingAddressSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   address: z.string().min(5, "Address must be at least 5 characters"),
   contact: z.string().min(5, "Contact must be at least 5 characters"),
-  country: z.string().min(1, "Country is required"),
+  alternateContact: z.string().optional(),
+  state: z.string().min(1, "State is required"),
   city: z.string().min(1, "City is required"),
-  area: z.string().optional(),
+  zipCode: z.string().min(1, "Pincode is required"),
 });
 
 /**
@@ -214,9 +215,10 @@ export async function addShippingAddressAction(prevState, formData) {
     name: formData.get("name"),
     address: formData.get("address"),
     contact: formData.get("contact"),
-    country: formData.get("country"),
+    alternateContact: formData.get("alternateContact") || "",
+    state: formData.get("state"),
     city: formData.get("city"),
-    area: formData.get("area") || "",
+    zipCode: formData.get("zipCode"),
   });
 
   if (!validatedFields.success) {
@@ -253,7 +255,7 @@ export async function addShippingAddressAction(prevState, formData) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(validatedFields.data),
+      body: JSON.stringify({ ...validatedFields.data, country: "India" }),
     });
 
     const updatedData = await handleResponse(response);

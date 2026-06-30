@@ -171,6 +171,7 @@ const useCheckoutSubmit = ({
       const userDetails = {
         name: `${data.firstName || ""} ${data.lastName || ""}`.trim(),
         contact: data.contact,
+        alternateContact: data.alternateContact || "",
         email: data.email,
         address: data.address,
         state: data.state,
@@ -368,8 +369,10 @@ const useCheckoutSubmit = ({
       setValue("lastName", lastName);
       setValue("address", address.address || "");
       setValue("contact", address.contact || "");
+      setValue("alternateContact", address.alternateContact || "");
       setValue("email", userInfo?.email || "");
       setValue("city", address.city || "");
+      setValue("state", address.state || "");
       setValue("country", address.country || "");
       setValue("zipCode", address.zipCode || "");
     } else {
@@ -377,7 +380,9 @@ const useCheckoutSubmit = ({
       setValue("lastName", "");
       setValue("address", "");
       setValue("contact", "");
+      setValue("alternateContact", "");
       setValue("city", "");
+      setValue("state", "");
       setValue("country", "");
       setValue("zipCode", "");
     }

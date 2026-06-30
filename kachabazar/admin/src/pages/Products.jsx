@@ -317,21 +317,21 @@ const Products = () => {
         enableSorting: false,
         enableHiding: false,
       },
-      {
-        id: "featured",
-        accessorFn: (row) => (row.isFeatured ? "show" : "hide"),
-        header: ({ column }) => (
-          <DynamicTableColumnHeader column={column} title={t("Featured")} />
-        ),
-        cell: ({ row }) => (
-          <ShowHideButton
-            id={row.original._id}
-            status={row.original.isFeatured ? "show" : "hide"}
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
+      // {
+      //   id: "featured",
+      //   accessorFn: (row) => (row.isFeatured ? "show" : "hide"),
+      //   header: ({ column }) => (
+      //     <DynamicTableColumnHeader column={column} title={t("Featured")} />
+      //   ),
+      //   cell: ({ row }) => (
+      //     <ShowHideButton
+      //       id={row.original._id}
+      //       status={row.original.isFeatured ? "show" : "hide"}
+      //     />
+      //   ),
+      //   enableSorting: false,
+      //   enableHiding: false,
+      // },
       {
         id: "actions",
         header: () => (
