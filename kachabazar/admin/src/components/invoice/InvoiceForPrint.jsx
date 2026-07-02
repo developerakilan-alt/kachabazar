@@ -173,6 +173,26 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                     <br />
                     <br />
 
+                    {/* TO Address */}
+                    <span className="font-semibold text-foreground block">
+                      To :
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {data?.user_info?.name}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {data?.user_info?.address}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {data?.user_info?.city}, {data?.user_info?.country}{" "}
+                      {data?.user_info?.zipCode}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {data?.user_info?.contact}
+                    </span>
+
+                    <br />
+
                     {/* FROM Address */}
                     <span className="font-semibold text-foreground block">
                       From :
@@ -186,25 +206,7 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                     <span className="text-muted-foreground block">
                       {globalSetting?.contact}
                     </span>
-                    <br />
 
-                    {/* TO Address */}
-                    <span className="font-semibold text-foreground block">
-                      To :
-                    </span>
-                    <span className="text-muted-foreground block">
-                      {or?.user_info?.name}
-                    </span>
-                    <span className="text-muted-foreground block">
-                      {or?.user_info?.address}
-                    </span>
-                    <span className="text-muted-foreground block">
-                      {or?.user_info?.city}, {or?.user_info?.country}{" "}
-                      {or?.user_info?.zipCode}
-                    </span>
-                    <span className="text-muted-foreground block">
-                      {or?.user_info?.contact}
-                    </span>
                     <br />
 
                     {globalSetting?.vat_number && (
@@ -410,39 +412,26 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                   <br />
                   <br />
 
-                  {/* FROM Address */}
-                  <span className="font-semibold text-foreground block">
-                    From :
-                  </span>
-                  <span className="text-muted-foreground block">
-                    {globalSetting?.company_name}
-                  </span>
-                  <span className="text-muted-foreground block">
-                    {globalSetting?.address}
-                  </span>
-                  <span className="text-muted-foreground block">
-                    {globalSetting?.contact}
-                  </span>
-                  <br />
-
                   {/* TO Address */}
-                  <span className="font-semibold text-foreground block">
-                    To :
-                  </span>
-                  <span className="text-muted-foreground block">
-                    {data?.user_info?.name}
-                  </span>
-                  <span className="text-muted-foreground block">
-                    {data?.user_info?.address}
-                  </span>
-                  <span className="text-muted-foreground block">
-                    {data?.user_info?.city}, {data?.user_info?.country}{" "}
-                    {data?.user_info?.zipCode}
-                  </span>
-                  <span className="text-muted-foreground block">
-                    {data?.user_info?.contact}
-                  </span>
-                  <br />
+                    <span className="font-semibold text-foreground block">
+                      To :
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {data?.user_info?.name}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {data?.user_info?.address}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {data?.user_info?.city}, {data?.user_info?.country}{" "}
+                      {data?.user_info?.zipCode}
+                    </span>
+                    <span className="text-muted-foreground block">
+                      {data?.user_info?.contact}
+                    </span>
+                    <br />
+
+                    
 
                   {globalSetting?.vat_number && (
                     <>
@@ -487,6 +476,12 @@ const InvoiceForPrint = ({ data, printRef, globalSetting }) => {
                   <span>{t("Total")} : </span>
                   <span className="font-semibold">{fp(data?.total)}</span>
                 </h3>
+                <div className="mt-32 text-xs text-right">
+                <span className="font-semibold block">From :</span>
+                <span className="block">{globalSetting?.company_name}</span>
+                <span className="block">{globalSetting?.address}</span>
+                <span className="block">{globalSetting?.contact}</span>
+              </div>
               </div>
             </div>
           </Card>
