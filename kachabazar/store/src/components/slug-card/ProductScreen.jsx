@@ -235,7 +235,7 @@ const ProductScreen = ({ product, reviews, attributes, relatedProducts }) => {
                       </Button>
                     </div>
 
-                    {/* Add to Cart Button — Gold */}
+                    {/* Add to Cart Button */}
                     <button
                       onClick={() => handleAddToCart(item)}
                       disabled={isOutOfStock}
@@ -268,8 +268,8 @@ const ProductScreen = ({ product, reviews, attributes, relatedProducts }) => {
                     <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center">
                       <RotateCcw className="w-4 h-4 text-amber-700" />
                     </div>
-                    <span className="text-xs font-semibold text-foreground">Easy Returns</span>
-                    <span className="text-[10px] text-muted-foreground">Hassle free returns</span>
+                    <span className="text-xs font-semibold text-foreground">Easy Replacement</span>
+                    <span className="text-[10px] text-muted-foreground">Courier damaged products</span>
                   </div>
                 </div>
 
