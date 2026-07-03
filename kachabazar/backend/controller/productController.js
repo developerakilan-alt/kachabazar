@@ -88,7 +88,10 @@ const getAllProducts = async (req, res) => {
     const titleQueries = languageCodes.map((lang) => ({
       [`title.${lang}`]: { $regex: `${title}`, $options: "i" },
     }));
-    queryObject.$or = titleQueries;
+    queryObject.$or = [
+      ...titleQueries,
+      { sku: { $regex: `${title}`, $options: "i" } },
+    ];
   }
 
   if (price === "low") {
@@ -333,7 +336,10 @@ const getShowingStoreProducts = async (req, res) => {
         [`title.${lang}`]: { $regex: `${title}`, $options: "i" },
       }));
 
-      queryObject.$or = titleQueries;
+      queryObject.$or = [
+        ...titleQueries,
+        { sku: { $regex: `${title}`, $options: "i" } },
+      ];
     }
     if (slug) {
       queryObject.slug = { $regex: slug, $options: "i" };

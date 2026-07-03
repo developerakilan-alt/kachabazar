@@ -19,8 +19,12 @@ import { handleLogEvent } from "src/lib/analytics";
 import useUtilsFunction from "@hooks/useUtilsFunction";
 import ProductModal from "@components/modal/ProductModal";
 import ImageWithFallback from "@components/common/ImageWithFallBack";
+import { getDefaultVariant } from "@utils/variant";
 
 const ProductCard = ({ product, attributes }) => {
+  const defaultVariant = product?.isCombination
+    ? getDefaultVariant(product, attributes)
+    : {};
   const modalRef = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
   const { globalSetting } = useSetting();
@@ -190,12 +194,12 @@ const ProductCard = ({ product, attributes }) => {
             product={product}
             price={
               product?.isCombination
-                ? product?.variants[0]?.price
+                ? defaultVariant?.price
                 : product?.prices?.price
             }
             originalPrice={
               product?.isCombination
-                ? product?.variants[0]?.originalPrice
+                ? defaultVariant?.originalPrice
                 : product?.prices?.originalPrice
             }
           />

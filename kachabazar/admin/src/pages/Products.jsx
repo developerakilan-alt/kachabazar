@@ -289,22 +289,22 @@ const Products = () => {
           ),
         enableSorting: false,
       },
-      {
-        id: "details",
-        header: () => (
-          <span className="text-center block">{t("DetailsTbl")}</span>
-        ),
-        cell: ({ row }) => (
-          <Link
-            to={`/product/${row.original._id}`}
-            className="flex justify-center text-muted-foreground hover:text-primary"
-          >
-            <FiZoomIn className="w-5 h-5" />
-          </Link>
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
+      // {
+      //   id: "details",
+      //   header: () => (
+      //     <span className="text-center block">{t("DetailsTbl")}</span>
+      //   ),
+      //   cell: ({ row }) => (
+      //     <Link
+      //       to={`/product/${row.original._id}`}
+      //       className="flex justify-center text-muted-foreground hover:text-primary"
+      //     >
+      //       <FiZoomIn className="w-5 h-5" />
+      //     </Link>
+      //   ),
+      //   enableSorting: false,
+      //   enableHiding: false,
+      // },
       {
         id: "published",
         accessorFn: (row) => row.status,

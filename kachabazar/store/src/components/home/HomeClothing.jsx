@@ -318,11 +318,11 @@ const HomeClothing = ({
           <div className={wideContainer}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
               {(home?.trust_badges?.length > 0
-                ? home.trust_badges
+                ? home.trust_badges.slice(0, 3)
                 : [
                     { title: home?.quick_delivery_title, description: home?.quick_delivery_description },
                     { title: home?.promotion_title, description: home?.promotion_description },
-                    { title: home?.feature_title, description: home?.feature_description },
+                    {},
                   ]
               ).map((badge, i) => {
                 const badgeIcons = [FiTruck, FiFileText, FiStar, FiShield, FiCreditCard, FiHeart, FiAward];
@@ -350,22 +350,13 @@ const HomeClothing = ({
                           No Cash on Delivery (COD), If the courier is returned due to call not picked up or incorrect address, re-shipping charges will be applicable
                         </p>
                       </>
-                    ) : i === 2 ? (
+                    ) : (
                       <>
                         <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
                           Naturally Derived
                         </h4>
                         <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
                           No Refunds Under Any Circumstances, 360° Unboxing Video is Mandatory for replacement requests (only for damaged products)
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 dark:text-white mb-2">
-                          {t(badge?.title) || "Trust Badge"}
-                        </h4>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
-                          {t(badge?.description) || ""}
                         </p>
                       </>
                     )}
