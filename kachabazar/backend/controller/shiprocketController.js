@@ -150,9 +150,11 @@ const refreshShiprocketStatus = async (req, res) => {
 
     const srStatus = await shiprocket.refreshOrderStatus(order);
 
-    if (srStatus.updated) {
+    if (srStatus.updated || srStatus.awb !== order.shiprocket.awb) {
       order.shiprocket.status = srStatus.status || order.shiprocket.status;
-      const mappedOrderStatus = shiprocket.mapShiprocketToOrderStatus(srStatus.status || order.shiprocket.status);
+      if (srStatus.awb) order.shiprocket.awb = srStatus.awb;
+      if (srStatus.shipmentId) order.shiprocket.shipmentId = srStatus.shipmentId;
+      const mappedOrderStatus = shiprocket.mapShiprocketToOrderStatus(order.shiprocket.status);
       if (mappedOrderStatus && order.status !== mappedOrderStatus) {
         order.status = mappedOrderStatus;
       }
@@ -196,9 +198,11 @@ const customerRefreshStatus = async (req, res) => {
 
     const srStatus = await shiprocket.refreshOrderStatus(order);
 
-    if (srStatus.updated) {
+    if (srStatus.updated || srStatus.awb !== order.shiprocket.awb) {
       order.shiprocket.status = srStatus.status || order.shiprocket.status;
-      const mapped = shiprocket.mapShiprocketToOrderStatus(srStatus.status || order.shiprocket.status);
+      if (srStatus.awb) order.shiprocket.awb = srStatus.awb;
+      if (srStatus.shipmentId) order.shiprocket.shipmentId = srStatus.shipmentId;
+      const mapped = shiprocket.mapShiprocketToOrderStatus(order.shiprocket.status);
       if (mapped && order.status !== mapped) {
         order.status = mapped;
       }

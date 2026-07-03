@@ -137,26 +137,126 @@ const trackShipmentByOrder = async (orderId) => {
   return api("GET", `/courier/track/orders/${orderId}`);
 };
 
-const refreshOrderStatus = async (order) => {
-  let tracking = null;
-  if (order.shiprocket?.awb) {
-    tracking = await trackShipment(order.shiprocket.awb);
-  } else if (order.shiprocket?.orderId) {
-    try {
-      tracking = await trackShipmentByOrder(order.shiprocket.orderId);
-    } catch {
-      return { status: order.shiprocket?.status || "created", updated: false, currentStatus: null, courierName: null };
+/**
+ * Get full order details from ShipRocket by their order ID.
+ * Useful for orders that haven't been assigned a courier/AWB yet.
+ */
+const getShiprocketOrder = async (orderId) => {
+  return api("GET", `/orders/show/${orderId}`);
+};
+
+const tryExtractTrackingData = (data) => {
+  try {
+    if (!data) return null;
+    const td = data.tracking_data || data.data || data;
+    if (!td || typeof td !== "object") {
+      console.error("ShipRocket: unexpected response type:", typeof td, td);
+      return null;
     }
-  } else {
-    return { status: order.shiprocket?.status || "created", updated: false, currentStatus: null, courierName: null };
+    const result = {
+      status: td.shipment_status || td.status || td.order_status || td.status_code || null,
+      currentStatus: td.current_status || td.currentStatus || null,
+      courierName: td.courier_name || td.courierName || null,
+      awb: td.awb || td.awb_code || null,
+      shipmentId: td.shipment_id || td.shipmentId || null,
+    };
+    if (!result.status) {
+      console.error("ShipRocket: unrecognized response — top keys:", Object.keys(data), "inner keys:", Object.keys(td));
+    }
+    return result;
+  } catch (err) {
+    console.error("ShipRocket: tryExtractTrackingData error:", err.message);
+    return null;
   }
-  const srStatus = tracking?.tracking_data?.shipment_status || order.shiprocket.status;
-  return {
-    status: srStatus,
-    currentStatus: tracking?.tracking_data?.current_status || null,
-    courierName: tracking?.tracking_data?.courier_name || null,
-    updated: srStatus !== order.shiprocket.status,
-  };
+};
+
+const refreshOrderStatus = async (order) => {
+  try {
+    const { awb, orderId, shipmentId, status: currentStatus } = order.shiprocket || {};
+
+    // Helper: try to extract and return, or null if no status found
+    const attempt = (label, result) => {
+      if (!result) return null;
+      try {
+        const extracted = tryExtractTrackingData(result);
+        if (extracted?.status) {
+          return {
+            status: extracted.status,
+            currentStatus: extracted.currentStatus,
+            courierName: extracted.courierName,
+            awb: extracted.awb || awb,
+            shipmentId: extracted.shipmentId || shipmentId,
+            updated: extracted.status !== currentStatus,
+          };
+        }
+        if (!extracted?.status && label !== "awb") {
+          console.error(`ShipRocket: ${label} returned no recognizable status, keys:`, Object.keys(result));
+        }
+      } catch (innerErr) {
+        console.error(`ShipRocket: attempt ${label} crashed:`, innerErr.message);
+      }
+      return null;
+    };
+
+    // 1) AWB-based tracking (most reliable)
+    if (awb) {
+      try {
+        const tracking = await trackShipment(awb);
+        const hit = attempt("awb", tracking);
+        if (hit) return hit;
+      } catch (err) {
+        console.error(`ShipRocket: AWB track failed for ${awb}:`, err.message);
+      }
+    }
+
+    if (orderId) {
+      const errors = [];
+
+      // 2) Track by orderId
+      try {
+        const tracking = await trackShipmentByOrder(orderId);
+        const hit = attempt("trackByOrder", tracking);
+        if (hit) return hit;
+      } catch (err) {
+        errors.push(`trackByOrder: ${err.message}`);
+      }
+
+      // 3) /orders/show/{orderId}
+      try {
+        const data = await api("GET", `/orders/show/${orderId}`);
+        const hit = attempt("orders/show", data);
+        if (hit) return hit;
+      } catch (err) {
+        errors.push(`orders/show: ${err.message}`);
+      }
+
+      // 4) /orders/{orderId}
+      try {
+        const data = await api("GET", `/orders/${orderId}`);
+        const hit = attempt("orders/", data);
+        if (hit) return hit;
+      } catch (err) {
+        errors.push(`orders/: ${err.message}`);
+      }
+
+      // 5) /courier/track?order_id={orderId}
+      try {
+        const data = await api("GET", `/courier/track?order_id=${orderId}`);
+        const hit = attempt("track?order_id", data);
+        if (hit) return hit;
+      } catch (err) {
+        errors.push(`track?order_id: ${err.message}`);
+      }
+
+      console.error(`ShipRocket: all order lookups failed for orderId=${orderId}`, errors.join(" | "));
+    }
+
+    return { status: currentStatus || "created", updated: false, currentStatus: null, courierName: null, awb, shipmentId };
+  } catch (err) {
+    console.error("ShipRocket: refreshOrderStatus unexpected error:", err.message, err.stack);
+    const { awb, orderId, shipmentId, status } = order?.shiprocket || {};
+    return { status: status || "created", updated: false, currentStatus: null, courierName: null, awb, shipmentId };
+  }
 };
 
 const SHIPROCKET_STATUS_MAP = {
@@ -186,6 +286,8 @@ module.exports = {
   createOrder,
   checkServiceability,
   trackShipment,
+  trackShipmentByOrder,
+  getShiprocketOrder,
   generateLabel,
   generateManifest,
   refreshOrderStatus,

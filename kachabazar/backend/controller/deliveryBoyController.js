@@ -1154,8 +1154,10 @@ const trackOrder = async (req, res) => {
         const shiprocket = require("../lib/shiprocket");
         const result = await shiprocket.refreshOrderStatus(order);
 
-        if (result.updated) {
+        if (result.updated || result.awb !== order.shiprocket.awb) {
           order.shiprocket.status = result.status || order.shiprocket.status;
+          if (result.awb) order.shiprocket.awb = result.awb;
+          if (result.shipmentId) order.shiprocket.shipmentId = result.shipmentId;
           const mapped = shiprocket.mapShiprocketToOrderStatus(order.shiprocket.status);
           if (mapped && order.status !== mapped) {
             order.status = mapped;
