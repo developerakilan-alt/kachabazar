@@ -172,6 +172,8 @@ const SHIPROCKET_STATUS_MAP = {
   SHIPPED: "processing",
   MANIFEST_GENERATED: "processing",
   NEW: "processing",
+  READY_TO_SHIP: "processing",
+  REQUESTED: "processing",
   UNDELIVERED: "processing",
 };
 

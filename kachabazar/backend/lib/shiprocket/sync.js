@@ -6,19 +6,25 @@ const SYNC_INTERVAL = 30 * 60 * 1000;
 const syncShiprocketStatuses = async () => {
   try {
     const orders = await Order.find({
-      "shiprocket.awb": { $exists: true, $ne: "" },
+      $or: [
+        { "shiprocket.awb": { $exists: true, $ne: "" } },
+        { "shiprocket.orderId": { $exists: true, $ne: "" } },
+      ],
       status: { $nin: ["delivered", "cancel", "refunded"] },
-    }).select("_id shiprocket");
+    }).select("_id shiprocket status");
 
     if (orders.length === 0) return;
 
     let updated = 0;
     for (const order of orders) {
       try {
-        const result = await shiprocket.trackShipment(order.shiprocket.awb);
-        const latestStatus = result?.tracking_data?.shipment_status;
-        if (latestStatus && order.shiprocket.status !== latestStatus) {
-          order.shiprocket.status = latestStatus;
+        const result = await shiprocket.refreshOrderStatus(order);
+        if (result.updated) {
+          order.shiprocket.status = result.status || order.shiprocket.status;
+          const mapped = shiprocket.mapShiprocketToOrderStatus(order.shiprocket.status);
+          if (mapped && order.status !== mapped) {
+            order.status = mapped;
+          }
           await order.save();
           updated++;
         }

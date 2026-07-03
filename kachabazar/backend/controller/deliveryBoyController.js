@@ -1147,23 +1147,50 @@ const trackOrder = async (req, res) => {
       );
     }
 
-    // Fetch ShipRocket tracking if AWB is available and write back status
+    // Fetch ShipRocket tracking and write back latest status
     let shiprocketTracking = null;
-    if (order.shiprocket?.awb) {
+    if (order.shiprocket?.awb || order.shiprocket?.orderId) {
       try {
         const shiprocket = require("../lib/shiprocket");
-        shiprocketTracking = await shiprocket.trackShipment(order.shiprocket.awb);
+        const result = await shiprocket.refreshOrderStatus(order);
 
-        // Write back latest status to order for admin visibility
-        if (shiprocketTracking?.tracking_data?.shipment_status) {
-          const latestStatus = shiprocketTracking.tracking_data.shipment_status;
-          if (order.shiprocket.status !== latestStatus) {
-            order.shiprocket.status = latestStatus;
-            const mapped = shiprocket.mapShiprocketToOrderStatus(latestStatus);
-            if (mapped && order.status !== mapped) {
-              order.status = mapped;
-            }
-            await order.save();
+        if (result.updated) {
+          order.shiprocket.status = result.status || order.shiprocket.status;
+          const mapped = shiprocket.mapShiprocketToOrderStatus(order.shiprocket.status);
+          if (mapped && order.status !== mapped) {
+            order.status = mapped;
+          }
+          await order.save();
+
+          // Add internal tracking history entry for the status change
+          const internalStatus = shiprocket.mapShiprocketToOrderStatus(order.shiprocket.status);
+          const trackingMsg = getTrackingStatusMessage(internalStatus);
+          if (tracking && trackingMsg !== "Order status updated") {
+            await OrderTracking.findOneAndUpdate(
+              { orderId: order._id },
+              {
+                $push: {
+                  history: {
+                    status: internalStatus,
+                    message: `ShipRocket: ${trackingMsg}`,
+                    updatedBy: "system",
+                    timestamp: new Date(),
+                  },
+                },
+                $set: { status: internalStatus },
+              },
+            );
+          }
+        }
+
+        // Re-fetch full ShipRocket tracking data for display
+        if (order.shiprocket?.awb) {
+          shiprocketTracking = await shiprocket.trackShipment(order.shiprocket.awb);
+        } else if (order.shiprocket?.orderId) {
+          try {
+            shiprocketTracking = await shiprocket.trackShipmentByOrder(order.shiprocket.orderId);
+          } catch {
+            // fallback: use the data we already have from refreshOrderStatus
           }
         }
       } catch {
