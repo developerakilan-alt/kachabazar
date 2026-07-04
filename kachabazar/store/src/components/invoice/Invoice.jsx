@@ -220,7 +220,7 @@ const Invoice = ({ data, printRef, globalSetting }) => {
                     Tracking ID
                   </span>
                   <span className="font-mono font-semibold text-primary text-sm">
-                    {data.trackingId}
+                    {data?.trackingId}
                   </span>
                 </div>
               </div>

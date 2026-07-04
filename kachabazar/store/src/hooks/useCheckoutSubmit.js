@@ -236,7 +236,7 @@ const useCheckoutSubmit = ({
         ...orderResponse,
         date: showDateFormat(orderResponse.createdAt),
         company_info: {
-          currency: currency,
+          currency: "₹",
           vat_number: globalSetting?.vat_number,
           company: globalSetting?.company_name,
           address: globalSetting?.address,
