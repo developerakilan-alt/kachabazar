@@ -265,6 +265,7 @@ const SHIPROCKET_STATUS_MAP = {
   RTO: "cancel",
   RETURNED: "cancel",
   ON_HOLD: "processing",
+  PICKUP_SCHEDULED: "processing",
   PICKED_UP: "out-for-delivery",
   IN_TRANSIT: "out-for-delivery",
   OUT_FOR_DELIVERY: "out-for-delivery",
@@ -275,10 +276,46 @@ const SHIPROCKET_STATUS_MAP = {
   READY_TO_SHIP: "processing",
   REQUESTED: "processing",
   UNDELIVERED: "processing",
+  AWAITING_PICKUP: "processing",
+  RTO_ORIGIN: "cancel",
+  IN_TRANSIT_RTO: "cancel",
+  RTO_DELIVERED: "cancel",
+  ON_HOLD_CAUSED_BY_CUSTOMER: "processing",
+  LOST: "cancel",
+  DAMAGED: "cancel",
 };
 
 const mapShiprocketToOrderStatus = (srStatus) => {
   return SHIPROCKET_STATUS_MAP[srStatus] || "processing";
+};
+
+const mapShiprocketToTrackingStatus = (srStatus) => {
+  const trackingMap = {
+    DELIVERED: "delivered",
+    CANCELLED: "cancelled",
+    RTO: "returned",
+    RETURNED: "returned",
+    ON_HOLD: "confirmed",
+    PICKUP_SCHEDULED: "confirmed",
+    PICKED_UP: "picked-up",
+    IN_TRANSIT: "on-the-way",
+    OUT_FOR_DELIVERY: "on-the-way",
+    REACHED_DESTINATION: "nearby",
+    SHIPPED: "confirmed",
+    MANIFEST_GENERATED: "confirmed",
+    NEW: "confirmed",
+    READY_TO_SHIP: "confirmed",
+    REQUESTED: "confirmed",
+    UNDELIVERED: "on-the-way",
+    AWAITING_PICKUP: "ready-for-pickup",
+    RTO_ORIGIN: "returned",
+    IN_TRANSIT_RTO: "returned",
+    RTO_DELIVERED: "returned",
+    ON_HOLD_CAUSED_BY_CUSTOMER: "confirmed",
+    LOST: "cancelled",
+    DAMAGED: "cancelled",
+  };
+  return trackingMap[srStatus] || "confirmed";
 };
 
 module.exports = {
@@ -292,4 +329,6 @@ module.exports = {
   generateManifest,
   refreshOrderStatus,
   mapShiprocketToOrderStatus,
+  mapShiprocketToTrackingStatus,
+  SHIPROCKET_STATUS_MAP,
 };

@@ -224,6 +224,105 @@ const customerRefreshStatus = async (req, res) => {
   }
 };
 
+const handleWebhook = async (req, res) => {
+  try {
+    const token = req.headers["x-api-key"];
+    const expectedToken = process.env.SHIPROCKET_WEBHOOK_TOKEN;
+    if (expectedToken && token !== expectedToken) {
+      return res.status(401).json({ message: "Invalid API key" });
+    }
+
+    const payload = req.body || {};
+
+    const shiprocketOrderId = payload.order_id;
+    const awb = payload.awb || payload.awb_code;
+    const srStatus = payload.current_status || payload.status || payload.shipment_status;
+
+    // Accept test/empty pings — ShipRocket validates connectivity
+    if (!shiprocketOrderId && !awb) {
+      return res.json({ received: true });
+    }
+
+    if (!srStatus) {
+      return res.json({ received: true, warning: "No status in payload" });
+    }
+
+    const order = await Order.findOne({
+      $or: [
+        { "shiprocket.orderId": shiprocketOrderId },
+        ...(awb ? [{ "shiprocket.awb": awb }] : []),
+      ],
+    });
+
+    if (!order) {
+      return res.json({ received: true, warning: "Order not found" });
+    }
+
+    const prevOrderStatus = order.status;
+    const prevSrStatus = order.shiprocket?.status;
+
+    order.shiprocket = {
+      ...(order.shiprocket || {}),
+      orderId: shiprocketOrderId || order.shiprocket?.orderId,
+      shipmentId: payload.shipment_id || order.shiprocket?.shipmentId,
+      awb: awb || order.shiprocket?.awb,
+      status: srStatus,
+    };
+
+    const mappedOrderStatus = shiprocket.mapShiprocketToOrderStatus(srStatus);
+    if (mappedOrderStatus && order.status !== mappedOrderStatus) {
+      order.status = mappedOrderStatus;
+    }
+
+    await order.save();
+
+    if (order.status !== prevOrderStatus || srStatus !== prevSrStatus) {
+      const trackingStatus = shiprocket.mapShiprocketToTrackingStatus(srStatus);
+      const trackingMsg = getTrackingStatusMessage(trackingStatus);
+
+      if (trackingMsg !== "Order status updated") {
+        await OrderTracking.findOneAndUpdate(
+          { orderId: order._id },
+          {
+            $push: {
+              history: {
+                status: trackingStatus,
+                message: `ShipRocket: ${trackingMsg}`,
+                updatedBy: "system",
+                timestamp: new Date(),
+              },
+            },
+            $set: {
+              status: trackingStatus,
+              trackingId: order.trackingId,
+              customerName: order.user_info?.name,
+              customerPhone: order.user_info?.contact,
+              deliveryAddress: order.user_info?.address,
+            },
+          },
+          { upsert: true },
+        );
+
+        if (order.user) {
+          await CustomerNotification.create({
+            customerId: order.user,
+            orderId: order._id,
+            trackingId: order.trackingId,
+            type: getNotificationType(trackingStatus),
+            title: getNotificationTitle(trackingStatus),
+            message: `Your order #${order.invoice} ${trackingMsg.toLowerCase()}. Track with ID: ${order.trackingId}`,
+          });
+        }
+      }
+    }
+
+    res.json({ received: true, orderId: shiprocketOrderId, status: srStatus, mappedStatus: order.status });
+  } catch (err) {
+    console.error("ShipRocket webhook error:", err.message);
+    res.json({ received: true, error: err.message });
+  }
+};
+
 const clearShiprocketData = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -249,4 +348,5 @@ module.exports = {
   refreshShiprocketStatus,
   customerRefreshStatus,
   clearShiprocketData,
+  handleWebhook,
 };

@@ -159,6 +159,9 @@ app.use("/v1/uploads/", uploadRoutes);
 // ── ShipRocket Routes ──
 app.use("/v1/shiprocket/", shiprocketRoutes);
 
+// ── Courier Webhook (ShipRocket callback — path avoids blocked keywords) ──
+app.use("/v1/webhooks/", require("../routes/webhookRoutes"));
+
 // ── Delivery Boy Routes ──
 const { loginDeliveryBoy } = require("../controller/deliveryBoyController");
 app.post("/v1/delivery-boy/login", loginDeliveryBoy);
