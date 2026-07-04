@@ -46,7 +46,7 @@ const sendOrderConfirmationEmail = async (order) => {
       {
         ...order.toObject(),
         company_info: {
-          currency: cfg.currency || "$",
+          currency: cfg.default_currency || "₹",
           logo: cfg.invoice_logo || cfg.logo || "",
           vat_number: cfg.vat_number || "",
           company: cfg.company_name || "",
