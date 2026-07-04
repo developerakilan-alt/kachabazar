@@ -54,7 +54,7 @@ const DownloadPrintButton = ({ data }) => {
                 document={
                   <InvoicePDF data={data} globalSetting={globalSetting} />
                 }
-                fileName={`Invoice-${data.invoice}.pdf`}
+                fileName={`Invoice-${data?.invoice}.pdf`}
               >
                 {({ loading }) => (
                   <Button variant="create">
