@@ -151,7 +151,7 @@ function getLocaleForCurrency(currencyCode, lang) {
  */
 export function formatPrice(
   value,
-  currencySymbol = "$",
+  currencySymbol = "₹",
   lang = "en",
   decimals = 2,
 ) {

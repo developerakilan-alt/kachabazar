@@ -121,7 +121,7 @@ export function getLocale(lang) {
  * @param {string} lang - UI language code (e.g., "en", "bn")
  * @returns {string} Formatted price string
  */
-export function formatPrice(value, currencySymbol = "$", lang = "en") {
+export function formatPrice(value, currencySymbol = "₹", lang = "en") {
   const num = Number(parseFloat(value || 0).toFixed(2));
   const currencyCode = getCurrencyCode(currencySymbol);
   // Use the UI language locale — NOT the currency's native locale

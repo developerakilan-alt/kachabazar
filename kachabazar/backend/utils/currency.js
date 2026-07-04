@@ -5,8 +5,8 @@ const currency = [
     status: "show",
   },
   {
-    name: "Dollar",
-    symbol: "$",
+    name: "Rupee",
+    symbol: "₹",
     status: "show",
   },
   {
