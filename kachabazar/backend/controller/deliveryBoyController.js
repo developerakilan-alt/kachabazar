@@ -1152,9 +1152,17 @@ const trackOrder = async (req, res) => {
     if (order.shiprocket?.awb || order.shiprocket?.orderId) {
       try {
         const shiprocket = require("../lib/shiprocket");
-        const result = await shiprocket.refreshOrderStatus(order);
 
-        if (result.updated || result.awb !== order.shiprocket.awb) {
+        // Skip API refresh if recently updated via webhook (avoid reverting real-time updates)
+        const lastWebhook = order.shiprocket?.lastWebhookUpdate;
+        const skipRefresh = lastWebhook && (Date.now() - new Date(lastWebhook).getTime()) < 5 * 60 * 1000;
+
+        let result = null;
+        if (!skipRefresh) {
+          result = await shiprocket.refreshOrderStatus(order);
+        }
+
+        if (result && (result.updated || result.awb !== order.shiprocket.awb)) {
           order.shiprocket.status = result.status || order.shiprocket.status;
           if (result.awb) order.shiprocket.awb = result.awb;
           if (result.shipmentId) order.shiprocket.shipmentId = result.shipmentId;
@@ -1165,9 +1173,13 @@ const trackOrder = async (req, res) => {
           await order.save();
 
           // Add internal tracking history entry for the status change
-          const internalStatus = shiprocket.mapShiprocketToOrderStatus(order.shiprocket.status);
+          const internalStatus = shiprocket.mapShiprocketToTrackingStatus(order.shiprocket.status);
           const trackingMsg = getTrackingStatusMessage(internalStatus);
           if (tracking && trackingMsg !== "Order status updated") {
+            await OrderTracking.updateOne(
+              { orderId: order._id },
+              { $pull: { history: { status: internalStatus } } },
+            );
             await OrderTracking.findOneAndUpdate(
               { orderId: order._id },
               {

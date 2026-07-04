@@ -1,0 +1,4 @@
+SR Status	Order Status	When
+NEW / PICKUP_SCHEDULED / MANIFEST_GENERATED	processing	Still in warehouse
+PICKED_UP / IN_TRANSIT / OUT_FOR_DELIVERY	out-for-delivery	Courier has it
+DELIVERED	delivered	Delivered

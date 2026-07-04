@@ -39,6 +39,10 @@ const createShiprocketOrder = async (req, res) => {
     const trackingStatus = "confirmed";
     const trackingMessage = getTrackingStatusMessage(trackingStatus);
 
+    await OrderTracking.updateOne(
+      { orderId: order._id },
+      { $pull: { history: { status: trackingStatus } } },
+    );
     await OrderTracking.findOneAndUpdate(
       { orderId: order._id },
       {
@@ -236,7 +240,7 @@ const handleWebhook = async (req, res) => {
 
     const shiprocketOrderId = payload.order_id;
     const awb = payload.awb || payload.awb_code;
-    const srStatus = payload.current_status || payload.status || payload.shipment_status;
+    const srStatus = payload.status || payload.shipment_status || payload.current_status;
 
     // Accept test/empty pings — ShipRocket validates connectivity
     if (!shiprocketOrderId && !awb) {
@@ -261,19 +265,18 @@ const handleWebhook = async (req, res) => {
     const prevOrderStatus = order.status;
     const prevSrStatus = order.shiprocket?.status;
 
-    order.shiprocket = {
-      ...(order.shiprocket || {}),
-      orderId: shiprocketOrderId || order.shiprocket?.orderId,
-      shipmentId: payload.shipment_id || order.shiprocket?.shipmentId,
-      awb: awb || order.shiprocket?.awb,
-      status: srStatus,
-    };
+    if (!order.shiprocket) order.shiprocket = {};
+    if (shiprocketOrderId) order.shiprocket.orderId = shiprocketOrderId;
+    if (payload.shipment_id) order.shiprocket.shipmentId = payload.shipment_id;
+    if (awb) order.shiprocket.awb = awb;
+    order.shiprocket.status = srStatus;
+    order.shiprocket.lastWebhookUpdate = new Date();
+    order.markModified("shiprocket");
 
     const mappedOrderStatus = shiprocket.mapShiprocketToOrderStatus(srStatus);
     if (mappedOrderStatus && order.status !== mappedOrderStatus) {
       order.status = mappedOrderStatus;
     }
-
     await order.save();
 
     if (order.status !== prevOrderStatus || srStatus !== prevSrStatus) {
@@ -281,6 +284,10 @@ const handleWebhook = async (req, res) => {
       const trackingMsg = getTrackingStatusMessage(trackingStatus);
 
       if (trackingMsg !== "Order status updated") {
+        await OrderTracking.updateOne(
+          { orderId: order._id },
+          { $pull: { history: { status: trackingStatus } } },
+        );
         await OrderTracking.findOneAndUpdate(
           { orderId: order._id },
           {

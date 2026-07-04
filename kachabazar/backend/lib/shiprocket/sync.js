@@ -22,9 +22,15 @@ const syncShiprocketStatuses = async () => {
 
     if (orders.length === 0) return;
 
+    const NOW = Date.now();
     let updated = 0;
     for (const order of orders) {
       try {
+        // Skip orders recently updated via webhook to avoid reverting real-time updates
+        const lastWebhook = order.shiprocket?.lastWebhookUpdate;
+        if (lastWebhook && (NOW - new Date(lastWebhook).getTime()) < SYNC_INTERVAL) {
+          continue;
+        }
         const result = await shiprocket.refreshOrderStatus(order);
         if (result.updated || result.awb !== order.shiprocket.awb) {
           const prevStatus = order.shiprocket.status;
@@ -42,6 +48,10 @@ const syncShiprocketStatuses = async () => {
           const trackingMsg = getTrackingStatusMessage(trackingStatus);
 
           if (trackingMsg !== "Order status updated") {
+            await OrderTracking.updateOne(
+              { orderId: order._id },
+              { $pull: { history: { status: trackingStatus } } },
+            );
             await OrderTracking.findOneAndUpdate(
               { orderId: order._id },
               {

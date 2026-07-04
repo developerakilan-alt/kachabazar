@@ -89,6 +89,7 @@ const orderSchema = new mongoose.Schema(
       status: { type: String },
       labelUrl: { type: String },
       manifestUrl: { type: String },
+      lastWebhookUpdate: { type: Date },
     },
 
     // Other courier tracking (admin pastes tracking URL)
