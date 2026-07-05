@@ -49,6 +49,7 @@ export default defineConfig({
         clientsClaim: true,
         // Don't cache-bust URLs that already have hashes
         dontCacheBustURLsMatching: /\.[a-f0-9]{8}\./,
+        navigateFallback: "index.html",
       },
 
       includeAssets: [
