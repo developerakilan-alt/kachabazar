@@ -25,7 +25,6 @@ import { Button } from "@components/ui/button";
 import { Label } from "@components/ui/label";
 import Stock from "@components/common/Stock";
 import useProductAction from "@hooks/useProductAction";
-import ImageWithFallback from "@components/common/ImageWithFallBack";
 import { useSetting } from "@context/SettingContext";
 import {
   FiEye,
@@ -36,7 +35,6 @@ import {
 } from "react-icons/fi";
 import { FaStar } from "react-icons/fa6";
 import MainModal from "./MainModal";
-import Image from "next/image";
 
 const ProductModal = ({ product, modalOpen, attributes, setModalOpen }) => {
   const { globalSetting } = useSetting();
@@ -92,21 +90,23 @@ const ProductModal = ({ product, modalOpen, attributes, setModalOpen }) => {
                 onClick={() => setModalOpen(false)}
                 className="flex-shrink-0 flex items-center justify-center h-auto cursor-pointer"
               >
-                {product?.image?.[0] ? (
-                  <Image
-                    src={selectedImage || product.image[0]}
-                    width={420}
-                    height={420}
-                    alt="product"
-                  />
-                ) : (
-                  <Image
-                    src="https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png"
-                    width={420}
-                    height={420}
-                    alt="product Image"
-                  />
-                )}
+                {(() => {
+                  const mSrc = selectedImage || product.image?.[0] || "https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png";
+                  return (
+                    <img
+                      src={mSrc}
+                      width={420}
+                      height={420}
+                      alt="product"
+                      onError={(e) => {
+                        if (!e.target.dataset.fallback) {
+                          e.target.dataset.fallback = "true";
+                          e.target.src = "https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png";
+                        }
+                      }}
+                    />
+                  );
+                })()}
               </div>
             </Link>
 

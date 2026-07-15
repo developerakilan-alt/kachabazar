@@ -72,7 +72,7 @@ const nextConfig = {
     // Optimize image loading
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60,
-    unoptimized: process.env.NODE_ENV === "development",
+    unoptimized: true,
   },
 
   // HTTP security headers

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowUp, ChevronRight, Minus, Plus, Heart, ShieldCheck, RotateCcw, Award } from "lucide-react";
 
@@ -109,24 +108,25 @@ const ProductScreen = ({ product, reviews, attributes, relatedProducts }) => {
             {/* Product Image */}
             <div className="lg:col-span-3 lg:row-end-1">
               <div className="overflow-hidden w-full mx-auto relative">
-                {product?.image?.[0] ? (
-                  <Image
-                    src={selectedImage || product.image[0]}
-                    alt="product"
-                    width={500}
-                    height={500}
-                    priority
-                    className="aspect-square w-full rounded-2xl bg-muted object-cover"
-                  />
-                ) : (
-                  <Image
-                    src="https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png"
-                    width={500}
-                    height={500}
-                    alt="product Image"
-                    className="aspect-square w-full rounded-2xl bg-muted object-cover"
-                  />
-                )}
+                {(() => {
+                  const imgSrc = selectedImage || product.image?.[0] || "https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png";
+                  return (
+                    <img
+                      src={imgSrc}
+                      alt="product"
+                      width={500}
+                      height={500}
+                      fetchPriority="high"
+                      onError={(e) => {
+                        if (!e.target.dataset.fallback) {
+                          e.target.dataset.fallback = "true";
+                          e.target.src = "https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png";
+                        }
+                      }}
+                      className="aspect-square w-full rounded-2xl bg-muted object-cover"
+                    />
+                  );
+                })()}
 
                 {/* Discount Badge */}
                 {discount > 0 && (

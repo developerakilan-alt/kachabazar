@@ -89,12 +89,18 @@ const ImageCarousel = ({ images, handleChangeImage }) => {
         {images?.map((img, i) => (
           <SwiperSlide key={i + 1} className="group">
             <button onClick={() => handleChangeImage(img)}>
-              <Image
-                className="border inline-flex items-center justify-center px-3 py-1 mt-2"
+              <img
+                className="border inline-flex items-center justify-center px-3 py-1 mt-2 object-cover"
                 src={img}
                 alt="product"
                 width={100}
                 height={100}
+                onError={(e) => {
+                  if (!e.target.dataset.fallback) {
+                    e.target.dataset.fallback = "true";
+                    e.target.src = "https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png";
+                  }
+                }}
               />
             </button>
           </SwiperSlide>
